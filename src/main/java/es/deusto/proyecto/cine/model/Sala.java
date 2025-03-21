@@ -16,6 +16,17 @@ public class Sala {
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL)
     private List<Emision> emisiones;
 
+    public Sala() {
+    }
+
+    public Sala(Long codSala, int numero, int capacidad, List<Emision> emisiones) {
+        this.codSala = codSala;
+        this.numero = numero;
+        this.capacidad = capacidad;
+        this.emisiones = emisiones;
+    }
+
+
     public Long getCodSala() {
         return codSala;
     }

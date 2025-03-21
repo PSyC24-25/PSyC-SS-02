@@ -18,6 +18,21 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Compra> compras;
 
+    public Usuario() {
+    }
+
+    public Usuario(Long codUsuario, String nombre, String apellido, String correo, String numTelefono,
+            String contrasenya, List<Compra> compras) {
+        this.codUsuario = codUsuario;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.numTelefono = numTelefono;
+        this.contrasenya = contrasenya;
+        this.compras = compras;
+    }
+
+
     public Long getCodUsuario() {
         return codUsuario;
     }

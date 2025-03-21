@@ -22,6 +22,19 @@ public class Compra {
 
     private double precio;
 
+    
+    public Compra() {
+    }
+
+    public Compra(Long codCompra, Usuario usuario, Emision emision, List<String> asientos, double precio) {
+        this.codCompra = codCompra;
+        this.usuario = usuario;
+        this.emision = emision;
+        this.asientos = asientos;
+        this.precio = precio;
+    }
+
+
     public Long getCodCompra() {
         return codCompra;
     }

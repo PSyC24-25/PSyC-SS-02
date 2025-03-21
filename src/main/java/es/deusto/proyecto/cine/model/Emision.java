@@ -23,6 +23,18 @@ public class Emision {
     @OneToMany(mappedBy = "emison", cascade = CascadeType.ALL)
     private List<Usuario> compras;
 
+
+    public Emision() {
+    }
+
+    public Emision(Long codEmision, LocalDateTime dateTime, Pelicula pelicula, Sala sala, List<Usuario> compras) {
+        this.codEmision = codEmision;
+        this.dateTime = dateTime;
+        this.pelicula = pelicula;
+        this.sala = sala;
+        this.compras = compras;
+    }
+
     public Long getCodEmision() {
         return codEmision;
     }

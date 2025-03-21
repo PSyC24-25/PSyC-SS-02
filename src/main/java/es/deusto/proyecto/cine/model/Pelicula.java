@@ -19,6 +19,23 @@ public class Pelicula {
     @OneToMany(mappedBy = "pelicula", cascade = CascadeType.ALL)
     private List<Emision> emisiones;
 
+    
+    public Pelicula() {
+    }
+
+
+    public Pelicula(Long codPelicula, String titulo, String genero, int duracion, String director, String sinopsis,
+            List<Emision> emisiones) {
+        this.codPelicula = codPelicula;
+        this.titulo = titulo;
+        this.genero = genero;
+        this.duracion = duracion;
+        this.director = director;
+        this.sinopsis = sinopsis;
+        this.emisiones = emisiones;
+    }
+
+
     public Long getCodPelicula() {
         return codPelicula;
     }
@@ -65,14 +82,6 @@ public class Pelicula {
 
     public void setSinopsis(String sinopsis) {
         this.sinopsis = sinopsis;
-    }
-
-    public List<Usuario> getCompras() {
-        return compras;
-    }
-
-    public void setCompras(List<Usuario> compras) {
-        this.compras = compras;
     }
 
     
