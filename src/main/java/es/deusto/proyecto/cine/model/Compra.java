@@ -1,6 +1,8 @@
 package es.deusto.proyecto.cine.model;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -9,16 +11,19 @@ public class Compra {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codCompra;
 
-    @ManyToOne
-    @JoinColumn(name = "codUsuario", nullable = false)
-    private Usuario usuario;
+    @Column(name = "codUsuario", nullable = false)
+    private Long usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "codEmision", nullable = false)
-    private Emision emision;
+    @Column(name = "codEmision", nullable = false)
+    private Long emision;
 
     @ElementCollection
-    private List<String> asientos; 
+    @CollectionTable(
+        name = "asiento",
+        joinColumns = @JoinColumn(name = "codCompra") 
+    )
+    @Column(name = "asiento")
+    private List<String> asientos = new ArrayList<>();
 
     private double precio;
 
@@ -26,7 +31,7 @@ public class Compra {
     public Compra() {
     }
 
-    public Compra(Long codCompra, Usuario usuario, Emision emision, List<String> asientos, double precio) {
+    public Compra(Long codCompra, Long usuario, Long emision, List<String> asientos, double precio) {
         this.codCompra = codCompra;
         this.usuario = usuario;
         this.emision = emision;
@@ -43,19 +48,19 @@ public class Compra {
         this.codCompra = codCompra;
     }
 
-    public Usuario getUsuario() {
+    public Long getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Long usuario) {
         this.usuario = usuario;
     }
 
-    public Emision getEmision() {
+    public Long getEmision() {
         return emision;
     }
 
-    public void setEmision(Emision emision) {
+    public void setEmision(Long emision) {
         this.emision = emision;
     }
 

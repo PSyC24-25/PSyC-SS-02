@@ -10,26 +10,24 @@ public class Emision {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codEmision;
 
-    private LocalDateTime dateTime; 
+    private LocalDateTime fecha; 
 
-    @ManyToOne
-    @JoinColumn(name = "codPelicula", nullable = false)
-    private Pelicula pelicula;
+    @Column(name = "codPelicula", nullable = false)
+    private Long pelicula;
 
-    @ManyToOne
-    @JoinColumn(name = "codSala", nullable = false)
-    private Sala sala;
+    @Column(name = "codSala", nullable = false)
+    private Long sala;
 
-    @OneToMany(mappedBy = "emison", cascade = CascadeType.ALL)
-    private List<Usuario> compras;
+    @OneToMany(mappedBy = "emision", cascade = CascadeType.ALL)
+    private List<Compra> compras;
 
 
     public Emision() {
     }
 
-    public Emision(Long codEmision, LocalDateTime dateTime, Pelicula pelicula, Sala sala, List<Usuario> compras) {
+    public Emision(Long codEmision, LocalDateTime fecha, Long pelicula, Long sala, List<Compra> compras) {
         this.codEmision = codEmision;
-        this.dateTime = dateTime;
+        this.fecha = fecha;
         this.pelicula = pelicula;
         this.sala = sala;
         this.compras = compras;
@@ -44,34 +42,34 @@ public class Emision {
     }
 
     public LocalDateTime getDateTime() {
-        return dateTime;
+        return fecha;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setDateTime(LocalDateTime fecha) {
+        this.fecha = fecha;
     }
 
-    public Pelicula getPelicula() {
+    public Long getPelicula() {
         return pelicula;
     }
 
-    public void setPelicula(Pelicula pelicula) {
+    public void setPelicula(Long pelicula) {
         this.pelicula = pelicula;
     }
 
-    public Sala getSala() {
+    public Long getSala() {
         return sala;
     }
 
-    public void setSala(Sala sala) {
+    public void setSala(Long sala) {
         this.sala = sala;
     }
 
-    public List<Usuario> getCompras() {
+    public List<Compra> getCompras() {
         return compras;
     }
 
-    public void setCompras(List<Usuario> compras) {
+    public void setCompras(List<Compra> compras) {
         this.compras = compras;
     }
 
