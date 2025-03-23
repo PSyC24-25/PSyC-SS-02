@@ -1,4 +1,4 @@
-package main.java.es.deusto.proyecto.cine.model;
+package es.deusto.proyecto.cine.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
