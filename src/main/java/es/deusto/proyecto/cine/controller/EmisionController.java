@@ -4,11 +4,11 @@ import es.deusto.proyecto.cine.model.Emision;
 import es.deusto.proyecto.cine.service.EmisionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class EmisionController {
@@ -22,7 +22,36 @@ public class EmisionController {
     }
 
     @GetMapping("/emisiones/{id}")
-    public Emision getEmisionById(@PathVariable Long id) {
-        return emisionService.getEmisionById(id);
+    public ResponseEntity<Emision> getEmisionById(@PathVariable Long id) {
+        Optional<Emision> emision = emisionService.getEmisionById(id);
+
+        if(emision.isPresent()){
+            return ResponseEntity.ok(emision.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public Emision crearEmision(@RequestBody Emision emision) {
+        return emisionService.crearEmision(emision);
+    }
+
+    @PutMapping("/emisiones/{id}")
+    public ResponseEntity<Emision> actualizarEmision(@PathVariable Long id, @RequestBody Emision datosEmision) {
+        try {
+            Emision emisionActualizada = emisionService.actualizarEmision(id, datosEmision);
+            return ResponseEntity.ok(emisionActualizada);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @DeleteMapping("/emisiones/{id}")
+    public ResponseEntity<Void> borrarEmision(@PathVariable Long id) {
+        if (emisionService.getEmisionById(id).isPresent()){
+            emisionService.borrarEmision(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }
