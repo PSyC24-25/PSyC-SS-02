@@ -1,27 +1,37 @@
 package es.deusto.proyecto.cine.controller;
 
 import es.deusto.proyecto.cine.dto.PeliculaDTO;
-// import es.deusto.proyecto.cine.model.Pelicula;
 import es.deusto.proyecto.cine.service.PeliculaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.ui.Model;
 
 import java.util.List;
 // import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping("/peliculas")
 public class PeliculaController {
 
     @Autowired
     private PeliculaService peliculaService;
 
+    // @GetMapping
+    // public List<PeliculaDTO> getAllPeliculas() {
+    //     return peliculaService.getAllPeliculas();
+    // }
     @GetMapping
-    public List<PeliculaDTO> getAllPeliculas() {
-        return peliculaService.getAllPeliculas();
+    public String getAllPeliculas(Model model) {
+        List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
+        System.out.println("Films retrieved: " + peliculas);
+        System.out.println("Films count: " + peliculas.size());
+        model.addAttribute("peliculas", peliculas);
+        return "peliculas";
     }
 
     @GetMapping("/{id}")
