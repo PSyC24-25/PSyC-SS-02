@@ -1,54 +1,56 @@
 package es.deusto.proyecto.cine.controller;
 
-import es.deusto.proyecto.cine.model.Compra;
+import es.deusto.proyecto.cine.dto.CompraDTO;
 import es.deusto.proyecto.cine.service.CompraService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("/compras")
 public class CompraController {
     
     @Autowired
     private CompraService compraService;
 
-    @GetMapping("/compras")
-    public List<Compra> getAllCompras() {
+    @GetMapping
+    public List<CompraDTO> getAllCompras() {
         return compraService.getAllCompras();
     }
 
-    @GetMapping("/compras/{id}")
-    public ResponseEntity<Compra> getCompraById(@PathVariable Long id) {
-        Optional<Compra> compra = compraService.getCompraById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<CompraDTO> getCompraById(@PathVariable Long id) {
+        CompraDTO compra = compraService.getCompraById(id);
 
-        if(compra.isPresent()){
-            return ResponseEntity.ok(compra.get());
+        if(compra != null){
+            return ResponseEntity.ok(compra);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public Compra crearCompra(@RequestBody Compra compra) {
-        return compraService.crearCompra(compra);
+    public ResponseEntity<CompraDTO> crearCompra(@RequestBody CompraDTO compraDTO) {
+        CompraDTO compraGuardada = compraService.crearCompra(compraDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(compraGuardada);
     }
 
-    @PutMapping("/compras/{id}")
-    public ResponseEntity<Compra> actualizarCompra(@PathVariable Long id, @RequestBody Compra datosCompra) {
+    @PutMapping("/{id}")
+    public ResponseEntity<CompraDTO> actualizarCompra(@PathVariable Long id, @RequestBody CompraDTO datosCompra) {
         try {
-            Compra compraActualizada = compraService.actualizarCompra(id, datosCompra);
+            CompraDTO compraActualizada = compraService.actualizarCompra(id, datosCompra);
             return ResponseEntity.ok(compraActualizada);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @DeleteMapping("/compras/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> borrarCompra(@PathVariable Long id) {
-        if (compraService.getCompraById(id).isPresent()){
+        if (compraService.getCompraById(id) != null){
             compraService.borrarCompra(id);
             return ResponseEntity.noContent().build();
         }

@@ -1,55 +1,57 @@
 package es.deusto.proyecto.cine.controller;
 
-import es.deusto.proyecto.cine.model.Sala;
+import es.deusto.proyecto.cine.dto.SalaDTO;
 import es.deusto.proyecto.cine.service.SalaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("/salas")
 public class SalaController {
     
     @Autowired
     private SalaService salaService;
 
-    @GetMapping("/salas")
-    public List<Sala> getAllSalas() {
+    @GetMapping
+    public List<SalaDTO> getAllSalas() {
         return salaService.getAllSalas();
     }
 
-    @GetMapping("/salas/{id}")
-    public ResponseEntity<Sala> getSalaById(@PathVariable Long id) {
-        Optional<Sala> sala = salaService.getSalaById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<SalaDTO> getSalaById(@PathVariable Long id) {
+        SalaDTO sala = salaService.getSalaById(id);
 
-        if(sala.isPresent()){
-            return ResponseEntity.ok(sala.get());
+        if(sala != null){
+            return ResponseEntity.ok(sala);
         }
         return ResponseEntity.notFound().build();
     }
 
 
     @PostMapping
-    public Sala crearSala(@RequestBody Sala sala) {
-        return salaService.crearSala(sala);
+    public ResponseEntity<SalaDTO> crearSala(@RequestBody SalaDTO sala) {
+        SalaDTO salaGuardada = salaService.crearSala(sala);
+        return ResponseEntity.status(HttpStatus.CREATED).body(salaGuardada);
     }
 
-    @PutMapping("/salas/{id}")
-    public ResponseEntity<Sala> actualizarSala(@PathVariable Long id, @RequestBody Sala datosSala) {
+    @PutMapping("/{id}")
+    public ResponseEntity<SalaDTO> actualizarSala(@PathVariable Long id, @RequestBody SalaDTO datosSala) {
         try {
-            Sala salaActualizada = salaService.actualizarSala(id, datosSala);
+            SalaDTO salaActualizada = salaService.actualizarSala(id, datosSala);
             return ResponseEntity.ok(salaActualizada);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @DeleteMapping("/salas/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> borrarSala(@PathVariable Long id) {
-        if (salaService.getSalaById(id).isPresent()){
+        if (salaService.getSalaById(id) != null){
             salaService.borrarSala(id);
             return ResponseEntity.noContent().build();
         }

@@ -5,17 +5,23 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Compra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codCompra;
 
-    @Column(name = "codUsuario", nullable = false)
-    private Long usuario;
+    @ManyToOne
+    @JoinColumn(name = "codUsuario", nullable = false)
+    @JsonBackReference
+    private Usuario usuario;
 
-    @Column(name = "codEmision", nullable = false)
-    private Long emision;
+    @ManyToOne
+    @JoinColumn(name = "codEmision", nullable = false)
+    @JsonBackReference
+    private Emision emision;
 
     @ElementCollection
     @CollectionTable(
@@ -31,7 +37,7 @@ public class Compra {
     public Compra() {
     }
 
-    public Compra(Long codCompra, Long usuario, Long emision, List<String> asientos, double precio) {
+    public Compra(Long codCompra, Usuario usuario, Emision emision, List<String> asientos, double precio) {
         this.codCompra = codCompra;
         this.usuario = usuario;
         this.emision = emision;
@@ -48,19 +54,19 @@ public class Compra {
         this.codCompra = codCompra;
     }
 
-    public Long getUsuario() {
+    public Usuario getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Long usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
-    public Long getEmision() {
+    public Emision getEmision() {
         return emision;
     }
 
-    public void setEmision(Long emision) {
+    public void setEmision(Emision emision) {
         this.emision = emision;
     }
 

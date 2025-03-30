@@ -3,6 +3,8 @@ package es.deusto.proyecto.cine.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Usuario {
     @Id
@@ -15,7 +17,8 @@ public class Usuario {
     private String numTelefono;
     private String contrasenya;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Compra> compras;
 
     public Usuario() {

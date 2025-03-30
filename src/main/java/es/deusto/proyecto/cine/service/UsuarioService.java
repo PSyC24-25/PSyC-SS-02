@@ -1,5 +1,6 @@
 package es.deusto.proyecto.cine.service;
 
+import es.deusto.proyecto.cine.dto.UsuarioDTO;
 import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -16,29 +18,48 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> getAllUsuarios() {
-        return usuarioRepository.findAll();
+    private UsuarioDTO convertirADTO(Usuario usuario){
+        return new UsuarioDTO(usuario.getCodUsuario(), usuario.getNombre(), usuario.getApellido(), usuario.getCorreo());
     }
 
-    public Optional<Usuario> getUsuarioById(Long id) {
-        return usuarioRepository.findById(id);
+    private Usuario ConvertirAEntidad(UsuarioDTO usuarioDTO){
+        Usuario usuario = usuarioRepository.findById(usuarioDTO.getCodUsuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setCorreo(usuarioDTO.getCorreo());
+
+        return usuario;
     }
 
-    public Usuario crearUsuario(Usuario usuario){
-        return usuarioRepository.save(usuario);
+    public List<UsuarioDTO> getAllUsuarios() {
+        return usuarioRepository.findAll().stream()
+                .map(this::convertirADTO)
+                .collect(Collectors.toList());
     }
 
-    public Usuario actualizarUsuario(Long id, Usuario actualizarUsuario) {
+    public UsuarioDTO getUsuarioById(Long id) {
+        return usuarioRepository.findById(id).
+        map(this::convertirADTO) 
+        .orElse(null);    
+    }
+
+    public UsuarioDTO crearUsuario(UsuarioDTO usuarioDTO){
+        Usuario usuario = ConvertirAEntidad(usuarioDTO);
+        Usuario usuarioGuardado = usuarioRepository.save(usuario);
+        return convertirADTO(usuarioGuardado);
+    }
+
+    public UsuarioDTO actualizarUsuario(Long id, UsuarioDTO UsuarioDTO) {
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);
+
         if (usuarioExistente.isPresent()) {
             Usuario usuario = usuarioExistente.get();
-            usuario.setApellido(actualizarUsuario.getApellido());
-            usuario.setNombre(actualizarUsuario.getNombre());
-            usuario.setCompras(actualizarUsuario.getCompras());
-            usuario.setContrasenya(actualizarUsuario.getContrasenya());
-            usuario.setCorreo(actualizarUsuario.getCorreo());
-            usuario.setNumTelefono(actualizarUsuario.getNumTelefono());
-            return usuarioRepository.save(usuario);
+            usuario.setApellido(UsuarioDTO.getApellido());
+            usuario.setNombre(UsuarioDTO.getNombre());
+            usuario.setCorreo(UsuarioDTO.getCorreo());
+
+            Usuario usuarioActualizado = usuarioRepository.save(usuario);
+            return convertirADTO(usuarioActualizado);
         }
         throw new EntityNotFoundException("No se ha encontrado compra con ID " + id);
     }

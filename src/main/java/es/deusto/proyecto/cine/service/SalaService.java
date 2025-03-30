@@ -1,5 +1,6 @@
 package es.deusto.proyecto.cine.service;
 
+import es.deusto.proyecto.cine.dto.SalaDTO;
 import es.deusto.proyecto.cine.model.Sala;
 import es.deusto.proyecto.cine.repository.SalaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,33 +10,54 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SalaService {
     @Autowired
     private SalaRepository salaRepository;  
 
-
-    public List<Sala> getAllSalas() {
-        return salaRepository.findAll();
+    private SalaDTO convertirADTO(Sala sala){
+        return new SalaDTO(sala.getCodSala(), sala.getNumero(), sala.getCapacidad());
     }
 
-    public Optional<Sala> getSalaById(Long id) {
-        return salaRepository.findById(id); 
+    private Sala ConvertirAEntidad(SalaDTO salaDTO){
+        Sala sala = new Sala();
+        sala.setCodSala(salaDTO.getCodSala());
+        sala.setNumero(salaDTO.getNumero());
+        sala.setCapacidad(salaDTO.getCapacidad());
+
+        return sala;
     }
 
-    public Sala crearSala(Sala sala){
-        return salaRepository.save(sala);
+    public List<SalaDTO> getAllSalas() {
+        return salaRepository.findAll().stream()
+                .map(this::convertirADTO)
+                .collect(Collectors.toList());
     }
 
-    public Sala actualizarSala(Long id, Sala actualizarSala) {
+    public SalaDTO getSalaById(Long id) {
+        return salaRepository.findById(id)
+                .map(this::convertirADTO) 
+                .orElse(null); 
+    }
+
+    public SalaDTO crearSala(SalaDTO salaDTO){
+        Sala sala = ConvertirAEntidad(salaDTO);
+        Sala salaGuardada = salaRepository.save(sala);
+        return convertirADTO(salaGuardada);
+    }
+
+    public SalaDTO actualizarSala(Long id, SalaDTO actualizarSala) {
         Optional<Sala> salaExistente = salaRepository.findById(id);
+
         if (salaExistente.isPresent()) {
             Sala sala = salaExistente.get();
             sala.setCapacidad(actualizarSala.getCapacidad());
-            sala.setEmisiones(actualizarSala.getEmisiones());
             sala.setNumero(actualizarSala.getNumero());
-            return salaRepository.save(sala);
+
+            Sala salaActualizada = salaRepository.save(sala);
+            return convertirADTO(salaActualizada);
         }
         throw new EntityNotFoundException("No se ha encontrado compra con ID " + id);
     }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Emision {
     @Id
@@ -12,20 +14,24 @@ public class Emision {
 
     private LocalDateTime fecha; 
 
-    @Column(name = "codPelicula", nullable = false)
-    private Long pelicula;
+    @ManyToOne
+    @JoinColumn(name = "codPelicula", nullable = false)
+    @JsonBackReference
+    private Pelicula pelicula;
 
-    @Column(name = "codSala", nullable = false)
-    private Long sala;
+    @ManyToOne
+    @JoinColumn(name = "codSala", nullable = false)
+    @JsonBackReference
+    private Sala sala;
 
-    @OneToMany(mappedBy = "emision", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "emision", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Compra> compras;
 
 
     public Emision() {
     }
 
-    public Emision(Long codEmision, LocalDateTime fecha, Long pelicula, Long sala, List<Compra> compras) {
+    public Emision(Long codEmision, LocalDateTime fecha, Pelicula pelicula, Sala sala, List<Compra> compras) {
         this.codEmision = codEmision;
         this.fecha = fecha;
         this.pelicula = pelicula;
@@ -49,19 +55,19 @@ public class Emision {
         this.fecha = fecha;
     }
 
-    public Long getPelicula() {
+    public Pelicula getPelicula() {
         return pelicula;
     }
 
-    public void setPelicula(Long pelicula) {
+    public void setPelicula(Pelicula pelicula) {
         this.pelicula = pelicula;
     }
 
-    public Long getSala() {
+    public Sala getSala() {
         return sala;
     }
 
-    public void setSala(Long sala) {
+    public void setSala(Sala sala) {
         this.sala = sala;
     }
 

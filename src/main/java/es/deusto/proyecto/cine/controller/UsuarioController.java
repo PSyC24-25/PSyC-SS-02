@@ -1,54 +1,56 @@
 package es.deusto.proyecto.cine.controller;
 
-import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.dto.UsuarioDTO;
 import es.deusto.proyecto.cine.service.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
+@RequestMapping("/usuarios")
 public class UsuarioController {
     
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping("/usuarios")
-    public List<Usuario> getAllUsuarios() {
+    @GetMapping
+    public List<UsuarioDTO> getAllUsuarios() {
         return usuarioService.getAllUsuarios();
     }
 
-    @GetMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> getUsuarioById(@PathVariable Long id) {
-        Optional<Usuario> usuario = usuarioService.getUsuarioById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> getUsuarioById(@PathVariable Long id) {
+        UsuarioDTO usuario = usuarioService.getUsuarioById(id);
 
-        if(usuario.isPresent()){
-            return ResponseEntity.ok(usuario.get());
+        if(usuario != null){
+            return ResponseEntity.ok(usuario);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public Usuario crearCompra(@RequestBody Usuario usuario) {
-        return usuarioService.crearUsuario(usuario);
+    public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
+        UsuarioDTO usuarioGuardado = usuarioService.crearUsuario(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
     }
 
-    @PutMapping("/usuarios/{id}")
-    public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario datosUsuario) {
+    @PutMapping("/{id}")
+    public ResponseEntity<UsuarioDTO> actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO datosUsuarioDTO) {
         try {
-            Usuario usuarioActualizada = usuarioService.actualizarUsuario(id, datosUsuario);
+            UsuarioDTO usuarioActualizada = usuarioService.actualizarUsuario(id, datosUsuarioDTO);
             return ResponseEntity.ok(usuarioActualizada);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @DeleteMapping("/usuarios/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> borrarUsuario(@PathVariable Long id) {
-        if (usuarioService.getUsuarioById(id).isPresent()){
+        if (usuarioService.getUsuarioById(id) != null){
             usuarioService.borrarUsuario(id);
             return ResponseEntity.noContent().build();
         }

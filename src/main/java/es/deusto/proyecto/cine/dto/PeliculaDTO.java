@@ -1,43 +1,26 @@
-package es.deusto.proyecto.cine.model;
+package es.deusto.proyecto.cine.dto;
 
 
-import jakarta.persistence.*;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-@Entity
-public class Pelicula {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PeliculaDTO {
     private Long codPelicula;
-
     private String titulo;
     private String genero;
     private int duracion; 
     private String director;
     private String sinopsis;
 
-    @OneToMany(mappedBy = "pelicula", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Emision> emisiones;
 
-    
-    public Pelicula() {
+    public PeliculaDTO() {
     }
 
-
-    public Pelicula(Long codPelicula, String titulo, String genero, int duracion, String director, String sinopsis,
-            List<Emision> emisiones) {
+    public PeliculaDTO(Long codPelicula, String titulo, String genero, int duracion, String director, String sinopsis) {
         this.codPelicula = codPelicula;
         this.titulo = titulo;
         this.genero = genero;
         this.duracion = duracion;
         this.director = director;
         this.sinopsis = sinopsis;
-        this.emisiones = emisiones;
     }
-
 
     public Long getCodPelicula() {
         return codPelicula;
@@ -87,12 +70,4 @@ public class Pelicula {
         this.sinopsis = sinopsis;
     }
 
-    public List<Emision> getEmisiones() {
-        return emisiones;
-    }
-
-    public void setEmisiones(List<Emision> emisiones) {
-        this.emisiones = emisiones;
-    }
-    
 }
