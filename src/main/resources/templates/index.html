@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -10,18 +9,32 @@
     <div id="login-container">
         <h2>Iniciar Sesión</h2>
         <form id="login-form" onsubmit="return login(event)">
-            <input type="text" placeholder="Usuario" required><br>
-            <input type="password" placeholder="Contraseña" required><br>
+            <input type="text" id="usuario" placeholder="Usuario" required><br>
+            <input type="password" id="contraseña" placeholder="Contraseña" required><br>
+
+            <label for="rol">Tipo de usuario:</label>
+            <select id="rol">
+                <option value="usuario">Usuario</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <br><br>
+
             <button type="submit">Ingresar</button>
         </form>
-        <p><a href="registro.html">¿Aun no te has registrado?</a></p>
+
+        <p><a href="registro.html">¿Aún no te has registrado?</a></p>
     </div>
-    <a th:href="@{/peliculas}">Peliculas</a>
 
     <script>
         function login(event) {
             event.preventDefault();
-            window.location.href = 'paginaprincipal.html';
+            const rol = document.getElementById("rol").value;
+
+            if (rol === "admin") {
+                window.location.href = "admin_dashboard.html";
+            } else {
+                window.location.href = "paginaprincipal.html";
+            }
         }
     </script>
 </body>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración de Películas</title>
+</head>
+<body>
+    <h1>Administrar Películas</h1>
+    
+    <button onclick="location.href='admin_dashboard.html'">Volver al Panel</button>
+
+    <h2>Agregar Película</h2>
+    <form id="add-movie-form">
+        <input type="text" id="titulo" placeholder="Título" required><br>
+        <input type="text" id="duracion" placeholder="Duración" required><br>
+        <input type="text" id="genero" placeholder="Género" required><br>
+        <input type="text" id="director" placeholder="Director" required><br>
+        <textarea id="sinopsis" placeholder="Sinopsis"></textarea><br>
+        <button type="submit">Agregar Película</button>
+    </form>
+
+    <h2>Lista de Películas</h2>
+    <table border="1">
+        <tr>
+            <th>Título</th>
+            <th>Duración</th>
+            <th>Género</th>
+            <th>Director</th>
+            <th>Acciones</th>
+        </tr>
+        <tbody id="movies-list"></tbody>
+    </table>
+
+    <script>
+        document.getElementById('add-movie-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const movie = {
+                titulo: document.getElementById('titulo').value,
+                duracion: document.getElementById('duracion').value,
+                genero: document.getElementById('genero').value,
+                director: document.getElementById('director').value,
+                sinopsis: document.getElementById('sinopsis').value
+            };
+            fetch('/api/peliculas', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify(movie) 
+            }).then(() => location.reload());
+        });
+
+        function eliminarPelicula(id) {
+            fetch(`/api/peliculas/${id}`, { method: 'DELETE' }).then(() => location.reload());
+        }
+
+        function cargarPeliculas() {
+            fetch('/api/peliculas')
+                .then(response => response.json())
+                .then(data => {
+                    const table = document.getElementById('movies-list');
+                    table.innerHTML = '';
+                    data.forEach(pelicula => {
+                        table.innerHTML += `
+                            <tr>
+                                <td>${pelicula.titulo}</td>
+                                <td>${pelicula.duracion}</td>
+                                <td>${pelicula.genero}</td>
+                                <td>${pelicula.director}</td>
+                                <td><button onclick="eliminarPelicula(${pelicula.id})">Eliminar</button></td>
+                            </tr>`;
+                    });
+                });
+        }
+
+        cargarPeliculas();
+    </script>
+</body>
+</html>

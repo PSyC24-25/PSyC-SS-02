@@ -9,20 +9,35 @@
     <div id="registro-container">
         <h2>Registro de Usuario</h2>
         <form id="register-form" onsubmit="return register(event)">
-            <input type="text" placeholder="Nombre" required><br>
-            <input type="text" placeholder="Apellido" required><br>
-            <input type="email" placeholder="Correo" required><br>
-            <input type="text" placeholder="telefono" required><br>
-            <input type="password" placeholder="Contraseña" required><br>
+            <input type="text" id="nombre" placeholder="Nombre" required><br>
+            <input type="text" id="apellido" placeholder="Apellido" required><br>
+            <input type="email" id="correo" placeholder="Correo" required><br>
+            <input type="text" id="telefono" placeholder="Teléfono" required><br>
+            <input type="password" id="contraseña" placeholder="Contraseña" required><br>
+
+            <label for="rol">Tipo de usuario:</label>
+            <select id="rol">
+                <option value="usuario">Usuario</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <br><br>
+
             <button type="submit">Registrar</button>
         </form>
+
         <p>¿Ya tienes cuenta? <a href="index.html">Inicia sesión aquí</a></p>
     </div>
 
     <script>
         function register(event) {
             event.preventDefault();
-            window.location.href = 'paginaprincipal.html';
+            const rol = document.getElementById("rol").value;
+
+            if (rol === "admin") {
+                window.location.href = "admin_dashboard.html";
+            } else {
+                window.location.href = "paginaprincipal.html";
+            }
         }
     </script>
 </body>
