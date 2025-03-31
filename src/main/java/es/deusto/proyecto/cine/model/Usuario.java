@@ -3,7 +3,6 @@ package es.deusto.proyecto.cine.model;
 import jakarta.persistence.*;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Usuario {
@@ -18,14 +17,16 @@ public class Usuario {
     private String contrasenya;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<Compra> compras;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
     public Usuario() {
     }
 
     public Usuario(Long codUsuario, String nombre, String apellido, String correo, String numTelefono,
-            String contrasenya, List<Compra> compras) {
+            String contrasenya, List<Compra> compras, Rol rol) {
         this.codUsuario = codUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -33,6 +34,7 @@ public class Usuario {
         this.numTelefono = numTelefono;
         this.contrasenya = contrasenya;
         this.compras = compras;
+        this.rol = rol;
     }
 
 
@@ -92,5 +94,12 @@ public class Usuario {
         this.compras = compras;
     }
 
-    
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
 }

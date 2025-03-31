@@ -1,78 +1,49 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración de Películas</title>
+    <title>Administración de películas</title>
 </head>
 <body>
-    <h1>Administrar Películas</h1>
-    
-    <button onclick="location.href='admin_dashboard.html'">Volver al Panel</button>
-
-    <h2>Agregar Película</h2>
-    <form id="add-movie-form">
-        <input type="text" id="titulo" placeholder="Título" required><br>
-        <input type="text" id="duracion" placeholder="Duración" required><br>
-        <input type="text" id="genero" placeholder="Género" required><br>
-        <input type="text" id="director" placeholder="Director" required><br>
-        <textarea id="sinopsis" placeholder="Sinopsis"></textarea><br>
-        <button type="submit">Agregar Película</button>
-    </form>
-
-    <h2>Lista de Películas</h2>
-    <table border="1">
-        <tr>
-            <th>Título</th>
-            <th>Duración</th>
-            <th>Género</th>
-            <th>Director</th>
-            <th>Acciones</th>
-        </tr>
-        <tbody id="movies-list"></tbody>
+    <button th:href="@{/}">Volver al inicio</button>
+    <h1>Administrar películas</h1>
+    <h1>Lista de peliculas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Duracion</th>
+                <th>Genero</th>
+                <th>Director</th>
+                <th>Sinopsis</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pelicula : ${peliculas}">
+                <td th:text="${pelicula.titulo}"></td>
+                <td th:text="${pelicula.duracion}"></td>
+                <td th:text="${pelicula.genero}"></td>
+                <td th:text="${pelicula.director}"></td>
+                <td th:text="${pelicula.sinopsis}"></td>
+            </tr>
+        </tbody>
     </table>
 
-    <script>
-        document.getElementById('add-movie-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const movie = {
-                titulo: document.getElementById('titulo').value,
-                duracion: document.getElementById('duracion').value,
-                genero: document.getElementById('genero').value,
-                director: document.getElementById('director').value,
-                sinopsis: document.getElementById('sinopsis').value
-            };
-            fetch('/api/peliculas', { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify(movie) 
-            }).then(() => location.reload());
-        });
+    <h2>Agregar Película</h2>
+    <form th:action="@{/admin/peliculas}" method="post">
+        <label>Título:</label>
+        <input type="text" name="titulo" required>
 
-        function eliminarPelicula(id) {
-            fetch(`/api/peliculas/${id}`, { method: 'DELETE' }).then(() => location.reload());
-        }
+        <label>Duracion (minutos):</label>
+        <input type="number" name="duracion" required>
 
-        function cargarPeliculas() {
-            fetch('/api/peliculas')
-                .then(response => response.json())
-                .then(data => {
-                    const table = document.getElementById('movies-list');
-                    table.innerHTML = '';
-                    data.forEach(pelicula => {
-                        table.innerHTML += `
-                            <tr>
-                                <td>${pelicula.titulo}</td>
-                                <td>${pelicula.duracion}</td>
-                                <td>${pelicula.genero}</td>
-                                <td>${pelicula.director}</td>
-                                <td><button onclick="eliminarPelicula(${pelicula.id})">Eliminar</button></td>
-                            </tr>`;
-                    });
-                });
-        }
+        <label>Genero:</label>
+        <input type="text" name="genero" required>
 
-        cargarPeliculas();
-    </script>
+        <label>Director:</label>
+        <input type="text" name="director" required>
+
+        <button type="submit">Agregar película</button>
+    </form>
 </body>
 </html>

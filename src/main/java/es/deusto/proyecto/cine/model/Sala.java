@@ -4,7 +4,6 @@ package es.deusto.proyecto.cine.model;
 import jakarta.persistence.*;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Sala {
@@ -16,7 +15,6 @@ public class Sala {
     private int capacidad;
 
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<Emision> emisiones;
 
     public Sala() {

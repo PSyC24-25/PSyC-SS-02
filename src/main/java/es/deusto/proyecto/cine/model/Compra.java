@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 public class Compra {
     @Id
@@ -15,12 +13,10 @@ public class Compra {
 
     @ManyToOne
     @JoinColumn(name = "codUsuario", nullable = false)
-    @JsonBackReference
     private Usuario usuario;
 
     @ManyToOne
     @JoinColumn(name = "codEmision", nullable = false)
-    @JsonBackReference
     private Emision emision;
 
     @ElementCollection

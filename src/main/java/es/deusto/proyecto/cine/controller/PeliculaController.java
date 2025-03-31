@@ -4,7 +4,6 @@ import es.deusto.proyecto.cine.dto.PeliculaDTO;
 import es.deusto.proyecto.cine.service.PeliculaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +44,9 @@ public class PeliculaController {
     }
 
     @PostMapping
-    public ResponseEntity<PeliculaDTO> crearPelicula(@RequestBody PeliculaDTO peliculaDTO) {
-        PeliculaDTO peliculaGuardada = peliculaService.crearPelicula(peliculaDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(peliculaGuardada);
+    public String crearPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
+        peliculaService.crearPelicula(peliculaDTO);
+        return "redirect:/peliculas";
     }
 
     @PutMapping("/{id}")

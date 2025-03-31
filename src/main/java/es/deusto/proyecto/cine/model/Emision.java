@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 public class Emision {
     @Id
@@ -16,12 +14,10 @@ public class Emision {
 
     @ManyToOne
     @JoinColumn(name = "codPelicula", nullable = false)
-    @JsonBackReference
     private Pelicula pelicula;
 
     @ManyToOne
     @JoinColumn(name = "codSala", nullable = false)
-    @JsonBackReference
     private Sala sala;
 
     @OneToMany(mappedBy = "emision", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package es.deusto.proyecto.cine.controller;
 
 import es.deusto.proyecto.cine.dto.UsuarioDTO;
+import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.UsuarioService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,8 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        UsuarioDTO usuarioGuardado = usuarioService.crearUsuario(usuarioDTO);
+    public ResponseEntity<UsuarioDTO> crearUsuario(@RequestBody Usuario usuario) {
+        UsuarioDTO usuarioGuardado = usuarioService.crearUsuario(usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
     }
 
