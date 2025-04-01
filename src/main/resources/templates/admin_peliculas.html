@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Administración de películas</title>
     <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
     <a th:href="@{/admin}">Volver a panel admin</a>
@@ -17,7 +18,7 @@
                 <th>Genero</th>
                 <th>Director</th>
                 <th>Sinopsis</th>
-                <th>Cod</th>
+                <th>Borrar</th>
             </tr>
         </thead>
         <tbody>
@@ -27,9 +28,8 @@
                 <td th:text="${pelicula.genero}"></td>
                 <td th:text="${pelicula.director}"></td>
                 <td th:text="${pelicula.sinopsis}"></td>
-                <td th:text="${pelicula.codPelicula}"></td>
                 <td>
-                    <button onclick="borrarPelicula(this)" th:attr="data-id=${pelicula.codPelicula}">Delete</button>
+                    <button th:attr="data-id=${pelicula.codPelicula}">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -55,26 +55,6 @@
         <button type="submit">Agregar película</button>
     </form>
 
-    <script>
-        function borrarPelicula(button) {
-            console.log("hodsda")
-            let codPelicula = button.getAttribute("data-id");
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            console.log("hodsda")
-            console.log(codPelicula);
-            fetch(`/admin/peliculas/borrar/`+codPelicula, {
-                method: "DELETE",
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            }).then(response => {
-                if (response.ok) {
-                    setTimeout(() => window.location.reload(), 500);
-                } else {
-                    alert("No se ha podido eliminar la pelicula");
-                }
-            });
-        }
-    </script>
+    <script th:src="@{/js/pelicula.js}"></script>
 </body>
 </html>
