@@ -4,6 +4,7 @@ import es.deusto.proyecto.cine.dto.PeliculaDTO;
 import es.deusto.proyecto.cine.model.Pelicula;
 import es.deusto.proyecto.cine.repository.PeliculaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,11 +71,10 @@ public class PeliculaService {
         throw new EntityNotFoundException("No se ha encontrado compra con ID " + id);
     }
 
+    @Transactional
     public void borrarPelicula(Long id){
-        if (peliculaRepository.existsById(id)) {
-            peliculaRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("No existe pelicula con id: " + id);
-        }
+        Optional<Pelicula> pelicula = peliculaRepository.findByCodPelicula(id); 
+        System.out.println("PELICULA:" + pelicula.get().getTitulo());
+        peliculaRepository.deleteByCodPelicula(id);
     }
 }

@@ -29,7 +29,6 @@ public class AutUsuarioService implements UserDetailsService {
 
         System.out.println(" Usuario encontrado en BD: " + usuario.getCorreo());
         System.out.println(" Contraseña hasheada en BD: " + usuario.getContrasenya());
-        System.out.println(" Coincide con '123456'? " + passwordEncoder.matches("123456", usuario.getContrasenya()));
         return User.withUsername(usuario.getCorreo())
                    .password(usuario.getContrasenya()) 
                    .roles(usuario.getRol().name())

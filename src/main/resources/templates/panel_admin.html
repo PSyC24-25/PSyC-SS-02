@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Panel Admin</title>
+</head>
+<body>
+    <h1>Bienvenido, <span th:text="${nombre}">Admin</span>!</h1>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Volver al inicio</a></li>
+            <li><a th:href="@{/admin/peliculas}">Gestionar peliculas</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

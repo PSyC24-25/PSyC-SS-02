@@ -2,18 +2,23 @@ package es.deusto.proyecto.cine.controller;
 
 import java.util.List;
 
+// import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.deusto.proyecto.cine.dto.PeliculaDTO;
+// import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.PeliculaService;
 
 @Controller
-@RequestMapping("/admin/peliculas")
+@RequestMapping("/admin")
 public class AdminController {
 
     private final PeliculaService peliculaService;
@@ -22,16 +27,30 @@ public class AdminController {
         this.peliculaService = peliculaService;
     }
 
+    // @PreAuthorize("hasRole('ADMIN')") @AuthenticationPrincipal Usuario usuario, Model model
     @GetMapping
+    public String panelAdmin() {
+        // model.addAttribute("nombre", usuario.getNombre());
+        return "panel_admin";  
+    }
+
+    @GetMapping("/peliculas")
     public String getPeliculasAdmin(Model model) {
-        List<PeliculaDTO> films = peliculaService.getAllPeliculas();
-        model.addAttribute("films", films);
+        List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
+        model.addAttribute("peliculas", peliculas);
+        model.addAttribute("nuevaPelicula", new PeliculaDTO());
         return "admin_peliculas";
     }
 
-    @PostMapping
-    public String addPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
+    @PostMapping("/peliculas/agregar")
+    public String agregarPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
         peliculaService.crearPelicula(peliculaDTO);
+        return "redirect:/admin/peliculas";
+    }
+
+    @DeleteMapping("/peliculas/borrar/{id}")
+    public String deleteFilm(@PathVariable Long id) {
+        peliculaService.borrarPelicula(id);
         return "redirect:/admin/peliculas";
     }
 }

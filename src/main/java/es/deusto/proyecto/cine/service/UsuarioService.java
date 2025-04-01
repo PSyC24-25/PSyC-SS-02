@@ -76,8 +76,9 @@ public class UsuarioService {
             throw new IllegalArgumentException("ID nulo");
         }
         usuario.setRol(Rol.USUARIO);
+        System.out.println("Contra antes de hashear " + usuario.getContrasenya());
         usuario.setContrasenya(encriptar(usuario.getContrasenya()));
-        System.out.println("Contra despues de hashear" + usuario.getContrasenya());
+        System.out.println("Contra despues de hashear " + usuario.getContrasenya());
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
         return convertirADTO(usuarioGuardado);
     }

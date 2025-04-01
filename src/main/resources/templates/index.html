@@ -4,9 +4,13 @@
     <title>Inicio</title>
 </head>
 <body>
-    <div id="login-container">
-        <a th:href="@{/autenticacion/login}">Iniciar Sesion</a>
+    <nav>
+        <span th:if="${#authentication != null}">
+            Bienvenido, <span th:text="${#authentication.nombre}"></span>!
+        </span>
+        <a th:href="@{/autenticacion/login}">Iniciar sesion</a>
         <a th:href="@{/autenticacion/registro}">Registro</a>
+        <a th:href="@{/admin}">Panel admin</a>
         <a th:href="@{/peliculas}">Ver Cartelera</a>
     </div>
 </body>
