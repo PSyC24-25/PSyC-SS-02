@@ -6,13 +6,12 @@
 </head>
 <body>
     <nav>
-        <span th:if="${#authentication != null}">
-            Bienvenido, <span th:text="${#authentication.nombre}"></span>!
-        </span>
         <a th:href="@{/autenticacion/login}">Iniciar sesion</a>
         <a th:href="@{/autenticacion/registro}">Registro</a>
         <a th:href="@{/admin}">Panel admin</a>
+        <!--<span th:if="${usuario.rol == 'ADMIN'}"><a th:href="@{/admin}">Panel admin</a></span>-->
         <a th:href="@{/peliculas}">Ver Cartelera</a>
-    </div>
+    </nav>
+    <h2>Bienvenido, <span th:if="${usuario != null}" th:text="${usuario.nombre}"></span>!</h2>
 </body>
 </html>
