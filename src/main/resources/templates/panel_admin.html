@@ -5,7 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <h1>Bienvenido, <span th:text="${nombre}">Admin</span>!</h1>
+    <h1>Bienvenido, <span th:if="${usuario != null}" th:text="${usuario.nombre}"></span>!</h1>
 
     <nav>
         <ul>

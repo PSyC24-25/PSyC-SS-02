@@ -8,25 +8,13 @@
 </head>
 <body>
     <nav>
-        <ul> 
-            <!-- Usuario autenticado, muestra nombre y opcion cerrar sesión -->
-            <li th:if="${#authorization.expression('isAuthenticated()')}">
-                Bienvenido, <span th:text="${#authentication.principal.username}"></span>!
-                <form th:action="@{/logout}" method="post">
-                    <button type="submit">Cerrar sesión</button>
-                </form>
-            </li>
-
-            <!-- Usuario NO autenticado, muestra opciones login y registro -->
-            <li th:unless="${#authorization.expression('isAuthenticated()')}">
-                <a th:href="@{/autenticacion/login}">Iniciar sesión</a>
-                <a th:href="@{/autenticacion/registro}">Registro</a>
-            </li>
-
-            <!-- Opciones visibles todos -->
-            <li><a th:href="@{/admin}">Panel admin</a></li>
-            <li><a th:href="@{/peliculas}">Ver Cartelera</a></li>
-        </ul>
+        <span th:if="${#authentication != null}">
+            Bienvenido, <span th:text="${#authentication.nombre}"></span>!
+        </span>
+        <a th:href="@{/autenticacion/login}">Iniciar sesion</a>
+        <a th:href="@{/autenticacion/registro}">Registro</a>
+        <a th:href="@{/admin}">Panel admin</a>
+        <a th:href="@{/peliculas}">Ver Cartelera</a>
     </div>
 </body>
 </html>

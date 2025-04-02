@@ -2,6 +2,8 @@ package es.deusto.proyecto.cine.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 // import org.springframework.security.access.prepost.PreAuthorize;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.deusto.proyecto.cine.dto.PeliculaDTO;
+import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.repository.UsuarioRepository;
 // import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.PeliculaService;
 
@@ -23,14 +27,22 @@ public class AdminController {
 
     private final PeliculaService peliculaService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     public AdminController(PeliculaService peliculaService) {
         this.peliculaService = peliculaService;
     }
 
     // @PreAuthorize("hasRole('ADMIN')") @AuthenticationPrincipal Usuario usuario, Model model
     @GetMapping
-    public String panelAdmin() {
+    public String panelAdmin(Authentication authentication, Model model) {
         // model.addAttribute("nombre", usuario.getNombre());
+        if (authentication != null) {
+            String nombre = authentication.getName();
+            Usuario usuario = usuarioRepository.findByCorreo(nombre).orElse(null);
+            model.addAttribute("usuario", usuario);
+        }
         return "panel_admin";  
     }
 
