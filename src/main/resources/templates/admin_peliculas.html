@@ -8,8 +8,10 @@
 </head>
 <body>
     <a th:href="@{/admin}">Volver a panel admin</a>
+
     <h1>Administrar películas</h1>
-    <h1>Lista de peliculas</h1>
+
+    <h2>Lista de peliculas</h2>
     <table>
         <thead>
             <tr>
@@ -29,7 +31,9 @@
                 <td th:text="${pelicula.director}"></td>
                 <td th:text="${pelicula.sinopsis}"></td>
                 <td>
-                    <button th:attr="data-id=${pelicula.codPelicula}">Delete</button>
+                    <button class="delete-btn" th:attr="data-id=${pelicula.codPelicula}">
+                        Borrar
+                    </button>
                 </td>
             </tr>
         </tbody>
@@ -37,20 +41,30 @@
 
     <h2>Agregar Película</h2>
     <form th:action="@{/admin/peliculas/agregar}" method="post" th:object="${nuevaPelicula}">
-        <label>Título:</label>
-        <input type="text" name="titulo" required>
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Ingrese el título de la película" required>
+        </div>
 
-        <label>Duracion (minutos):</label>
-        <input type="number" name="duracion" th:field="*{duracion}" required>
+        <div class="form-group">
+            <label for="duracion">Duración (minutos):</label>
+            <input type="number" id="duracion" name="duracion" th:field="*{duracion}" min="1" required>
+        </div>
 
-        <label>Genero:</label>
-        <input type="text" name="genero" th:field="*{genero}" required>
+        <div class="form-group">
+            <label for="genero">Género:</label>
+            <input type="text" id="genero" name="genero" th:field="*{genero}" placeholder="Género de la película" required>
+        </div>
 
-        <label>Director:</label>
-        <input type="text" name="director" th:field="*{director}" required>
+        <div class="form-group">
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" th:field="*{director}" placeholder="Nombre del director" required>
+        </div>
 
-        <label>Sinopsis:</label>
-        <input type="text" name="sinopsis" th:field="*{sinopsis}" required>
+        <div class="form-group">
+            <label for="sinopsis">Sinopsis:</label>
+            <textarea id="sinopsis" name="sinopsis" th:field="*{sinopsis}" placeholder="Breve descripción de la película" required></textarea>
+        </div>
 
         <button type="submit">Agregar película</button>
     </form>

@@ -1,9 +1,17 @@
+/* ESTILO GENERAL */
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
     padding: 20px;
+    background-color: #f9f9f9;
 }
 
+h1, h2{
+    color: #333;
+    text-align: center;
+}
+
+/* TABLAS */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -12,7 +20,7 @@ table {
 
 th, td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px;
     text-align: left;
 }
 
@@ -20,14 +28,150 @@ th {
     background-color: #f4f4f4;
 }
 
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* ALTERNAR COLOR FILAS */
+}
+
 button {
-    background-color: red;
+    background-color: #dc3545;
     color: white;
     border: none;
-    padding: 5px 10px;
+    padding: 8px 16px;
     cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease-in-out;
 }
 
 button:hover {
     background-color: darkred;
+}
+
+button:active {
+    background-color: #9b0000;
+}
+
+button:focus{
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+}
+
+
+/* LOGIN CONTENEDOR */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+form div{
+    margin-bottom: 15px;
+}
+
+label{
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+input[type="email"], input[type="password"], button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+    border-color: #007BFF; /* Color de borde cuando se hace focus */
+    outline: none;
+}
+
+
+/* ENLACES */
+a {
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    text-align: center;
+}
+
+
+/* MENSAJE ERROR */
+.error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* VOLVER INICIO */
+.back-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #007BFF;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+
+/* FORMULARIO ADMIN PELICULAS */
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="number"]:focus, input[type="text"]:focus, textarea:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: darkgreen;
 }
