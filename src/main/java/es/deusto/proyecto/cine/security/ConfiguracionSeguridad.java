@@ -1,5 +1,8 @@
 package es.deusto.proyecto.cine.security;
 
+import org.apache.catalina.security.SecurityConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,9 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.apache.catalina.security.SecurityConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 @Configuration
@@ -27,6 +27,7 @@ public class ConfiguracionSeguridad {
                 .requestMatchers("/", "/autenticacion/login", "/autenticacion/registro", "/peliculas").permitAll()  // Public pages
                 .requestMatchers("/admin/**").hasRole("ADMIN")  // Admin pages
                 .requestMatchers(HttpMethod.DELETE, "admin/peliculas/**").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll() // 🔥 Permitir archivos estáticos
                 .anyRequest().authenticated()  // Hay que logearse para el resto
             )
             .formLogin(form -> form
