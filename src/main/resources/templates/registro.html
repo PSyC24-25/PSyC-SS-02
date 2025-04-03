@@ -6,24 +6,26 @@
 </head>
 <body>
     <a th:href="@{/}">Volver al inicio</a>
-    <h2>Registro</h2>
-    <form th:action="@{/autenticacion/registro}" method="post" th:object="${usuario}">
-        <label>Nombre:</label>
-        <input type="text" th:field="*{nombre}" required/><br/>
+    <div class = "registro-container">
+        <h2>Registro</h2>
+        <form th:action="@{/autenticacion/registro}" method="post" th:object="${usuario}">
+            <label>Nombre:</label>
+            <input type="text" th:field="*{nombre}" required/><br/>
 
-        <label>Apellido:</label>
-        <input type="text" th:field="*{apellido}" required/><br/>
+            <label>Apellido:</label>
+            <input type="text" th:field="*{apellido}" required/><br/>
 
-        <label>Correo:</label>
-        <input type="email" th:field="*{correo}" required/><br/>
+            <label>Correo:</label>
+            <input type="email" th:field="*{correo}" required/><br/>
 
-        <label>Numero Tel.:</label>
-        <input type="text" th:field="*{numTelefono}" required/><br/>
+            <label>Numero Tel.:</label>
+            <input type="text" th:field="*{numTelefono}" required/><br/>
 
-        <label>Contraseña:</label>
-        <input type="password" th:field="*{contrasenya}" required/><br/>
+            <label>Contraseña:</label>
+            <input type="password" th:field="*{contrasenya}" required/><br/>
 
-        <button type="submit">Registrar</button>
-    </form>
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
 </body>
 </html>
