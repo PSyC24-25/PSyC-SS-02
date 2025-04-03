@@ -6,6 +6,44 @@ body {
     background-color: #f9f9f9;
 }
 
+/* INDEX CONTENEDOR */
+.index-container {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+/* NAVBAR */
+nav {
+    background-color: #007BFF;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 0 15px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background 0.3s ease-in-out;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* MENSAJE DE BIENVENIDA */
+span {
+    display: block;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+
 h1, h2{
     color: #333;
     text-align: center;
