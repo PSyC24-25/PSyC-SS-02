@@ -8,13 +8,14 @@
 </head>
 <body>
     <nav>
-        <span th:if="${#authentication != null}">
-            Bienvenido, <span th:text="${#authentication.nombre}"></span>!
-        </span>
         <a th:href="@{/autenticacion/login}">Iniciar sesion</a>
         <a th:href="@{/autenticacion/registro}">Registro</a>
         <a th:href="@{/admin}">Panel admin</a>
         <a th:href="@{/peliculas}">Ver Cartelera</a>
-    </div>
+    </nav>
+    <br>
+    <span th:if="${usuario != null}">
+        Bienvenido, <span th:text="${usuario.nombre}"></span>!
+    </span>
 </body>
 </html>
