@@ -22,7 +22,7 @@ public class UsuarioService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
+    
     public UsuarioService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }

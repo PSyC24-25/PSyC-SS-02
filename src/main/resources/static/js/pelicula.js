@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     setTimeout(() => window.location.reload(), 500);
                 } else {
-                    alert("No se ha podido eliminar la película");
+                    setTimeout(() => window.location.reload(), 500);
                 }
             });
         });

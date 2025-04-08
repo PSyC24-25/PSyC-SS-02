@@ -5,17 +5,17 @@ import java.time.LocalDateTime;
 public class EmisionDTO {
     private Long codEmision;
     private LocalDateTime fecha; 
-    private Long idPelicula;
-    private Long idSala;
+    private String nomPelicula;
+    private int numSala;
 
     public EmisionDTO() {
     }
 
-    public EmisionDTO(Long codEmision, LocalDateTime fecha, Long idPelicula, Long idSala) {
+    public EmisionDTO(Long codEmision, LocalDateTime fecha, String nomPelicula, int numSala) {
         this.codEmision = codEmision;
         this.fecha = fecha;
-        this.idPelicula = idPelicula;
-        this.idSala = idSala;
+        this.nomPelicula = nomPelicula;
+        this.numSala = numSala;
     }
 
     public Long getCodEmision() {
@@ -34,19 +34,19 @@ public class EmisionDTO {
         this.fecha = fecha;
     }
 
-    public Long getIdPelicula() {
-        return idPelicula;
+    public String getNomPelicula() {
+        return nomPelicula;
     }
 
-    public void setIdPelicula(Long idPelicula) {
-        this.idPelicula = idPelicula;
+    public void setIdPelicula(String nomPelicula) {
+        this.nomPelicula = nomPelicula;
     }
 
-    public Long getIdSala() {
-        return idSala;
+    public int getNumSala() {
+        return numSala;
     }
 
-    public void setIdSala(Long idSala) {
-        this.idSala = idSala;
+    public void setNumSala(int numSala) {
+        this.numSala = numSala;
     }
 }

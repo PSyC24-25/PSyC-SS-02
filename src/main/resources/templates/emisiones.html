@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Peliculas</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/}">Volver al inicio</a>
+    <h1>Lista de emisiones</h1>
+
+    <h2>Películas de hoy</h2>
+    <p th:if="${emisionesHoy == null or #lists.isEmpty(emisionesHoy)}">No hay emisiones para hoy</p>
+    <table th:if="${emisionesHoy != null and !#lists.isEmpty(emisionesHoy)}">
+        <tr>
+            <th>Pelicula</th>
+            <th>Sala</th>
+            <th>Hora</th>
+        </tr>
+        <tr th:each="emision : ${emisionesHoy}">
+            <td th:text="${emision.nomPelicula}"></td>
+            <td th:text="${emision.numSala}"></td>
+            <td th:text="${emision.fecha}"></td>
+        </tr>
+    </table>
+
+    <h2>Películas futuras</h2>
+    <p th:if="${emisionesPosteriores == null or #lists.isEmpty(emisionesPosteriores)}">No hay emisiones futuras</p>
+    <table th:if="${emisionesPosteriores != null and !#lists.isEmpty(emisionesPosteriores)}">
+        <tr>
+            <th>Pelicula</th>
+            <th>Sala</th>
+            <th>Hora</th>
+        </tr>
+        <tr th:each="emision : ${emisionesPosteriores}">
+            <td th:text="${emision.nomPelicula}"></td>
+            <td th:text="${emision.numSala}"></td>
+            <td th:text="${emision.fecha}"></td>
+        </tr>
+    </table>
+</body>
+</html>

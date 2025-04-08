@@ -25,14 +25,14 @@ public class EmisionService {
     private PeliculaRepository peliculaRepository;
 
     private EmisionDTO convertirADTO(Emision emision){
-        return new EmisionDTO(emision.getCodEmision(), emision.getDateTime(), emision.getPelicula().getCodPelicula()
-        , emision.getSala().getCodSala());
+        return new EmisionDTO(emision.getCodEmision(), emision.getDateTime(), emision.getPelicula().getTitulo()
+        , emision.getSala().getNumero());
     }
 
     private Emision ConvertirAEntidad(EmisionDTO emisionDTO){
-        Pelicula pelicula = peliculaRepository.findById(emisionDTO.getIdPelicula())
+        Pelicula pelicula = peliculaRepository.findByTitulo(emisionDTO.getNomPelicula())
             .orElseThrow(() -> new RuntimeException("Pelicula no encontrada"));
-        Sala sala = salaRepository.findById(emisionDTO.getIdSala())
+        Sala sala = salaRepository.findByNumero(emisionDTO.getNumSala())
             .orElseThrow(() -> new RuntimeException("Sala no encontrada"));
 
         Emision emision = new Emision();
@@ -69,10 +69,10 @@ public class EmisionService {
             Emision emision = emisionExistente.get();
             emision.setDateTime(actualizarEmisionDTO.getFecha());
 
-            Pelicula pelicula = peliculaRepository.findById(actualizarEmisionDTO.getIdPelicula())
+            Pelicula pelicula = peliculaRepository.findByTitulo(actualizarEmisionDTO.getNomPelicula())
                 .orElseThrow(() -> new RuntimeException("Pelicula no encontrada"));
             emision.setPelicula(pelicula);
-            Sala sala = salaRepository.findById(actualizarEmisionDTO.getIdSala())
+            Sala sala = salaRepository.findByNumero(actualizarEmisionDTO.getNumSala())
                 .orElseThrow(() -> new RuntimeException("Sala no encontrada"));
             emision.setSala(sala);
 

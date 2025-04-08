@@ -27,8 +27,6 @@ public class PeliculaController {
     @GetMapping
     public String getAllPeliculas(Model model) {
         List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
-        System.out.println("Films retrieved: " + peliculas);
-        System.out.println("Films count: " + peliculas.size());
         model.addAttribute("peliculas", peliculas);
         return "peliculas";
     }
