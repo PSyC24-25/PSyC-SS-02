@@ -42,6 +42,11 @@ public class PeliculaService {
                 .collect(Collectors.toList());
     }
 
+    // Método para obtener películas filtradas por género
+    public List<PeliculaDTO> getPeliculasByGenero(String genero) {
+        return peliculaRepository.findByGenero(genero);
+    }
+
     public PeliculaDTO getPeliculaById(Long id) {
         return peliculaRepository.findById(id)
                 .map(this::convertirADTO) 

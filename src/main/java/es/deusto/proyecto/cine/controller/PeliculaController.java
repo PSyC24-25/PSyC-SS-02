@@ -25,9 +25,22 @@ public class PeliculaController {
     //     return peliculaService.getAllPeliculas();
     // }
     @GetMapping
-    public String getAllPeliculas(Model model) {
-        List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
+    public String getAllPeliculas(@RequestParam(name = "genero", required = false) String genero, Model model) {
+        /*List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
         model.addAttribute("peliculas", peliculas);
+        return "peliculas";*/
+        List<PeliculaDTO> peliculas;
+
+        if (genero != null && !genero.isEmpty()) {
+            // Si hay un género seleccionado, filtramos las películas por género
+            peliculas = peliculaService.getPeliculasByGenero(genero);
+        } else {
+            // Si no hay género seleccionado, mostramos todas las películas
+            peliculas = peliculaService.getAllPeliculas();
+        }
+
+        model.addAttribute("peliculas", peliculas);
+        model.addAttribute("generoSeleccionado", genero);  // Para mantener el valor del filtro
         return "peliculas";
     }
 

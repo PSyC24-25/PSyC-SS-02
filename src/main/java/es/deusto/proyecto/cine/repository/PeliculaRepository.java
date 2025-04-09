@@ -1,5 +1,6 @@
 package es.deusto.proyecto.cine.repository;
 
+import es.deusto.proyecto.cine.dto.PeliculaDTO;
 import es.deusto.proyecto.cine.model.Pelicula;
 import jakarta.transaction.Transactional;
 
@@ -8,6 +9,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.*;
+
 @Repository
 public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {   
     Optional<Pelicula> findByCodPelicula(Long codigo);
@@ -15,4 +18,8 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
     @Transactional
     void deleteByCodPelicula (Long codigo);
+
+
+    // BUSCAR PELICULAS POR GENERO
+    List<PeliculaDTO> findByGenero(String genero);
 }
