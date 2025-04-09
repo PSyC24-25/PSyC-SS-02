@@ -29,18 +29,19 @@ public class PeliculaController {
         /*List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
         model.addAttribute("peliculas", peliculas);
         return "peliculas";*/
+
         List<PeliculaDTO> peliculas;
 
         if (genero != null && !genero.isEmpty()) {
-            // Si hay un género seleccionado, filtramos las películas por género
+            // SI GENERO SELECCIONADO, SOLO APARECEN ESAS PELICULAS
             peliculas = peliculaService.getPeliculasByGenero(genero);
         } else {
-            // Si no hay género seleccionado, mostramos todas las películas
+            // NO GENERO SELECCIONADO, POR TANTO APARECEN TODAS
             peliculas = peliculaService.getAllPeliculas();
         }
 
         model.addAttribute("peliculas", peliculas);
-        model.addAttribute("generoSeleccionado", genero);  // Para mantener el valor del filtro
+        model.addAttribute("generoSeleccionado", genero);
         return "peliculas";
     }
 
