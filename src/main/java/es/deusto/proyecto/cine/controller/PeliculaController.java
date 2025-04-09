@@ -25,11 +25,7 @@ public class PeliculaController {
     //     return peliculaService.getAllPeliculas();
     // }
     @GetMapping
-    public String getAllPeliculas(@RequestParam(name = "genero", required = false) String genero, Model model) {
-        /*List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
-        model.addAttribute("peliculas", peliculas);
-        return "peliculas";*/
-
+    public String getAllPeliculas(@RequestParam(required = false) String genero, Model model) {
         List<PeliculaDTO> peliculas;
 
         if (genero != null && !genero.isEmpty()) {
@@ -41,7 +37,7 @@ public class PeliculaController {
         }
 
         model.addAttribute("peliculas", peliculas);
-        model.addAttribute("generoSeleccionado", genero);
+        model.addAttribute("genero", genero);
         return "peliculas";
     }
 

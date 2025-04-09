@@ -9,7 +9,7 @@
     <a th:href="@{/}">Volver al inicio</a>
     <h1>Lista de peliculas</h1>
 
-    <!-- FILTRO GENERO -->
+    
     <form action="#" th:action="@{/peliculas}" method="get">
         <label for="genero">Filtrar por Género:</label>
         <select name="genero" id="genero">
@@ -21,9 +21,11 @@
             <option value="Terror">Terror</option>
 
         </select>
-        <button type="button" id="filtrarBtn">Filtrar</button>
+        <button type="submit" id="filtrarBtn">Filtrar</button>
     </form>
 
+    <p th:if="${genero != null}">
+        Mostrando peliculas de género: <span th:text="${genero}"></span>
     <table>
         <tr>
             <th>Titulo</th>
@@ -40,39 +42,5 @@
             <td th:text="${pelicula.sinopsis}"></td>
         </tr>
     </table>
-
-    <script>
-        // FUNCIONAMIENTO BOTON
-        $('#filtrarBtn').click(function() {
-            // COGEMOS VALOR GENERO
-            var generoSeleccionado = $('#genero').val();
-
-            $.ajax({
-                url: '/peliculas',
-                type: 'GET',
-                data: { genero: generoSeleccionado },
-                success: function(data) {
-                   
-                    var peliculasTable = $('#peliculasTable');
-                    peliculasTable.empty();  
-                    
-                    data.forEach(function(pelicula) {
-                        var fila = '<tr>' +
-                            '<td>' + pelicula.titulo + '</td>' +
-                            '<td>' + pelicula.duracion + '</td>' +
-                            '<td>' + pelicula.genero + '</td>' +
-                            '<td>' + pelicula.director + '</td>' +
-                            '<td>' + pelicula.sinopsis + '</td>' +
-                        '</tr>';
-                        peliculasTable.append(fila);
-                    });
-                },
-                error: function(error) {
-                    console.log('Error al filtrar las películas:', error);
-                }
-            });
-        });
-    </script>
-
 </body>
 </html>

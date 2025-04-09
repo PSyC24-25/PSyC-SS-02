@@ -1,6 +1,5 @@
 package es.deusto.proyecto.cine.repository;
 
-import es.deusto.proyecto.cine.dto.PeliculaDTO;
 import es.deusto.proyecto.cine.model.Pelicula;
 import jakarta.transaction.Transactional;
 
@@ -21,5 +20,5 @@ public interface PeliculaRepository extends JpaRepository<Pelicula, Long> {
 
 
     // BUSCAR PELICULAS POR GENERO
-    List<PeliculaDTO> findByGenero(String genero);
+    List<Pelicula> findByGenero(String genero);
 }

@@ -42,9 +42,11 @@ public class PeliculaService {
                 .collect(Collectors.toList());
     }
 
-    // OBTENER PELICULAS FILTRADAS POR GENERO
+    
     public List<PeliculaDTO> getPeliculasByGenero(String genero) {
-        return peliculaRepository.findByGenero(genero);
+        return peliculaRepository.findByGenero(genero).stream()
+        .map(this::convertirADTO)
+        .collect(Collectors.toList());
     }
 
     public PeliculaDTO getPeliculaById(Long id) {

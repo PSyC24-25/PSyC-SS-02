@@ -37,7 +37,7 @@ nav a:hover {
 
 /* MENSAJE DE BIENVENIDA */
 span {
-    display: block;
+    display: inline;
     margin-top: 20px;
     font-size: 18px;
     color: #333;
