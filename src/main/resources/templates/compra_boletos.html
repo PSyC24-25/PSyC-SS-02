@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comprar Boletos</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <h1>Comprar Boletos</h1>
+
+    <p>Película: <strong th:text="${pelicula}"></strong></p>
+    <p>Fecha: <strong th:text="${fecha}"></strong></p>
+
+    <form method="post" th:action="@{/boletos/confirmar}">
+        <input type="hidden" name="pelicula" th:value="${pelicula}" />
+        <input type="hidden" name="fecha" th:value="${fecha}" />
+
+        <label for="cantidad">Cantidad de entradas:</label>
+        <input type="number" name="cantidad" id="cantidad" min="1" max="10" required>
+
+        <button type="submit">Confirmar compra</button>
+    </form>
+</body>
+</html>
