@@ -42,7 +42,17 @@ public class PeliculaService {
                 .collect(Collectors.toList());
     }
 
+    /* PARA GENERO Y NOMBRE */
     
+    public List<PeliculaDTO> buscarPeliculas(String nombre, String genero) {
+        return peliculaRepository.findAll().stream()
+            .filter(p -> (genero == null || genero.isEmpty() || p.getGenero().equalsIgnoreCase(genero)))
+            .filter(p -> (nombre == null || nombre.isEmpty() || p.getTitulo().toLowerCase().contains(nombre.toLowerCase())))
+            .map(this::convertirADTO)
+            .collect(Collectors.toList());
+    }
+    
+    /*IGUAL HAY QUE BORRARLO SI LO OTRO HACE */
     public List<PeliculaDTO> getPeliculasByGenero(String genero) {
         return peliculaRepository.findByGenero(genero).stream()
         .map(this::convertirADTO)

@@ -12,8 +12,9 @@
     
     <form action="#" th:action="@{/peliculas}" method="get">
         <label for="genero">Filtrar por Género:</label>
+        <!--
         <select name="genero" id="genero">
-            <option value="">-- Selecciona un género --</option>
+            <option value="">-- Selecciona un genero --</option>
 
             <option value="Acción">Accion</option>
             <option value="Comedia">Comedia</option>
@@ -21,11 +22,35 @@
             <option value="Terror">Terror</option>
 
         </select>
+        -->
+        <select name="genero" id="genero">
+            <option value="">-- Selecciona un género --</option>
+            <option value="Acción" th:selected="${genero == 'Acción'}">Acción</option>
+            <option value="Comedia" th:selected="${genero == 'Comedia'}">Comedia</option>
+            <option value="Drama" th:selected="${genero == 'Drama'}">Drama</option>
+            <option value="Terror" th:selected="${genero == 'Terror'}">Terror</option>
+        </select>
+
+
+        <label for="nombre">Buscar por Nombre:</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre de la película">
+
         <button type="submit" id="filtrarBtn">Filtrar</button>
     </form>
 
+    <!--
     <p th:if="${genero != null}">
         Mostrando peliculas de género: <span th:text="${genero}"></span>
+    -->
+
+    <p th:if="${genero != null && !genero.isEmpty()}">
+        Mostrando películas del género: <strong th:text="${genero}"></strong>
+    </p>
+    
+    <p th:if="${nombre != null && !nombre.isEmpty()}">
+        Buscando películas con el nombre: <strong th:text="${nombre}"></strong>
+    </p>
+
     <table>
         <tr>
             <th>Titulo</th>

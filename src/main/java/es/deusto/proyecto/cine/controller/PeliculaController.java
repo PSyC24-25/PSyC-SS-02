@@ -20,13 +20,14 @@ public class PeliculaController {
     @Autowired
     private PeliculaService peliculaService;
 
-    // @GetMapping
-    // public List<PeliculaDTO> getAllPeliculas() {
-    //     return peliculaService.getAllPeliculas();
-    // }
     @GetMapping
-    public String getAllPeliculas(@RequestParam(required = false) String genero, Model model) {
-        List<PeliculaDTO> peliculas;
+    public String getAllPeliculas(@RequestParam(required = false) String genero,
+                                  @RequestParam(required = false) String nombre, 
+                                  Model model) {
+        List<PeliculaDTO> peliculas = peliculaService.buscarPeliculas(nombre, genero);
+
+        /*
+        Para lo del nombre se quita
 
         if (genero != null && !genero.isEmpty()) {
             // SI GENERO SELECCIONADO, SOLO APARECEN ESAS PELICULAS
@@ -34,10 +35,20 @@ public class PeliculaController {
         } else {
             // NO GENERO SELECCIONADO, POR TANTO APARECEN TODAS
             peliculas = peliculaService.getAllPeliculas();
-        }
+        }*/
 
         model.addAttribute("peliculas", peliculas);
         model.addAttribute("genero", genero);
+       
+        /*
+         * 
+         */
+
+        model.addAttribute("nombre", nombre);
+
+        /*
+         * 
+         */
         return "peliculas";
     }
 
