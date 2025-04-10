@@ -24,7 +24,7 @@ public class PeliculaService {
          pelicula.getDirector(), pelicula.getSinopsis());
     }
 
-    private Pelicula ConvertirAEntidad(PeliculaDTO peliculaDTO){
+    private Pelicula convertirAEntidad(PeliculaDTO peliculaDTO){
         Pelicula pelicula = new Pelicula();
         pelicula.setCodPelicula(peliculaDTO.getCodPelicula());
         pelicula.setTitulo(peliculaDTO.getTitulo());
@@ -65,8 +65,12 @@ public class PeliculaService {
                 .orElse(null);            
     }
 
+    public Pelicula getPeliculaByTitulo(String titulo) {
+        return peliculaRepository.findByTitulo(titulo).orElse(null);
+    }
+
     public PeliculaDTO crearPelicula(PeliculaDTO peliculaDTO){
-        Pelicula pelicula = ConvertirAEntidad(peliculaDTO);
+        Pelicula pelicula = convertirAEntidad(peliculaDTO);
         Pelicula peliculaGuardada = peliculaRepository.save(pelicula);
         return convertirADTO(peliculaGuardada);
     }

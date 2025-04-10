@@ -6,12 +6,12 @@ public class EmisionDTO {
     private Long codEmision;
     private LocalDateTime fecha; 
     private String nomPelicula;
-    private int numSala;
+    private Integer numSala;
 
     public EmisionDTO() {
     }
 
-    public EmisionDTO(Long codEmision, LocalDateTime fecha, String nomPelicula, int numSala) {
+    public EmisionDTO(Long codEmision, LocalDateTime fecha, String nomPelicula, Integer numSala) {
         this.codEmision = codEmision;
         this.fecha = fecha;
         this.nomPelicula = nomPelicula;
@@ -38,15 +38,15 @@ public class EmisionDTO {
         return nomPelicula;
     }
 
-    public void setIdPelicula(String nomPelicula) {
+    public void setNomPelicula(String nomPelicula) {
         this.nomPelicula = nomPelicula;
     }
 
-    public int getNumSala() {
+    public Integer getNumSala() {
         return numSala;
     }
 
-    public void setNumSala(int numSala) {
+    public void setNumSala(Integer numSala) {
         this.numSala = numSala;
     }
 }

@@ -47,6 +47,10 @@ public class SalaService {
                 .orElse(null); 
     }
 
+    public Sala getSalaByNumero(int numero) {
+        return salaRepository.findByNumero(numero).orElse(null);
+    }
+
     public SalaDTO crearSala(SalaDTO salaDTO){
         Sala sala = ConvertirAEntidad(salaDTO);
         Sala salaGuardada = salaRepository.save(sala);

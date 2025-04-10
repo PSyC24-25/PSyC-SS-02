@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import es.deusto.proyecto.cine.dto.EmisionDTO;
 import es.deusto.proyecto.cine.dto.PeliculaDTO;
+import es.deusto.proyecto.cine.dto.SalaDTO;
 import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.repository.UsuarioRepository;
+import es.deusto.proyecto.cine.service.EmisionService;
 // import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.PeliculaService;
+import es.deusto.proyecto.cine.service.SalaService;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,14 +33,14 @@ public class AdminController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    private final EmisionService emisionService;
 
-    @Autowired
-    private EmisionService emisionService;
+    private final SalaService salaService;
 
-    @Autowired
-    private SalaService salaService;
-
-    public AdminController(PeliculaService peliculaService) {
+    public AdminController(PeliculaService peliculaService, EmisionService emisionService, SalaService salaService) {
+        this.salaService = salaService;
+        this.emisionService = emisionService;
         this.peliculaService = peliculaService;
     }
 
@@ -74,11 +78,11 @@ public class AdminController {
 
     @GetMapping("/emisiones")
     public String gestionarEmisiones(Model model) {
-        model.addAttribute("nuevaEmision", new Emision());
+        model.addAttribute("nuevaEmision", new EmisionDTO());
 
         // Aquí asumimos que tienes un método que devuelve entidades Pelicula
-        List<Pelicula> peliculas = peliculaService.getAllPeliculasRaw(); 
-        List<Sala> salas = salaService.obtenerTodas();
+        List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas(); 
+        List<SalaDTO> salas = salaService.getAllSalas();
 
         model.addAttribute("peliculas", peliculas);
         model.addAttribute("salas", salas);
@@ -87,8 +91,21 @@ public class AdminController {
     }
 
     @PostMapping("/emisiones/programar")
-    public String programarEmision(@ModelAttribute("nuevaEmision") Emision emision) {
-        emisionService.guardar(emision);
+    public String programarEmision(@ModelAttribute EmisionDTO emisionDTO) {
+        System.out.println("NomPelicula: " + emisionDTO.getNomPelicula());
+        System.out.println("NumSala: " + emisionDTO.getNumSala());
+        emisionService.crearEmision(emisionDTO);
         return "redirect:/admin/emisiones";
+        // Emision emision = new Emision();
+        // emision.setDateTime(emisionDTO.getFecha());
+
+        // Pelicula pelicula = peliculaService.getPeliculaByTitulo(emisionDTO.getNomPelicula());
+        // emision.setPelicula(pelicula);
+
+        // Sala sala = salaService.getSalaByNumero(emisionDTO.getNumSala());
+        // emision.setSala(sala);
+
+        // emisionService.guardar(emision);
+        // return "redirect:/admin/emisiones";
     }
 }

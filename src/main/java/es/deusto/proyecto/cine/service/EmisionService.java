@@ -21,7 +21,11 @@ public class EmisionService {
 
     @Autowired
     private EmisionRepository emisionRepository;
+
+    @Autowired
     private SalaRepository salaRepository;
+
+    @Autowired
     private PeliculaRepository peliculaRepository;
 
     private EmisionDTO convertirADTO(Emision emision){

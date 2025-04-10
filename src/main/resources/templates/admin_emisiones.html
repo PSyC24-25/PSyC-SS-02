@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Programar Emisión</title>
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
@@ -13,23 +14,23 @@
     <form th:action="@{/admin/emisiones/programar}" method="post" th:object="${nuevaEmision}">
         <div class="form-group">
             <label for="pelicula">Película:</label>
-            <select id="pelicula" name="pelicula" th:field="*{pelicula}" required>
+            <select id="pelicula" name="nomPelicula" th:field="*{nomPelicula}" required>
                 <option value="">-- Selecciona una película --</option>
-                <option th:each="p : ${peliculas}" th:value="${p}" th:text="${p.titulo}"></option>
+                <option th:each="p : ${peliculas}" th:value="${p.titulo}" th:text="${p.titulo}"></option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="sala">Sala:</label>
-            <select id="sala" name="sala" th:field="*{sala}" required>
+            <select id="sala" name="numSala" th:field="*{numSala}" required>
                 <option value="">-- Selecciona una sala --</option>
-                <option th:each="s : ${salas}" th:value="${s}" th:text="'Sala ' + ${s.numero}"></option>
+                <option th:each="s : ${salas}" th:value="${s.numero}" th:text="'Sala ' + ${s.numero}"></option>
             </select>
         </div>
 
         <div class="form-group">
             <label for="fecha">Fecha y hora:</label>
-            <input type="datetime-local" id="fecha" name="fecha" th:field="*{dateTime}" required>
+            <input type="datetime-local" id="fecha" name="fecha" th:field="*{fecha}" required>
         </div>
 
         <button type="submit">Programar Función</button>

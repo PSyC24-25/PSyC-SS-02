@@ -20,7 +20,7 @@ public class Emision {
     @JoinColumn(name = "codSala", nullable = false)
     private Sala sala;
 
-    @OneToMany(mappedBy = "emision", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "emision", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Compra> compras;
 
 
