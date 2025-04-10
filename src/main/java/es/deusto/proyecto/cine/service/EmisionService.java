@@ -56,6 +56,10 @@ public class EmisionService {
         .orElse(null);    
     }
 
+    public void guardar(Emision emision) {
+    emisionRepository.save(emision);
+    }   
+
     public EmisionDTO crearEmision(EmisionDTO emisionDTO){
         Emision emision = ConvertirAEntidad(emisionDTO);
         Emision emisionGuardada = emisionRepository.save(emision);

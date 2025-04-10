@@ -30,6 +30,11 @@ public class SalaService {
         return sala;
     }
 
+    public List<Sala> obtenerTodas() {
+    return salaRepository.findAll();
+    }
+
+
     public List<SalaDTO> getAllSalas() {
         return salaRepository.findAll().stream()
                 .map(this::convertirADTO)
