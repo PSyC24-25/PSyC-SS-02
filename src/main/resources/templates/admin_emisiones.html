@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Programar Emisión</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/admin}">Volver al panel admin</a>
+
+    <h1>Programar Nueva Función</h1>
+
+    <form th:action="@{/admin/emisiones/programar}" method="post" th:object="${nuevaEmision}">
+        <div class="form-group">
+            <label for="pelicula">Película:</label>
+            <select id="pelicula" name="pelicula" th:field="*{pelicula}" required>
+                <option value="">-- Selecciona una película --</option>
+                <option th:each="p : ${peliculas}" th:value="${p}" th:text="${p.titulo}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sala">Sala:</label>
+            <select id="sala" name="sala" th:field="*{sala}" required>
+                <option value="">-- Selecciona una sala --</option>
+                <option th:each="s : ${salas}" th:value="${s}" th:text="'Sala ' + ${s.numero}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha">Fecha y hora:</label>
+            <input type="datetime-local" id="fecha" name="fecha" th:field="*{dateTime}" required>
+        </div>
+
+        <button type="submit">Programar Función</button>
+    </form>
+</body>
+</html>

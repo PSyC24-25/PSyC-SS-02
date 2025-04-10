@@ -30,6 +30,12 @@ public class AdminController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EmisionService emisionService;
+
+    @Autowired
+    private SalaService salaService;
+
     public AdminController(PeliculaService peliculaService) {
         this.peliculaService = peliculaService;
     }
@@ -64,5 +70,25 @@ public class AdminController {
     public String deleteFilm(@PathVariable Long id) {
         peliculaService.borrarPelicula(id);
         return "redirect:/admin/peliculas";
+    }
+
+    @GetMapping("/emisiones")
+    public String gestionarEmisiones(Model model) {
+        model.addAttribute("nuevaEmision", new Emision());
+
+        // Aquí asumimos que tienes un método que devuelve entidades Pelicula
+        List<Pelicula> peliculas = peliculaService.getAllPeliculasRaw(); 
+        List<Sala> salas = salaService.obtenerTodas();
+
+        model.addAttribute("peliculas", peliculas);
+        model.addAttribute("salas", salas);
+
+        return "admin_emisiones";
+    }
+
+    @PostMapping("/emisiones/programar")
+    public String programarEmision(@ModelAttribute("nuevaEmision") Emision emision) {
+        emisionService.guardar(emision);
+        return "redirect:/admin/emisiones";
     }
 }
