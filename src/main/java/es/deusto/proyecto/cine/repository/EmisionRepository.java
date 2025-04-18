@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmisionRepository extends JpaRepository<Emision, Long> {   
+    Emision findByCodEmision(Long codEmision);
 }

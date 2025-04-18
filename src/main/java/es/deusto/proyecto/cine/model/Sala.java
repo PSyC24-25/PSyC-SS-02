@@ -13,6 +13,7 @@ public class Sala {
 
     private int numero;
     private int capacidad;
+    private int columnas;
 
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Emision> emisiones;
@@ -60,5 +61,12 @@ public class Sala {
         this.emisiones = emisiones;
     }
 
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public void setColumnas(int columnas) {
+        this.columnas = columnas;
+    }
     
 }

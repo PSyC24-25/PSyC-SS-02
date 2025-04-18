@@ -5,6 +5,7 @@ public class SalaDTO {
     private Long codSala;
     private int numero;
     private int capacidad;
+    private int columnas;
 
     public SalaDTO() {
     }
@@ -38,4 +39,13 @@ public class SalaDTO {
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
     }
+
+    public int getColumnas() {
+        return columnas;
+    }
+
+    public void setColumnas(int columnas) {
+        this.columnas = columnas;
+    }
+    
 }

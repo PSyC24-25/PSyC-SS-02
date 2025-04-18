@@ -12,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,7 +22,11 @@ public class CompraService {
     
     @Autowired
     private CompraRepository compraRepository;
+
+    @Autowired
     private EmisionRepository emisionRepository;
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     public double calcPrecio(CompraDTO compraDTO){
@@ -35,8 +40,7 @@ public class CompraService {
     }
 
     private Compra ConvertirAEntidad(CompraDTO compraDTO){
-        Emision emision = emisionRepository.findById(compraDTO.getIdEmision())
-            .orElseThrow(() -> new RuntimeException("Emision no encontrada"));
+        Emision emision = emisionRepository.findByCodEmision(compraDTO.getIdEmision());
         Usuario usuario = usuarioRepository.findById(compraDTO.getIdUsuario())
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -45,8 +49,21 @@ public class CompraService {
         compra.setEmision(emision);
         compra.setUsuario(usuario);
         compra.setPrecio(calcPrecio(compraDTO));
+        compra.setAsientos(compraDTO.getAsientos());
 
         return compra;
+    }
+
+    public List<String> getAsientosOcupadosPorEmision(Emision emision) {
+        List<Compra> compras = compraRepository.findByEmision(emision);
+        
+        List<String> ocupados = new ArrayList<>();
+        if (compras != null){
+            for (Compra compra : compras) {
+                ocupados.addAll(compra.getAsientos());
+            }
+        }
+        return ocupados;
     }
 
     public List<CompraDTO> getAllCompras() {

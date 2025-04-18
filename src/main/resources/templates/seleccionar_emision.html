@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleccionar emisión</title>
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/}">Volver al inicio</a>
+
+    <h2>Selecciona una Emisión</h2>
+
+    <form action="/compras/crear" method="get">
+        <label for="emision">Emisión:</label>
+        <select name="emisionId" id="emision" required>
+            <option value="">--Selecciona una emisión--</option>
+            <option th:each="e : ${emisiones}" 
+                    th:value="${e.codEmision}" 
+                    th:text="${e.nomPelicula} + ' - ' + ${e.fecha}">
+            </option>
+        </select>
+
+        <button type="submit">Seleccionar</button>
+    </form>
+    
+</body>
+</html>

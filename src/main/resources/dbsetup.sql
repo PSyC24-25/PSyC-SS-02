@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS pelicula (
 CREATE TABLE IF NOT EXISTS sala (
     cod_sala INT AUTO_INCREMENT PRIMARY KEY,
     numero INT NOT NULL,
-    capacidad INT NOT NULL
+    capacidad INT NOT NULL,
+    columnas INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS emision (

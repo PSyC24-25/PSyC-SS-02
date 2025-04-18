@@ -33,7 +33,7 @@ public class EmisionService {
         , emision.getSala().getNumero());
     }
 
-    private Emision ConvertirAEntidad(EmisionDTO emisionDTO){
+    public Emision ConvertirAEntidad(EmisionDTO emisionDTO){
         Pelicula pelicula = peliculaRepository.findByTitulo(emisionDTO.getNomPelicula())
             .orElseThrow(() -> new RuntimeException("Pelicula no encontrada"));
         Sala sala = salaRepository.findByNumero(emisionDTO.getNumSala())

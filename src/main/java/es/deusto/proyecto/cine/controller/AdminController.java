@@ -92,8 +92,6 @@ public class AdminController {
 
     @PostMapping("/emisiones/programar")
     public String programarEmision(@ModelAttribute EmisionDTO emisionDTO) {
-        System.out.println("NomPelicula: " + emisionDTO.getNomPelicula());
-        System.out.println("NumSala: " + emisionDTO.getNumSala());
         emisionService.crearEmision(emisionDTO);
         return "redirect:/admin/emisiones";
         // Emision emision = new Emision();
