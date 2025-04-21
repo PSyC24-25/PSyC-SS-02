@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import es.deusto.proyecto.cine.dto.EmisionDTO;
@@ -71,9 +72,22 @@ public class AdminController {
     }
 
     @DeleteMapping("/peliculas/borrar/{id}")
-    public String deleteFilm(@PathVariable Long id) {
+    public String borrarPelicula(@PathVariable Long id) {
         peliculaService.borrarPelicula(id);
         return "redirect:/admin/peliculas";
+    }
+
+    @PutMapping("/peliculas/editar")
+    public String actualizarPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
+        peliculaService.actualizarPelicula(peliculaDTO.getCodPelicula(), peliculaDTO);
+        return "redirect:/admin/peliculas";
+    }
+
+    @GetMapping("/peliculas/editar/{id}")
+    public String editarPelicula(@PathVariable Long id, Model model) {
+        PeliculaDTO pelicula = peliculaService.getPeliculaById(id);
+        model.addAttribute("pelicula", pelicula);
+        return "admin_pelicula_editar";
     }
 
     @GetMapping("/emisiones")

@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
+    //BORRAR
     document.querySelectorAll("button[data-id]").forEach(button => {
         button.addEventListener("click", function () {
             let codPelicula = this.getAttribute("data-id");
@@ -21,4 +22,5 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
+
 });

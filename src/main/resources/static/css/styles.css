@@ -223,3 +223,23 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: darkgreen;
 }
+
+button.edit-btn {
+    background-color: yellow;
+    color: black;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 15px;
+    border-radius: 4px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+button.edit-btn:hover {
+    background-color: gold;
+}
+
+button.edit-btn:active {
+    background-color: goldenrod;
+}

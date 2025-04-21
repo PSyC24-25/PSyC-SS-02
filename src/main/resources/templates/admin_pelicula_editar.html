@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Película</title>
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/admin/peliculas}">Volver a lista de películas</a>
+
+    <h1>Editar Película</h1>
+    <form th:action="@{/admin/peliculas/editar}" method="post" th:object="${pelicula}">
+        <input type="hidden" name="_method" value="put" />
+        <input type="hidden" th:field="*{codPelicula}" />
+
+        <div class="form-group">
+            <label for="titulo">Título:</label>
+            <input type="text" id="titulo" name="titulo" th:field="*{titulo}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="duracion">Duración (minutos):</label>
+            <input type="number" id="duracion" name="duracion" th:field="*{duracion}" min="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="genero">Género:</label>
+            <input type="text" id="genero" name="genero" th:field="*{genero}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="director">Director:</label>
+            <input type="text" id="director" name="director" th:field="*{director}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sinopsis">Sinopsis:</label>
+            <textarea id="sinopsis" name="sinopsis" th:field="*{sinopsis}" required></textarea>
+        </div>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</body>
+</html>

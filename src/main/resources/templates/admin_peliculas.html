@@ -20,7 +20,7 @@
                 <th>Genero</th>
                 <th>Director</th>
                 <th>Sinopsis</th>
-                <th>Borrar</th>
+                <th>Modificar</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +31,9 @@
                 <td th:text="${pelicula.director}"></td>
                 <td th:text="${pelicula.sinopsis}"></td>
                 <td>
+                    <button class="edit-btn" th:onclick="'window.location.href=\'/admin/peliculas/editar/' + ${pelicula.codPelicula} + '\''">
+                        Editar
+                    </button>
                     <button class="delete-btn" th:attr="data-id=${pelicula.codPelicula}">
                         Borrar
                     </button>
