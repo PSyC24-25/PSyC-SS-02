@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administración de usuarios</title>
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/admin}">Volver a panel admin</a>
+
+    <h1>Administrar usuarios</h1>
+
+    <h2>Lista de usuarios</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Correo</th>
+                <th>Num. telefono</th>
+                <th>Modificar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.nombre}"></td>
+                <td th:text="${usuario.apellido}"></td>
+                <td th:text="${usuario.correo}"></td>
+                <td th:text="${usuario.numTelefono}"></td>
+                <td>
+                    <button class="edit-btn" th:onclick="'window.location.href=\'/admin/usuarios/editar/' + ${usuario.codUsuario} + '\''">
+                        Editar
+                    </button>
+                    <button class="delete-btn" th:attr="data-id=${usuario.codUsuario}">
+                        Borrar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -19,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import es.deusto.proyecto.cine.dto.EmisionDTO;
 import es.deusto.proyecto.cine.dto.PeliculaDTO;
 import es.deusto.proyecto.cine.dto.SalaDTO;
+import es.deusto.proyecto.cine.dto.UsuarioDTO;
 import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.repository.UsuarioRepository;
 import es.deusto.proyecto.cine.service.EmisionService;
 // import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.PeliculaService;
 import es.deusto.proyecto.cine.service.SalaService;
+import es.deusto.proyecto.cine.service.UsuarioService;
 
 @Controller
 @RequestMapping("/admin")
@@ -39,7 +41,10 @@ public class AdminController {
 
     private final SalaService salaService;
 
-    public AdminController(PeliculaService peliculaService, EmisionService emisionService, SalaService salaService) {
+    private final UsuarioService usuarioService;
+
+    public AdminController(PeliculaService peliculaService, EmisionService emisionService, SalaService salaService, UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
         this.salaService = salaService;
         this.emisionService = emisionService;
         this.peliculaService = peliculaService;
@@ -119,5 +124,12 @@ public class AdminController {
 
         // emisionService.guardar(emision);
         // return "redirect:/admin/emisiones";
+    }
+
+    @GetMapping("/usuarios")
+    public String getUsuariosAdmin(Model model) {
+        List<UsuarioDTO> usuarios = usuarioService.getAllUsuarios();
+        model.addAttribute("usuarios", usuarios);
+        return "admin_usuarios";
     }
 }
