@@ -1,18 +1,18 @@
 package es.deusto.proyecto.cine.service;
 
-import es.deusto.proyecto.cine.dto.UsuarioDTO;
-import es.deusto.proyecto.cine.model.Rol;
-import es.deusto.proyecto.cine.model.Usuario;
-import es.deusto.proyecto.cine.repository.UsuarioRepository;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import es.deusto.proyecto.cine.dto.UsuarioDTO;
+import es.deusto.proyecto.cine.model.Rol;
+import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.repository.UsuarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UsuarioService {
@@ -66,22 +66,34 @@ public class UsuarioService {
     }
 
     
-    public UsuarioDTO crearUsuario(Usuario usuario){
-        Optional<Usuario> us = usuarioRepository.findByCorreo("pedro@gmail.com");
-        System.out.println("Resultado de la búsqueda: " + us.get().getNombre());
-        if (usuarioRepository.findByCorreo(usuario.getCorreo()).isPresent()) {
-            throw new RuntimeException("Usuario ya registrado");
+    public UsuarioDTO crearUsuario(Usuario usuario) {
+        // Verificar si el correo ya está registrado en la base de datos
+        Optional<Usuario> usuarioExistente = usuarioRepository.findByCorreo(usuario.getCorreo());
+    
+        if (usuarioExistente.isPresent()) {
+            throw new RuntimeException("El correo electrónico ya está registrado");
         }
+    
+        // Validar que el ID del usuario es nulo (ya que es un nuevo usuario)
         if (usuario.getCodUsuario() != null) {
-            throw new IllegalArgumentException("ID nulo");
+            throw new IllegalArgumentException("El ID del usuario no debe estar presente al crear un nuevo usuario");
         }
+    
+        // Establecer el rol predeterminado de 'USUARIO'
         usuario.setRol(Rol.USUARIO);
-        System.out.println("Contra antes de hashear " + usuario.getContrasenya());
+    
+        // Encriptar la contraseña antes de guardarla
+        System.out.println("Contraseña antes de encriptar: " + usuario.getContrasenya());
         usuario.setContrasenya(encriptar(usuario.getContrasenya()));
-        System.out.println("Contra despues de hashear " + usuario.getContrasenya());
+        System.out.println("Contraseña después de encriptar: " + usuario.getContrasenya());
+    
+        // Guardar el nuevo usuario en la base de datos
         Usuario usuarioGuardado = usuarioRepository.save(usuario);
+    
+        // Devolver el UsuarioDTO con los datos del usuario guardado
         return convertirADTO(usuarioGuardado);
     }
+    
 
     public UsuarioDTO actualizarUsuario(Long id, UsuarioDTO UsuarioDTO) {
         Optional<Usuario> usuarioExistente = usuarioRepository.findById(id);

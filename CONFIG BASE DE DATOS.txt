@@ -1,0 +1,39 @@
+Solucionar problemas de conectividad con la base de datos.
+
+1. Revisar la versión de mysql
+	- Abrir CMD
+	- Escribir comando 'mysql --version'
+	En mi caso tenia una versión de MariaDB inferior a 10.5.X, que no parece ser compatible con la configuración de la base de datos del proyecto.
+
+2. Si tenias una versión inferior a la 10.5.X-MariaDB instalar esta versión desde la web. Yo he descargado la versión 10.5.28-MariaDB.
+
+3. Una vez realizada la instalación intenta ejecutar mysql desde XAMPP, a mi no me funcionaba, en caso de que no funcione desinstala XAMPP y vuelve a instalarlo.
+
+4. Abrir CMD de vuelta y escribir el comando 'where mysql'. Es posible que te muestre varias instalaciones, entre ellas, la nueva, es decir, MariaDB o la de XAMPP. Aquí es importante el orden en el que estas aparecen, si entre todas las versiones que tienes MariaDB 10.5 está arriba del todo entonces perfecto, en caso contrario o en caso de que no aparezca:
+	- Abrir las variables de entorno del sistema
+	- Ir al Path del variables del sistema, no del usuario
+	- Añadir al PATH la dirección de la versión 10.5 de MariaDB/bin
+	- Una vez añadido mueves la versión hacia arriba hasta que esta se encuentre por encima del resto de versiones (que aparecian al ejecutar el comando 'where mysql') que tengas instaladas.
+	- Una vez hecho esto abre del vuelta CMD y ejecuta de nuevo el comando 'where mysql'.
+	- Si aún hay versiones por encima, revisa el PATH de usuario y elimina cualquier versión que haya ahí almacenada y vuelve a ejecutar.
+
+5. Vuelve a ejecutar el comando 'mysql --version' para revisar que la versión se ha actualizado correctamente.
+
+6. La instalación ya está realizada, sin embargo, es posible que no tengas la base de datos 'cine' creada debido al cambio de versión. En este caso tienes dos opciones (yo he seguido la opción B).
+	a) Crear de vuelta la base de datos desde 0
+
+	b) Cambiar la ruta para que te detecte la base de datos utilizada con la version anterior
+	En caso de que quieras cambiar la ruta:
+	- Ve al archivo de cofiguración (my.ini) de MariaDB 10.5
+	Posible ruta: C:\Program Files\MariaDB 10.5\data\my.ini
+	- Busca la siguiente línea: datadir=C:/Program Files/MariaDB 10.5/data
+	Esta línea te indica donde se almacenan las bases de datos
+	- Debes sustituir esta línea por la dirección en la que estabas almacenando las bases de datos antes. En mi caso en la carpeta del XAMPP.
+	Posible ruta: datadir=C:\xampp\mysql\data
+	En caso de que no se encuentren en esa dirección, inicia XAMPP ejecuta en CMD el comando 'mysql -u root -p', dentro de la base de datos ejecuta 'SHOW VARIABLES LIKE 'datadir';' ahí se te mostrara la dirección.
+	- Tras esto abre CMD y ejecuta el comando: 'mysql -u root -p' y una vez dentro de la BD ejecuta 'SHOW DATABASES;', en principio se te deberían mostrar las bases de datos de la nueva dirección, es decir, las que tenias creadas antes de cambiar la versión, donde debería estar la base de datos cine.
+
+7. Ejecutar el programa y debería de funcionar. En caso de querer ver si los datos se almacenan en la BD.
+	- En CMD ejecutar 'mysql -u root -p'
+	- USE cine;
+	- SELECT * FROM usuario;
