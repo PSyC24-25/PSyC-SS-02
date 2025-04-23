@@ -12,6 +12,7 @@
     <h1>Administrar películas</h1>
 
     <h2>Lista de peliculas</h2>
+    <input type="hidden" id="clase-oculta" th:attr="nom-clase='peliculas'"/>
     <table>
         <thead>
             <tr>
@@ -72,6 +73,6 @@
         <button type="submit">Agregar película</button>
     </form>
 
-    <script th:src="@{/js/pelicula.js}"></script>
+    <script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

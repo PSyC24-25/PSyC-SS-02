@@ -10,10 +10,11 @@ public class SalaDTO {
     public SalaDTO() {
     }
 
-    public SalaDTO(Long codSala, int numero, int capacidad) {
+    public SalaDTO(Long codSala, int numero, int capacidad, int columnas) {
         this.codSala = codSala;
         this.numero = numero;
         this.capacidad = capacidad;
+        this.columnas = columnas;
     }
 
     public Long getCodSala() {

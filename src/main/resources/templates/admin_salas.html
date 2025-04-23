@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administración de salas</title>
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/admin}">Volver a panel admin</a>
+
+    <h1>Administrar salas</h1>
+
+    <h2>Lista de salas</h2>
+    <input type="hidden" id="clase-oculta" th:attr="nom-clase='salas'"/>
+    <table>
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Capacidad</th>
+                <th>Columnas</th>
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="sala : ${salas}">
+                <td th:text="${sala.numero}"></td>
+                <td th:text="${sala.capacidad}"></td>
+                <td th:text="${sala.columnas}"></td>
+                <td>
+                    <button class="delete-btn" th:attr="data-id=${sala.codSala}">
+                        Borrar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Agregar Película</h2>
+    <form th:action="@{/admin/salas/agregar}" method="post" th:object="${nuevaSala}">
+        <div class="form-group">
+            <label for="numero">Número:</label>
+            <input type="number" id="numero" name="numero" placeholder="Ingresa el numero de la sala" required>
+        </div>
+
+        <div class="form-group">
+            <label for="capacidad">Capacidad (asientos):</label>
+            <input type="number" id="capacidad" name="capacidad" th:field="*{capacidad}" min="25" required>
+        </div>
+
+        <div class="form-group">
+            <label for="columnas">Columnas:</label>
+            <input type="number" id="columnas" name="columnas" th:field="*{columnas}" min="1" max="20" required>
+        </div>
+        
+
+        <button type="submit">Agregar sala</button>
+    </form>
+
+    <script th:src="@{/js/admin.js}"></script>
+</body>
+</html>

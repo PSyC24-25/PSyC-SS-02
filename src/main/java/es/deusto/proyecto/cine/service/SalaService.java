@@ -18,7 +18,7 @@ public class SalaService {
     private SalaRepository salaRepository;  
 
     private SalaDTO convertirADTO(Sala sala){
-        return new SalaDTO(sala.getCodSala(), sala.getNumero(), sala.getCapacidad());
+        return new SalaDTO(sala.getCodSala(), sala.getNumero(), sala.getCapacidad(), sala.getColumnas());
     }
 
     private Sala ConvertirAEntidad(SalaDTO salaDTO){
@@ -26,6 +26,7 @@ public class SalaService {
         sala.setCodSala(salaDTO.getCodSala());
         sala.setNumero(salaDTO.getNumero());
         sala.setCapacidad(salaDTO.getCapacidad());
+        sala.setColumnas(salaDTO.getColumnas());
 
         return sala;
     }
@@ -52,6 +53,10 @@ public class SalaService {
     }
 
     public SalaDTO crearSala(SalaDTO salaDTO){
+        Sala salaExistente = getSalaByNumero(salaDTO.getNumero());
+        if (salaExistente != null) {
+            throw new RuntimeException("Ya existe una sala con el número: " + salaDTO.getNumero());
+        }
         Sala sala = ConvertirAEntidad(salaDTO);
         Sala salaGuardada = salaRepository.save(sala);
         return convertirADTO(salaGuardada);
@@ -64,6 +69,7 @@ public class SalaService {
             Sala sala = salaExistente.get();
             sala.setCapacidad(actualizarSala.getCapacidad());
             sala.setNumero(actualizarSala.getNumero());
+            sala.setColumnas(actualizarSala.getColumnas());
 
             Sala salaActualizada = salaRepository.save(sala);
             return convertirADTO(salaActualizada);
