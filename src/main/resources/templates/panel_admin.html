@@ -5,15 +5,16 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-    <h1>Bienvenido, <span th:if="${usuario != null}" th:text="${usuario.nombre}"></span>!</h1>
-
-    <nav>
-        <ul>
-            <li><a th:href="@{/}">Volver al inicio</a></li>
-            <li><a th:href="@{/admin/usuarios}">Gestionar usuarios</a></li>
-            <li><a th:href="@{/admin/peliculas}">Gestionar peliculas</a></li>
-            <li><a th:href="@{/admin/emisiones}">Programar funciones</a></li>
-        </ul>
-    </nav>
+    <a th:href="@{/}">Volver al inicio</a>
+    <div class = "admin-container">
+        <h1 class="admin-title">Bienvenido, <span th:if="${usuario != null}" th:text="${usuario.nombre}"></span>!</h1>
+        <nav class = "admin-nav">
+            <ul>
+                <li><a th:href="@{/admin/usuarios}">Gestionar usuarios</a></li>
+                <li><a th:href="@{/admin/peliculas}">Gestionar peliculas</a></li>
+                <li><a th:href="@{/admin/emisiones}">Programar funciones</a></li>
+            </ul>
+        </nav>
+    </div>
 </body>
 </html>
