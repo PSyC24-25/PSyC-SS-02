@@ -5,6 +5,7 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
+<<<<<<< HEAD
     <a th:href="@{/}">Volver al inicio</a>
     <div class = "admin-container">
         <h1 class="admin-title">Bienvenido, <span th:if="${usuario != null}" th:text="${usuario.nombre}"></span>!</h1>
@@ -16,5 +17,19 @@
             </ul>
         </nav>
     </div>
+=======
+    <h1>Bienvenido, <span th:if="${usuario != null}" th:text="${usuario.nombre}"></span>!</h1>
+
+    <nav>
+        <ul>
+            <li><a th:href="@{/}">Volver al inicio</a></li>
+            <li><a th:href="@{/admin/usuarios}">Gestionar usuarios</a></li>
+            <li><a th:href="@{/admin/peliculas}">Gestionar peliculas</a></li>
+            <li><a th:href="@{/admin/salas}">Gestionar salas</a></li>
+            <li><a th:href="@{/admin/emisiones}">Programar funciones</a></li>
+            
+        </ul>
+    </nav>
+>>>>>>> 6db7a44827501e39d6e99688bda4d2d5b8e6514e
 </body>
 </html>

@@ -132,4 +132,26 @@ public class AdminController {
         model.addAttribute("usuarios", usuarios);
         return "admin_usuarios";
     }
+
+
+    @GetMapping("/salas")
+    public String getSalasAdmin(Model model) {
+        List<SalaDTO> salas = salaService.getAllSalas();
+        model.addAttribute("salas", salas);
+        model.addAttribute("nuevaSala", new SalaDTO());
+        return "admin_salas";
+    }
+
+    @PostMapping("/salas/agregar")
+    public String agregarSala(@ModelAttribute SalaDTO salaDTO) {
+        salaService.crearSala(salaDTO);
+        return "redirect:/admin/salas";
+    }
+
+    @DeleteMapping("/salas/borrar/{id}")
+    public String borrarSala(@PathVariable Long id) {
+        salaService.borrarSala(id);
+        return "redirect:/admin/salas";
+    }
+
 }

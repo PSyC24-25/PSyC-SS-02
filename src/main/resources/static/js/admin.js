@@ -4,11 +4,13 @@ document.addEventListener("DOMContentLoaded", function () {
     //BORRAR
     document.querySelectorAll("button[data-id]").forEach(button => {
         button.addEventListener("click", function () {
-            let codPelicula = this.getAttribute("data-id");
+            let codigo = this.getAttribute("data-id");
+            const claseOculta = document.getElementById("clase-oculta");
+            let clase = claseOculta.getAttribute("nom-clase");
+            console.log(clase);
             let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-            console.log(codPelicula);
-            fetch(`/admin/peliculas/borrar/${codPelicula}`, {
+            fetch(`/admin/${clase}/borrar/${codigo}`, {
                 method: "DELETE",
                 headers: {
                     "X-CSRF-TOKEN": csrfToken
