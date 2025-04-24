@@ -12,6 +12,7 @@
     <h1>Administrar usuarios</h1>
 
     <h2>Lista de usuarios</h2>
+    <input type="hidden" id="clase-oculta" th:attr="nom-clase='usuarios'"/>
     <table>
         <thead>
             <tr>
@@ -39,5 +40,6 @@
             </tr>
         </tbody>
     </table>
+    <script th:src="@{/js/admin.js}"></script>
 </body>
 </html>

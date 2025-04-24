@@ -1,5 +1,6 @@
 package es.deusto.proyecto.cine.dto;
 
+import es.deusto.proyecto.cine.model.Rol;
 
 public class UsuarioDTO {
     private Long codUsuario;
@@ -8,17 +9,19 @@ public class UsuarioDTO {
     private String correo;
     private String numTelefono;
     private String contrasenya;
+    private Rol rol;
 
     public UsuarioDTO() {
     }
 
-    public UsuarioDTO(Long codUsuario, String nombre, String apellido, String correo, String numTelefono, String contrasenya) {
+    public UsuarioDTO(Long codUsuario, String nombre, String apellido, String correo, String numTelefono, String contrasenya, Rol rol) {
         this.codUsuario = codUsuario;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.numTelefono = numTelefono;
         this.contrasenya = contrasenya;
+        this.rol = rol;
     }
 
     public Long getCodUsuario() {
@@ -67,6 +70,14 @@ public class UsuarioDTO {
 
     public void setNumTelefono(String numTelefono) {
         this.numTelefono = numTelefono;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
     }
     
 }

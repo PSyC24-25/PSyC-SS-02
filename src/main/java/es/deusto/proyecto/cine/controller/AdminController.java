@@ -133,6 +133,25 @@ public class AdminController {
         return "admin_usuarios";
     }
 
+    @PutMapping("/usuarios/editar")
+    public String actualizarUsuario(@ModelAttribute UsuarioDTO usuarioDTO) {
+        usuarioService.actualizarUsuario(usuarioDTO.getCodUsuario(), usuarioDTO);
+        return "redirect:/admin/usuarios";
+    }
+
+    @GetMapping("/usuarios/editar/{id}")
+    public String editarUsuario(@PathVariable Long id, Model model) {
+        UsuarioDTO usuario = usuarioService.getUsuarioById(id);
+        model.addAttribute("usuario", usuario);
+        return "admin_usuario_editar";
+    }
+
+    @DeleteMapping("/usuarios/borrar/{id}")
+    public String borrarUsuario(@PathVariable Long id) {
+        usuarioService.borrarUsuario(id);
+        return "redirect:/admin/usuarios";
+    }
+
 
     @GetMapping("/salas")
     public String getSalasAdmin(Model model) {

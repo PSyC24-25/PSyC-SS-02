@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar usuario</title>
+    <meta name="csrf-token" th:content="${_csrf.token}"/>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <a th:href="@{/admin/usuarios}">Volver a lista de usuarios</a>
+
+    <h1>Editar Película</h1>
+    <form th:action="@{/admin/usuarios/editar}" method="post" th:object="${usuario}">
+        <input type="hidden" name="_method" value="put" />
+        <input type="hidden" th:field="*{codUsuario}" />
+
+        <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" th:field="*{nombre}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="apellido">Apellido:</label>
+            <input type="text" id="apellido" name="apellido" th:field="*{apellido}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="numTelefono">Num. Telefono:</label>
+            <input type="text" id="numTelefono" name="numTelefono" th:field="*{numTelefono}"required>
+        </div>
+
+        <div class="form-group">
+            <label for="rol">Rol:</label>
+            <select id="rol" name="rol" th:field="*{rol}" required>
+                <option value="ADMIN" th:selected="${usuario.rol == 'ADMIN'}">ADMIN</option>
+                <option value="USUARIO" th:selected="${usuario.rol == 'USUARIO'}">USUARIO</option>
+            </select>
+        </div>
+
+        <button type="submit">Guardar Cambios</button>
+    </form>
+</body>
+</html>

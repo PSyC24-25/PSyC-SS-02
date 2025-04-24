@@ -40,7 +40,8 @@ public class UsuarioService {
     }
 
     private UsuarioDTO convertirADTO(Usuario usuario){
-        return new UsuarioDTO(usuario.getCodUsuario(), usuario.getNombre(), usuario.getApellido(), usuario.getCorreo(), usuario.getNumTelefono(), usuario.getContrasenya());
+        return new UsuarioDTO(usuario.getCodUsuario(), usuario.getNombre(), usuario.getApellido(),
+         usuario.getCorreo(), usuario.getNumTelefono(), usuario.getContrasenya(), usuario.getRol());
     }
 
     private Usuario ConvertirAEntidad(UsuarioDTO usuarioDTO){
@@ -49,6 +50,7 @@ public class UsuarioService {
         usuario.setApellido(usuarioDTO.getApellido());
         usuario.setCorreo(usuarioDTO.getCorreo());
         usuario.setNumTelefono(usuarioDTO.getNumTelefono());
+        usuario.setRol(usuarioDTO.getRol());
 
         return usuario;
     }
@@ -102,7 +104,9 @@ public class UsuarioService {
             Usuario usuario = usuarioExistente.get();
             usuario.setApellido(UsuarioDTO.getApellido());
             usuario.setNombre(UsuarioDTO.getNombre());
-            usuario.setCorreo(UsuarioDTO.getCorreo());
+            // usuario.setCorreo(UsuarioDTO.getCorreo());
+            usuario.setNumTelefono(UsuarioDTO.getNumTelefono());
+            usuario.setRol(UsuarioDTO.getRol());
 
             Usuario usuarioActualizado = usuarioRepository.save(usuario);
             return convertirADTO(usuarioActualizado);
