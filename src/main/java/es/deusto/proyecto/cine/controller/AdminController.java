@@ -28,6 +28,8 @@ import es.deusto.proyecto.cine.service.PeliculaService;
 import es.deusto.proyecto.cine.service.SalaService;
 import es.deusto.proyecto.cine.service.UsuarioService;
 
+
+//Controlador para todo la gestion del administrador
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -50,10 +52,9 @@ public class AdminController {
         this.peliculaService = peliculaService;
     }
 
-    // @PreAuthorize("hasRole('ADMIN')") @AuthenticationPrincipal Usuario usuario, Model model
+    // PANEL ADMIN
     @GetMapping
     public String panelAdmin(Authentication authentication, Model model) {
-        // model.addAttribute("nombre", usuario.getNombre());
         if (authentication != null) {
             String nombre = authentication.getName();
             Usuario usuario = usuarioRepository.findByCorreo(nombre).orElse(null);
@@ -62,6 +63,8 @@ public class AdminController {
         return "panel_admin";  
     }
 
+
+    //PELICULAS
     @GetMapping("/peliculas")
     public String getPeliculasAdmin(Model model) {
         List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
@@ -95,6 +98,8 @@ public class AdminController {
         return "admin_pelicula_editar";
     }
 
+
+    //EMISIONES
     @GetMapping("/emisiones")
     public String gestionarEmisiones(Model model) {
         model.addAttribute("nuevaEmision", new EmisionDTO());
@@ -126,6 +131,8 @@ public class AdminController {
         // return "redirect:/admin/emisiones";
     }
 
+
+    //USUARIOS
     @GetMapping("/usuarios")
     public String getUsuariosAdmin(Model model) {
         List<UsuarioDTO> usuarios = usuarioService.getAllUsuarios();
@@ -153,6 +160,7 @@ public class AdminController {
     }
 
 
+    //SALAS
     @GetMapping("/salas")
     public String getSalasAdmin(Model model) {
         List<SalaDTO> salas = salaService.getAllSalas();
