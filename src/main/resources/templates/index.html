@@ -11,7 +11,9 @@
         <nav>
             <a th:href="@{/autenticacion/login}">Iniciar sesion</a>
             <a th:href="@{/autenticacion/registro}">Registro</a>
-            <a th:href="@{/admin}">Panel admin</a>
+            <span th:if="${usuario != null and usuario.rol.name() == 'ADMIN'}">
+                <a th:href="@{/admin}">Panel admin</a>
+            </span>
             <a th:href="@{/peliculas}">Cartelera</a>
             <a th:href="@{/emisiones}">Ver emisiones</a>
             <!--<span th:if="${usuario != null}">-->

@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS pelicula (
     duracion INT NOT NULL,
     genero VARCHAR(100),
     director VARCHAR(100),
-    sinopsis VARCHAR(100)
+    sinopsis VARCHAR(2000)
 );
 
 CREATE TABLE IF NOT EXISTS sala (
