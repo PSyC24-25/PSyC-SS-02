@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda de Comida - Cine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        .hidden {
+            display: none;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: auto;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        input, select, button {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Tienda del Cine</h1>
+
+    <!-- Parte de introducir ID del boleto -->
+    <div id="idSection">
+        <label for="boletoId">Introduce tu identificador de boleto:</label>
+        <input type="text" id="boletoId" placeholder="ID del boleto">
+        <button onclick="validarId()">Confirmar ID</button>
+    </div>
+
+    <!-- Parte de elegir comida y bebida -->
+    <div id="menuSection" class="hidden">
+        <h2>Elige tu pedido</h2>
+
+        <form id="pedidoForm">
+
+            <h3>Comida</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="comidaLista"></tbody>
+            </table>
+
+            <h3>Bebida</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="bebidaLista"></tbody>
+            </table>
+
+            <h3 id="totalPrecio">Total: 0 €</h3>
+
+            <button type="button" onclick="confirmarPedido()">Confirmar Pedido</button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+// Definimos los productos y precios
+const comidaItems = [
+    { nombre: "Palomitas", precio: 5 },
+    { nombre: "Nachos", precio: 4 },
+    { nombre: "Hot Dog", precio: 6 },
+    { nombre: "Dulces", precio: 3 },
+    { nombre: "Nada", precio: 0 }
+];
+
+const bebidaItems = [
+    { nombre: "Refresco", precio: 3 },
+    { nombre: "Agua", precio: 2 },
+    { nombre: "Café", precio: 2.5 },
+    { nombre: "Nada", precio: 0 }
+];
+
+function validarId() {
+    const boletoId = document.getElementById('boletoId').value.trim();
+    if (boletoId !== "") {
+        document.getElementById('idSection').classList.add('hidden');
+        document.getElementById('menuSection').classList.remove('hidden');
+        cargarMenu();
+    } else {
+        alert("Por favor introduce un identificador de boleto válido.");
+    }
+}
+
+function cargarMenu() {
+    const comidaLista = document.getElementById('comidaLista');
+    const bebidaLista = document.getElementById('bebidaLista');
+
+    comidaItems.forEach((item, index) => {
+        comidaLista.innerHTML += `
+            <tr>
+                <td>${item.nombre}</td>
+                <td>${item.precio} €</td>
+                <td><input type="number" id="comida_${index}" min="0" value="0" onchange="calcularTotal()"></td>
+            </tr>
+        `;
+    });
+
+    bebidaItems.forEach((item, index) => {
+        bebidaLista.innerHTML += `
+            <tr>
+                <td>${item.nombre}</td>
+                <td>${item.precio} €</td>
+                <td><input type="number" id="bebida_${index}" min="0" value="0" onchange="calcularTotal()"></td>
+            </tr>
+        `;
+    });
+}
+
+function calcularTotal() {
+    let total = 0;
+    let nadaComida = false;
+    let nadaBebida = false;
+
+    comidaItems.forEach((item, index) => {
+        const cantidad = parseInt(document.getElementById(`comida_${index}`).value) || 0;
+        if (item.nombre === "Nada" && cantidad > 0) nadaComida = true;
+        total += item.precio * cantidad;
+    });
+
+    bebidaItems.forEach((item, index) => {
+        const cantidad = parseInt(document.getElementById(`bebida_${index}`).value) || 0;
+        if (item.nombre === "Nada" && cantidad > 0) nadaBebida = true;
+        total += item.precio * cantidad;
+    });
+
+    // Validar que solo uno tenga "Nada"
+    if (nadaComida && nadaBebida) {
+        alert("Solo puedes elegir 'Nada' en comida o en bebida, no en ambos.");
+        resetearNada();
+        total = 0;
+    }
+
+    document.getElementById('totalPrecio').textContent = `Total: ${total.toFixed(2)} €`;
+}
+
+function resetearNada() {
+    comidaItems.forEach((item, index) => {
+        if (item.nombre === "Nada") {
+            document.getElementById(`comida_${index}`).value = 0;
+        }
+    });
+    bebidaItems.forEach((item, index) => {
+        if (item.nombre === "Nada") {
+            document.getElementById(`bebida_${index}`).value = 0;
+        }
+    });
+}
+
+function confirmarPedido() {
+    calcularTotal(); // Para asegurarse que el total está actualizado
+
+    let cantidadTotal = 0;
+    let nadaSeleccionada = false;
+
+    // Contar todas las cantidades seleccionadas
+    comidaItems.forEach((item, index) => {
+        const cantidad = parseInt(document.getElementById(`comida_${index}`).value) || 0;
+        if (item.nombre === "Nada" && cantidad > 0) {
+            nadaSeleccionada = true;
+        } else {
+            cantidadTotal += cantidad;
+        }
+    });
+
+    bebidaItems.forEach((item, index) => {
+        const cantidad = parseInt(document.getElementById(`bebida_${index}`).value) || 0;
+        if (item.nombre === "Nada" && cantidad > 0) {
+            nadaSeleccionada = true;
+        } else {
+            cantidadTotal += cantidad;
+        }
+    });
+
+    if (cantidadTotal === 0) {
+        alert("Debes seleccionar al menos un producto para poder confirmar el pedido.");
+        return;
+    }
+
+    const totalText = document.getElementById('totalPrecio').textContent;
+    alert(`Pedido confirmado.\n${totalText}`);
+    // Aquí puedes enviar los datos al servidor si quieres
+}
+
+
+</script>
+
+</body>
+</html>
