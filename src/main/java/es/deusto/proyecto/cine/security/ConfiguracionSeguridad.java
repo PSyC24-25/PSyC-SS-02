@@ -25,7 +25,7 @@ public class ConfiguracionSeguridad {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/autenticacion/login", "/autenticacion/registro", "/peliculas", "/emisiones").permitAll()  // Public pages
+                .requestMatchers("/", "/autenticacion/login", "/autenticacion/registro", "/peliculas", "/emisiones", "/usuarios/**").permitAll()  // Public pages
                 .requestMatchers("/admin/**").authenticated()  // Admin pages
                 .requestMatchers(HttpMethod.DELETE, "admin/peliculas/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll() // Permitir archivos estáticos
