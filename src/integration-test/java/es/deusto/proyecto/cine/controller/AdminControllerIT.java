@@ -1,184 +1,65 @@
-package es.deusto.proyecto.cine.controller;
-
-import java.util.List;
-
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-// import org.springframework.security.access.prepost.PreAuthorize;
-// import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
 
-import es.deusto.proyecto.cine.dto.EmisionDTO;
-import es.deusto.proyecto.cine.dto.PeliculaDTO;
-import es.deusto.proyecto.cine.dto.SalaDTO;
-import es.deusto.proyecto.cine.dto.UsuarioDTO;
-import es.deusto.proyecto.cine.model.Usuario;
-import es.deusto.proyecto.cine.repository.UsuarioRepository;
-import es.deusto.proyecto.cine.service.EmisionService;
-// import es.deusto.proyecto.cine.model.Usuario;
-import es.deusto.proyecto.cine.service.PeliculaService;
-import es.deusto.proyecto.cine.service.SalaService;
-import es.deusto.proyecto.cine.service.UsuarioService;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
-//Controlador para todo la gestion del administrador
-@Controller
-@RequestMapping("/admin")
-public class AdminController {
-
-    private final PeliculaService peliculaService;
+@SpringBootTest
+@AutoConfigureMockMvc
+class AdminControllerIT {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-    
-    private final EmisionService emisionService;
+    private MockMvc mockMvc;
 
-    private final SalaService salaService;
-
-    private final UsuarioService usuarioService;
-
-    public AdminController(PeliculaService peliculaService, EmisionService emisionService, SalaService salaService, UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-        this.salaService = salaService;
-        this.emisionService = emisionService;
-        this.peliculaService = peliculaService;
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void accesoAlPanelAdmin_debeMostrarVistaCorrecta() throws Exception {
+        mockMvc.perform(get("/admin"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("panel_admin"));
     }
 
-    // PANEL ADMIN
-    @GetMapping
-    public String panelAdmin(Authentication authentication, Model model) {
-        if (authentication != null) {
-            String nombre = authentication.getName();
-            Usuario usuario = usuarioRepository.findByCorreo(nombre).orElse(null);
-            model.addAttribute("usuario", usuario);
-        }
-        return "panel_admin";  
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void verPeliculasAdmin_debeMostrarVistaConPeliculas() throws Exception {
+        mockMvc.perform(get("/admin/peliculas"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("admin_peliculas"))
+            .andExpect(model().attributeExists("peliculas"))
+            .andExpect(model().attributeExists("nuevaPelicula"));
     }
 
-
-    //PELICULAS
-    @GetMapping("/peliculas")
-    public String getPeliculasAdmin(Model model) {
-        List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas();
-        model.addAttribute("peliculas", peliculas);
-        model.addAttribute("nuevaPelicula", new PeliculaDTO());
-        return "admin_peliculas";
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void verEmisionesAdmin_debeMostrarVistaConDatos() throws Exception {
+        mockMvc.perform(get("/admin/emisiones"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("admin_emisiones"))
+            .andExpect(model().attributeExists("nuevaEmision"))
+            .andExpect(model().attributeExists("peliculas"))
+            .andExpect(model().attributeExists("salas"));
     }
 
-    @PostMapping("/peliculas/agregar")
-    public String agregarPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
-        peliculaService.crearPelicula(peliculaDTO);
-        return "redirect:/admin/peliculas";
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void verUsuariosAdmin_debeMostrarVistaConUsuarios() throws Exception {
+        mockMvc.perform(get("/admin/usuarios"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("admin_usuarios"))
+            .andExpect(model().attributeExists("usuarios"));
     }
 
-    @DeleteMapping("/peliculas/borrar/{id}")
-    public String borrarPelicula(@PathVariable Long id) {
-        peliculaService.borrarPelicula(id);
-        return "redirect:/admin/peliculas";
+    @Test
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    void verSalasAdmin_debeMostrarVistaConSalas() throws Exception {
+        mockMvc.perform(get("/admin/salas"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("admin_salas"))
+            .andExpect(model().attributeExists("salas"))
+            .andExpect(model().attributeExists("nuevaSala"));
     }
-
-    @PutMapping("/peliculas/editar")
-    public String actualizarPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
-        peliculaService.actualizarPelicula(peliculaDTO.getCodPelicula(), peliculaDTO);
-        return "redirect:/admin/peliculas";
-    }
-
-    @GetMapping("/peliculas/editar/{id}")
-    public String editarPelicula(@PathVariable Long id, Model model) {
-        PeliculaDTO pelicula = peliculaService.getPeliculaById(id);
-        model.addAttribute("pelicula", pelicula);
-        return "admin_pelicula_editar";
-    }
-
-
-    //EMISIONES
-    @GetMapping("/emisiones")
-    public String gestionarEmisiones(Model model) {
-        model.addAttribute("nuevaEmision", new EmisionDTO());
-
-        // Aquí asumimos que tienes un método que devuelve entidades Pelicula
-        List<PeliculaDTO> peliculas = peliculaService.getAllPeliculas(); 
-        List<SalaDTO> salas = salaService.getAllSalas();
-
-        model.addAttribute("peliculas", peliculas);
-        model.addAttribute("salas", salas);
-
-        return "admin_emisiones";
-    }
-
-    @PostMapping("/emisiones/programar")
-    public String programarEmision(@ModelAttribute EmisionDTO emisionDTO) {
-        emisionService.crearEmision(emisionDTO);
-        return "redirect:/admin/emisiones";
-        // Emision emision = new Emision();
-        // emision.setDateTime(emisionDTO.getFecha());
-
-        // Pelicula pelicula = peliculaService.getPeliculaByTitulo(emisionDTO.getNomPelicula());
-        // emision.setPelicula(pelicula);
-
-        // Sala sala = salaService.getSalaByNumero(emisionDTO.getNumSala());
-        // emision.setSala(sala);
-
-        // emisionService.guardar(emision);
-        // return "redirect:/admin/emisiones";
-    }
-
-
-    //USUARIOS
-    @GetMapping("/usuarios")
-    public String getUsuariosAdmin(Model model) {
-        List<UsuarioDTO> usuarios = usuarioService.getAllUsuarios();
-        model.addAttribute("usuarios", usuarios);
-        return "admin_usuarios";
-    }
-
-    @PutMapping("/usuarios/editar")
-    public String actualizarUsuario(@ModelAttribute UsuarioDTO usuarioDTO) {
-        usuarioService.actualizarUsuario(usuarioDTO.getCodUsuario(), usuarioDTO);
-        return "redirect:/admin/usuarios";
-    }
-
-    @GetMapping("/usuarios/editar/{id}")
-    public String editarUsuario(@PathVariable Long id, Model model) {
-        UsuarioDTO usuario = usuarioService.getUsuarioById(id);
-        model.addAttribute("usuario", usuario);
-        return "admin_usuario_editar";
-    }
-
-    @DeleteMapping("/usuarios/borrar/{id}")
-    public String borrarUsuario(@PathVariable Long id) {
-        usuarioService.borrarUsuario(id);
-        return "redirect:/admin/usuarios";
-    }
-
-
-    //SALAS
-    @GetMapping("/salas")
-    public String getSalasAdmin(Model model) {
-        List<SalaDTO> salas = salaService.getAllSalas();
-        model.addAttribute("salas", salas);
-        model.addAttribute("nuevaSala", new SalaDTO());
-        return "admin_salas";
-    }
-
-    @PostMapping("/salas/agregar")
-    public String agregarSala(@ModelAttribute SalaDTO salaDTO) {
-        salaService.crearSala(salaDTO);
-        return "redirect:/admin/salas";
-    }
-
-    @DeleteMapping("/salas/borrar/{id}")
-    public String borrarSala(@PathVariable Long id) {
-        salaService.borrarSala(id);
-        return "redirect:/admin/salas";
-    }
-
 }

@@ -123,14 +123,5 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
 	</build>
-	<profiles>
-		<profile>
-			<id>integration-tests</id>
-			<build>
-				<testSourceDirectory>src/integration-test/java</testSourceDirectory>
-			</build>
-		</profile>
-	</profiles>
 </project>
