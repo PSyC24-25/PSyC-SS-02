@@ -84,6 +84,11 @@
 			<version>1.37.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Profiler VisualVM -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
