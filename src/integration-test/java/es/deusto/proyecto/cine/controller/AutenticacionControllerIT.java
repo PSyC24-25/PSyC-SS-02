@@ -1,37 +1,51 @@
 package es.deusto.proyecto.cine.controller;
 
-import es.deusto.proyecto.cine.dto.UsuarioDTO;
 import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.UsuarioService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Controller
-@RequestMapping("/autenticacion")
-public class AutenticacionController {
+@SpringBootTest
+@AutoConfigureMockMvc
+class AutenticacionControllerIT {
 
-    private final UsuarioService usuarioService;
+    @Autowired
+    private MockMvc mockMvc;
 
-    public AutenticacionController(UsuarioService usuarioService){
-        this.usuarioService = usuarioService;
+    @MockBean
+    private UsuarioService usuarioService;
+
+    @Test
+    void login_debeDevolverVistaLogin() throws Exception {
+        mockMvc.perform(get("/autenticacion/login"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("login"));
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-    
-    @GetMapping("/registro")
-    public String formularioRegistro(Model model) {
-        model.addAttribute("usuario", new UsuarioDTO());
-        return "registro";
+    @Test
+    void formularioRegistro_debeMostrarVistaRegistroConDTO() throws Exception {
+        mockMvc.perform(get("/autenticacion/registro"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("registro"))
+            .andExpect(model().attributeExists("usuario"));
     }
 
-    @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
-        usuarioService.crearUsuario(usuario);
-        return "redirect:/autenticacion/login";
+    @Test
+    void registrarUsuario_debeLlamarAlServicioYRedirigir() throws Exception {
+        mockMvc.perform(post("/autenticacion/registro")
+                .param("correo", "test@correo.com")
+                .param("contrasena", "1234"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/autenticacion/login"));
+
+        verify(usuarioService).crearUsuario(org.mockito.ArgumentMatchers.any(Usuario.class));
     }
 }
