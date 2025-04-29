@@ -17,11 +17,11 @@ public class SalaService {
     @Autowired
     private SalaRepository salaRepository;  
 
-    private SalaDTO convertirADTO(Sala sala){
+    public SalaDTO convertirADTO(Sala sala){
         return new SalaDTO(sala.getCodSala(), sala.getNumero(), sala.getCapacidad(), sala.getColumnas());
     }
 
-    private Sala ConvertirAEntidad(SalaDTO salaDTO){
+    public Sala ConvertirAEntidad(SalaDTO salaDTO){
         Sala sala = new Sala();
         sala.setCodSala(salaDTO.getCodSala());
         sala.setNumero(salaDTO.getNumero());
