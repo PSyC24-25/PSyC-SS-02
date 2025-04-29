@@ -23,16 +23,15 @@ import java.util.List;
 @RequestMapping("/compras")
 public class CompraController {
     
-    @Autowired
-    private CompraService compraService;
-
+    private final CompraService compraService;
     private final EmisionService emisionService;
-
     private final UsuarioService usuarioService;
-
     private final SalaService salaService;
 
-    public CompraController(EmisionService emisionService, UsuarioService usuarioService, SalaService salaService) {
+    @Autowired
+    public CompraController(CompraService compraService, EmisionService emisionService, 
+                            UsuarioService usuarioService, SalaService salaService) {
+        this.compraService = compraService;
         this.emisionService = emisionService;
         this.usuarioService = usuarioService;
         this.salaService = salaService;

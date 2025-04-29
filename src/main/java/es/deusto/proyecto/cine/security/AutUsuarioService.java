@@ -14,11 +14,8 @@ import es.deusto.proyecto.cine.repository.UsuarioRepository;
 public class AutUsuarioService implements UserDetailsService {
     
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
-
     public AutUsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
