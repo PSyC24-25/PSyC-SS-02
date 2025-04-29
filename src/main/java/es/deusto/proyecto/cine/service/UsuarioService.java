@@ -36,12 +36,12 @@ public class UsuarioService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    private UsuarioDTO convertirADTO(Usuario usuario){
+    public UsuarioDTO convertirADTO(Usuario usuario){
         return new UsuarioDTO(usuario.getCodUsuario(), usuario.getNombre(), usuario.getApellido(),
          usuario.getCorreo(), usuario.getNumTelefono(), usuario.getContrasenya(), usuario.getRol());
     }
 
-    private Usuario ConvertirAEntidad(UsuarioDTO usuarioDTO){
+    public Usuario ConvertirAEntidad(UsuarioDTO usuarioDTO){
         Usuario usuario = usuarioRepository.findById(usuarioDTO.getCodUsuario()).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setApellido(usuarioDTO.getApellido());

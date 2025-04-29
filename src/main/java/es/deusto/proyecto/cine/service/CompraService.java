@@ -35,6 +35,12 @@ public class CompraService {
     }
 
     private CompraDTO convertirADTO(Compra compra){
+        if (compra.getUsuario() == null) {
+            throw new RuntimeException("Usuario no encontrado");
+        }
+        if (compra.getEmision() == null) {
+            throw new RuntimeException("Emision no encontrada");
+        }
         return new CompraDTO(compra.getCodCompra(), compra.getUsuario().getCodUsuario(), compra.getEmision().getCodEmision()
         , compra.getAsientos());
     }

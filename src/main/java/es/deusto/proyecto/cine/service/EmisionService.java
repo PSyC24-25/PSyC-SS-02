@@ -29,6 +29,12 @@ public class EmisionService {
     private PeliculaRepository peliculaRepository;
 
     private EmisionDTO convertirADTO(Emision emision){
+        if (emision.getPelicula() == null) {
+            throw new RuntimeException("Pelicula no encontrada");
+        }
+        if (emision.getSala() == null) {
+            throw new RuntimeException("Sala no encontrada");
+        }
         return new EmisionDTO(emision.getCodEmision(), emision.getDateTime(), emision.getPelicula().getTitulo()
         , emision.getSala().getNumero());
     }
