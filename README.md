@@ -13,3 +13,4 @@
 
  1. Para ejecutar los tests: `mvn test`. (Se debe haber establecido la conexión con la base de datos)
  2. `mvn jacoco:report` para obtener el análisis de los test en **"target/site/jacoco/index.html"**
+ 3. Para ejecutar solo los tests de rendimiento: `mvn -Dtest=PerformanceTest test`. Resultados en: **"target/reports/perf-report.html"**
