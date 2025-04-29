@@ -12,6 +12,43 @@ body {
     padding: 50px 20px;
 }
 
+/* Barra superior de autenticación */
+.auth-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 20px;
+    gap: 20px;
+}
+
+/* Enlaces cuando no hay sesión */
+.auth-links {
+    display: flex;
+    gap: 15px;
+}
+
+/* Estilo nombre de usuario y logout */
+.logout-form {
+    display: inline;
+}
+
+/* Nombre y saludo */
+.user-info {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    font-size: 16px;
+    color: #333;
+}
+
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+}
+
 /* NAVBAR */
 nav {
     background-color: #007BFF;

@@ -7,24 +7,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <!-- Autenticación -->
+    <div class="auth-bar">
+        <div class="auth-links" th:if="${usuario == null}">
+            <a th:href="@{/autenticacion/login}">Iniciar sesión</a>
+            <a th:href="@{/autenticacion/registro}">Registro</a>
+        </div>
+        <div class="user-info" th:if="${usuario != null}">
+            <div class="user-welcome">
+                <span>Bienvenido,</span>
+                <span class="username" th:text="${usuario.nombre}"></span>
+            </div>
+            <!-- Logout -->
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        </div>
+    </div>
+    <!-- Navegación principal -->
     <div class="index-container">
         <nav>
-            <a th:href="@{/autenticacion/login}">Iniciar sesion</a>
-            <a th:href="@{/autenticacion/registro}">Registro</a>
-            <span th:if="${usuario != null and usuario.rol.name() == 'ADMIN'}">
-                <a th:href="@{/admin}">Panel admin</a>
-            </span>
             <a th:href="@{/peliculas}">Cartelera</a>
-            <a th:href="@{/emisiones}">Ver emisiones</a>
-            <!--<span th:if="${usuario != null}">-->
-                <a th:href="@{/compras}">Comprar boletos</a>
-            <!--</span>  -->
-            
+            <a th:href="@{/emisiones}">Emisiones</a>
+            <a th:href="@{/compras}">Tickets</a>
+            <span th:if="${usuario != null and usuario.rol.name() == 'ADMIN'}">
+                <a th:href="@{/admin}">Administrador</a>
+            </span>
         </nav>
-    </div>
-    <br>
-    <span th:if="${usuario != null}">
-        Bienvenido, <span th:text="${usuario.nombre}"></span>!
-    </span>   
+    </div> 
 </body>
 </html>
