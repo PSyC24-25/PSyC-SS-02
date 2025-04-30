@@ -62,4 +62,18 @@ public class PerformanceTest {
     public void testGetAllComprasPerformance() {
         peliculaService.getAllPeliculas();
     }
+
+    @Test
+    @JUnitPerfTest(threads = 20, durationMs = 5000, warmUpMs = 1000)
+    @JUnitPerfTestRequirement(executionsPerSec = 35, percentiles = "95:300ms")
+    public void testGetAllSalasPerformance() {
+        salaService.getAllSalas();
+    }
+
+    @Test
+    @JUnitPerfTest(threads = 20, durationMs = 5000, warmUpMs = 1000)
+    @JUnitPerfTestRequirement(executionsPerSec = 35, percentiles = "95:300ms")
+    public void testGetAllEmisionPerformance() {
+        emisionService.getAllEmisiones();
+    }
 }
