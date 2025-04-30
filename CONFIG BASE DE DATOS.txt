@@ -1,4 +1,4 @@
-Solucionar problemas de conectividad con la base de datos.
+Solucionar problemas de conectividad con la base de datos. Es posible que funcione sin necesidad de realizar los siguientes pasos, probar si funciona correctamente antes de seguir los pasos.
 
 1. Revisar la versión de mysql
 	- Abrir CMD
