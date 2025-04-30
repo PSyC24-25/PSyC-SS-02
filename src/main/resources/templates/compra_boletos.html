@@ -10,17 +10,17 @@
             height: 40px;
             margin: 5px;
             text-align: center;
-            background-color: #90ee90; /* green = free */
+            background-color: #90ee90; /* verde = libre */
             cursor: pointer;
         }
 
         .seat.occupied {
-            background-color: #d9534f; /* red */
+            background-color: #d9534f; /* rojo = ocupado */
             cursor: not-allowed;
         }
 
         .seat.selected {
-            background-color: #337ab7; /* blue */
+            background-color: #337ab7; /* azul = seleccionado */
         }
 
         .seat-map {
@@ -29,67 +29,78 @@
             width: fit-content;
             margin: 20px 0;
         }
+
         table {
             border-collapse: collapse;
             margin: 10px;
         }
+
         td {
             padding: 8px;
             text-align: center;
         }
+
         input[type="checkbox"]:disabled + span {
             color: gray;
             text-decoration: line-through;
+        }
+
+        #panelAsientos {
+            border: 2px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            width: 90%;
+            margin: 20px auto;
         }
     </style>
 </head>
 <body>
     <a th:href="@{/}">Volver al inicio</a><br>
-    <a th:href="@{/compras}">Elegir otra emision</a>
+    <a th:href="@{/compras}">Elegir otra emisión</a>
     <h1>Comprar Boletos</h1>
 
     <label>Usuario:</label>
     <input type="text" th:value="${usuario.correo}" readonly/><br><br>
-    <label>Emision:</label>
+    <label>Emisión:</label>
     <input type="text" th:value="${emision.nomPelicula + '  ' + emision.fecha}" readonly/><br>
 
-    <br>
-    <h1>PANTALLA</h1>
-    <br><br><br>
-    <form th:action="@{/compras/guardar}"  method="post" th:object="${nuevaCompra}" onsubmit="return validateForm()">
-        <input type="hidden" name="idEmision" th:value="${emision.codEmision}"/>
-    
-        <div id = "seatMap">
-            <table>
-                <tbody>
-                    <tr th:each="fila : ${#numbers.sequence(0, filas - 1)}">
-                        <td th:each="columna : ${#numbers.sequence(1, sala.columnas)}"
-                            th:with="rowLetter=${'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.charAt(fila)},
-                                     seat=${'' + rowLetter + columna}">
-                            
-                            <label>
-                                <input type="checkbox" name="asientos" th:value="${seat}" 
-                                       th:disabled="${asientosOcupados.contains(seat)}"/>
-                                <span th:text="${seat}"></span>
-                            </label>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    
-        <input type="hidden" name="asientosSel" id="asientosSeleccionados"/>
-    
-        <p id="precioTotal">Precio: 0€</p>
-        <button type="submit">Comprar</button>
-    </form>
+    <div id="panelAsientos">
+        <h2>PANTALLA</h2>
+        <br><br>
+        <form th:action="@{/compras/guardar}" method="post" th:object="${nuevaCompra}" onsubmit="return validateForm()">
+            <input type="hidden" name="idEmision" th:value="${emision.codEmision}" />
+
+            <div id="seatMap">
+                <table>
+                    <tbody>
+                        <tr th:each="fila : ${#numbers.sequence(0, filas - 1)}">
+                            <td th:each="columna : ${#numbers.sequence(1, sala.columnas)}"
+                                th:with="rowLetter=${'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.charAt(fila)},
+                                         seat=${'' + rowLetter + columna}">
+                                <label>
+                                    <input type="checkbox" name="asientos" th:value="${seat}" 
+                                           th:disabled="${asientosOcupados.contains(seat)}"/>
+                                    <span th:text="${seat}"></span>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <input type="hidden" name="asientosSel" id="asientosSeleccionados" />
+            <p id="precioTotal">Precio: 0€</p>
+            <button type="submit">Comprar</button>
+        </form>
+    </div>
 
     <script>
         const checkboxes = document.querySelectorAll('input[type="checkbox"][name="asientos"]');
         const selectedSeatsInput = document.getElementById('asientosSeleccionados');
         const priceDisplay = document.getElementById('precioTotal');
         const pricePerSeat = 9.5;
-    
+
         function updateSelectedSeats() {
             const selected = [];
             checkboxes.forEach(cb => {
@@ -102,22 +113,19 @@
         }
 
         function validateForm() {
-            const checkboxes = document.querySelectorAll('input[type="checkbox"][name="asientos"]');
             const isAnyChecked = Array.from(checkboxes).some(cb => cb.checked && !cb.disabled);
-    
             if (!isAnyChecked) {
                 alert("Por favor, selecciona al menos un asiento antes de continuar.");
-                return false; // Prevent form submission
+                return false;
             }
             alert("¡Gracias por tu compra! Disfruta de la película.");
-            return true; // Allow form submission
+            return true;
         }
-    
+
         checkboxes.forEach(cb => {
             cb.addEventListener('change', updateSelectedSeats);
         });
-    
-        // Initial update in case some checkboxes are pre-checked
+
         updateSelectedSeats();
     </script>
 </body>
