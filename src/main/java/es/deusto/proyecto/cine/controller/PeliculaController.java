@@ -1,17 +1,26 @@
 package es.deusto.proyecto.cine.controller;
 
-import es.deusto.proyecto.cine.dto.PeliculaDTO;
-import es.deusto.proyecto.cine.service.PeliculaService;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-// import java.util.Optional;
+import es.deusto.proyecto.cine.dto.PeliculaDTO;
+import es.deusto.proyecto.cine.service.PeliculaService;
+// import javax.servlet.http.HttpServletRequest;
+
 
 @Controller
 @RequestMapping("/peliculas")
@@ -23,34 +32,24 @@ public class PeliculaController {
     @GetMapping
     public String getAllPeliculas(@RequestParam(required = false) String genero,
                                   @RequestParam(required = false) String nombre, 
-                                  Model model) {
+                                  Model model,
+                                  @RequestHeader(value = "X-Requested-With", required = false) String requestedWith) {
         List<PeliculaDTO> peliculas = peliculaService.buscarPeliculas(nombre, genero);
-
-        /*
-        Para lo del nombre se quita
-
-        if (genero != null && !genero.isEmpty()) {
-            // SI GENERO SELECCIONADO, SOLO APARECEN ESAS PELICULAS
-            peliculas = peliculaService.getPeliculasByGenero(genero);
-        } else {
-            // NO GENERO SELECCIONADO, POR TANTO APARECEN TODAS
-            peliculas = peliculaService.getAllPeliculas();
-        }*/
-
+        
+        // Verifica las películas recuperadas
+        System.out.println("Películas obtenidas: " + peliculas);
+    
         model.addAttribute("peliculas", peliculas);
         model.addAttribute("genero", genero);
-       
-        /*
-         * 
-         */
-
         model.addAttribute("nombre", nombre);
-
-        /*
-         * 
-         */
+    
+        if ("XMLHttpRequest".equals(requestedWith)) {
+            // Asegúrate de que se devuelve solo el fragmento y no toda la página
+            return "fragments/tablaPeliculas :: tabla";
+        }
+    
         return "peliculas";
-    }
+    }    
 
     @GetMapping("/{id}")
     public ResponseEntity<PeliculaDTO> getPeliculaById(@PathVariable Long id) {

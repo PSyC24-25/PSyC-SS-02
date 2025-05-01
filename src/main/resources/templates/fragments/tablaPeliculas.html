@@ -1,0 +1,19 @@
+<!-- fragments/tablaPeliculas.html -->
+<div id="tablaPeliculas" th:fragment="tabla">
+    <table>
+        <tr>
+            <th>Titulo</th>
+            <th>Duracion</th>
+            <th>Genero</th>
+            <th>Director</th>
+            <th>Sinopsis</th>
+        </tr>
+        <tr th:each="pelicula : ${peliculas}">
+            <td th:text="${pelicula.titulo}"></td>
+            <td th:text="${pelicula.duracion}"></td>
+            <td th:text="${pelicula.genero}"></td>
+            <td th:text="${pelicula.director}"></td>
+            <td th:text="${pelicula.sinopsis}"></td>
+        </tr>
+    </table>
+</div>

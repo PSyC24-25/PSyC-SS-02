@@ -10,7 +10,7 @@
     <h1>Lista de peliculas</h1>
 
     
-    <form action="#" th:action="@{/peliculas}" method="get">
+    <form id="filtroForm" action="#" th:action="@{/peliculas}" method="get">
         <label for="genero">Filtrar por Género:</label>
         <!--
         <select name="genero" id="genero">
@@ -51,21 +51,58 @@
         Buscando películas con el nombre: <strong th:text="${nombre}"></strong>
     </p>
 
-    <table>
-        <tr>
-            <th>Titulo</th>
-            <th>Duracion</th>
-            <th>Genero</th>
-            <th>Director</th>
-            <th>Sinopsis</th>
-        </tr>
-        <tr th:each="pelicula : ${peliculas}">
-            <td th:text="${pelicula.titulo}"></td>
-            <td th:text="${pelicula.duracion}"></td>
-            <td th:text="${pelicula.genero}"></td>
-            <td th:text="${pelicula.director}"></td>
-            <td th:text="${pelicula.sinopsis}"></td>
-        </tr>
-    </table>
+    <div id="tablaPeliculas" th:replace="fragments/tablaPeliculas :: tabla">
+        <table>
+            <tr>
+                <th>Titulo</th>
+                <th>Duracion</th>
+                <th>Genero</th>
+                <th>Director</th>
+                <th>Sinopsis</th>
+            </tr>
+            <tr th:each="pelicula : ${peliculas}">
+                <td th:text="${pelicula.titulo}"></td>
+                <td th:text="${pelicula.duracion}"></td>
+                <td th:text="${pelicula.genero}"></td>
+                <td th:text="${pelicula.director}"></td>
+                <td th:text="${pelicula.sinopsis}"></td>
+            </tr>
+        </table>
+    </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const nombreInput = document.getElementById('nombre');
+        const generoSelect = document.getElementById('genero');
+        const tablaPeliculas = document.getElementById('tablaPeliculas');
+    
+        function actualizarPeliculas() {
+        const nombre = nombreInput.value;
+        const genero = generoSelect.value;
+
+        const url = `/peliculas?nombre=${encodeURIComponent(nombre)}&genero=${encodeURIComponent(genero)}`;
+        console.log("Solicitando URL: ", url); // Verifica la URL generada
+
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error en la petición');
+            return response.text();
+        })
+        .then(html => {
+            console.log("HTML recibido:", html); // Verifica el HTML que se recibe
+            tablaPeliculas.innerHTML = html; // Inserta directamente el HTML recibido
+        })
+        .catch(error => {
+            console.error("Error al actualizar la tabla:", error);
+        });
+    }
+    
+        nombreInput.addEventListener('input', actualizarPeliculas);
+        generoSelect.addEventListener('change', actualizarPeliculas);
+    });
+</script>    
 </html>
