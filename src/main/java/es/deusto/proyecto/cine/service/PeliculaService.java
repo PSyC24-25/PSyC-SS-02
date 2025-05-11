@@ -19,12 +19,12 @@ public class PeliculaService {
     @Autowired
     private PeliculaRepository peliculaRepository; 
 
-    private PeliculaDTO convertirADTO(Pelicula pelicula){
+    public PeliculaDTO convertirADTO(Pelicula pelicula){
         return new PeliculaDTO(pelicula.getCodPelicula(), pelicula.getTitulo(), pelicula.getGenero(), pelicula.getDuracion(),
          pelicula.getDirector(), pelicula.getSinopsis());
     }
 
-    private Pelicula convertirAEntidad(PeliculaDTO peliculaDTO){
+    public Pelicula convertirAEntidad(PeliculaDTO peliculaDTO){
         Pelicula pelicula = new Pelicula();
         pelicula.setCodPelicula(peliculaDTO.getCodPelicula());
         pelicula.setTitulo(peliculaDTO.getTitulo());
