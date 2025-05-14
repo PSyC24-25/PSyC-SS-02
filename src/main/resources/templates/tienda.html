@@ -194,8 +194,11 @@ function confirmarPedido() {
 
     const totalTexto = document.getElementById('totalPrecio').textContent;
     alert(`Pedido confirmado.\n${totalTexto}`);
-    // Aquí puedes hacer una petición al backend si quieres
+
+    // Redirigir al inicio
+    window.location.href = "/";
 }
+
 </script>
 
 </body>

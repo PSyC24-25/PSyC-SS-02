@@ -31,6 +31,7 @@
             <a th:href="@{/peliculas}">Cartelera</a>
             <a th:href="@{/emisiones}">Emisiones</a>
             <a th:href="@{/compras}">Tickets</a>
+            <a th:href="@{/tienda}">Tienda</a>
             <span th:if="${usuario != null and usuario.rol.name() == 'ADMIN'}">
                 <a th:href="@{/admin}">Administrador</a>
             </span>
