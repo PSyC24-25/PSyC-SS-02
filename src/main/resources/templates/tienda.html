@@ -47,180 +47,155 @@
 <div class="container">
     <h1>Tienda del Cine</h1>
 
-    <!-- Parte de introducir ID del boleto -->
-    <div id="idSection">
-        <label for="boletoId">Introduce tu identificador de boleto:</label>
-        <input type="text" id="boletoId" placeholder="ID del boleto">
-        <button onclick="validarId()">Confirmar ID</button>
+    <!-- Nueva sección para elegir si desea comida/bebida -->
+    <div id="opcionesIniciales">
+        <label><input type="checkbox" id="quiereComida"> ¿Quieres comida?</label><br>
+        <label><input type="checkbox" id="quiereBebida"> ¿Quieres bebida?</label><br>
+        <button onclick="continuarPedido()">Continuar</button>
     </div>
 
-    <!-- Parte de elegir comida y bebida -->
+    <!-- Sección principal del menú -->
     <div id="menuSection" class="hidden">
-        <h2>Elige tu pedido</h2>
-
+        <h2>Tu ID de Pedido: <span id="idPedido"></span></h2>
         <form id="pedidoForm">
 
-            <h3>Comida</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                    </tr>
-                </thead>
-                <tbody id="comidaLista"></tbody>
-            </table>
+            <div id="comidaSection" class="hidden">
+                <h3>Comida</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comidaLista"></tbody>
+                </table>
+            </div>
 
-            <h3>Bebida</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                    </tr>
-                </thead>
-                <tbody id="bebidaLista"></tbody>
-            </table>
+            <div id="bebidaSection" class="hidden">
+                <h3>Bebida</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bebidaLista"></tbody>
+                </table>
+            </div>
 
             <h3 id="totalPrecio">Total: 0 €</h3>
-
             <button type="button" onclick="confirmarPedido()">Confirmar Pedido</button>
         </form>
     </div>
-
 </div>
 
 <script>
-// Definimos los productos y precios
+// Productos
 const comidaItems = [
     { nombre: "Palomitas", precio: 5 },
     { nombre: "Nachos", precio: 4 },
     { nombre: "Hot Dog", precio: 6 },
-    { nombre: "Dulces", precio: 3 },
-    { nombre: "Nada", precio: 0 }
+    { nombre: "Dulces", precio: 3 }
 ];
 
 const bebidaItems = [
     { nombre: "Refresco", precio: 3 },
     { nombre: "Agua", precio: 2 },
-    { nombre: "Café", precio: 2.5 },
-    { nombre: "Nada", precio: 0 }
+    { nombre: "Café", precio: 2.5 }
 ];
 
-function validarId() {
-    const boletoId = document.getElementById('boletoId').value.trim();
-    if (boletoId !== "") {
-        document.getElementById('idSection').classList.add('hidden');
-        document.getElementById('menuSection').classList.remove('hidden');
-        cargarMenu();
-    } else {
-        alert("Por favor introduce un identificador de boleto válido.");
+function continuarPedido() {
+    const quiereComida = document.getElementById("quiereComida").checked;
+    const quiereBebida = document.getElementById("quiereBebida").checked;
+
+    if (!quiereComida && !quiereBebida) {
+        alert("Debes seleccionar al menos una opción: comida o bebida.");
+        return;
+    }
+
+    document.getElementById("opcionesIniciales").classList.add("hidden");
+    document.getElementById("menuSection").classList.remove("hidden");
+
+    // Generar ID aleatorio
+    const id = generarIdAleatorio();
+    document.getElementById("idPedido").textContent = id;
+
+    // Mostrar secciones correspondientes
+    if (quiereComida) {
+        document.getElementById("comidaSection").classList.remove("hidden");
+        cargarMenu("comida");
+    }
+
+    if (quiereBebida) {
+        document.getElementById("bebidaSection").classList.remove("hidden");
+        cargarMenu("bebida");
     }
 }
 
-function cargarMenu() {
-    const comidaLista = document.getElementById('comidaLista');
-    const bebidaLista = document.getElementById('bebidaLista');
+function generarIdAleatorio() {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let id = '';
+    for (let i = 0; i < 4; i++) {
+        id += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    return id;
+}
 
-    comidaItems.forEach((item, index) => {
-        comidaLista.innerHTML += `
-            <tr>
-                <td>${item.nombre}</td>
-                <td>${item.precio} €</td>
-                <td><input type="number" id="comida_${index}" min="0" value="0" onchange="calcularTotal()"></td>
-            </tr>
-        `;
-    });
+function cargarMenu(tipo) {
+    if (tipo === "comida") {
+        const comidaLista = document.getElementById('comidaLista');
+        comidaItems.forEach((item, index) => {
+            comidaLista.innerHTML += `
+                <tr>
+                    <td>${item.nombre}</td>
+                    <td>${item.precio} €</td>
+                    <td><input type="number" id="comida_${index}" min="0" value="0" onchange="calcularTotal()"></td>
+                </tr>
+            `;
+        });
+    }
 
-    bebidaItems.forEach((item, index) => {
-        bebidaLista.innerHTML += `
-            <tr>
-                <td>${item.nombre}</td>
-                <td>${item.precio} €</td>
-                <td><input type="number" id="bebida_${index}" min="0" value="0" onchange="calcularTotal()"></td>
-            </tr>
-        `;
-    });
+    if (tipo === "bebida") {
+        const bebidaLista = document.getElementById('bebidaLista');
+        bebidaItems.forEach((item, index) => {
+            bebidaLista.innerHTML += `
+                <tr>
+                    <td>${item.nombre}</td>
+                    <td>${item.precio} €</td>
+                    <td><input type="number" id="bebida_${index}" min="0" value="0" onchange="calcularTotal()"></td>
+                </tr>
+            `;
+        });
+    }
 }
 
 function calcularTotal() {
     let total = 0;
-    let nadaComida = false;
-    let nadaBebida = false;
 
     comidaItems.forEach((item, index) => {
-        const cantidad = parseInt(document.getElementById(`comida_${index}`).value) || 0;
-        if (item.nombre === "Nada" && cantidad > 0) nadaComida = true;
-        total += item.precio * cantidad;
+        const input = document.getElementById(`comida_${index}`);
+        if (input) total += item.precio * (parseInt(input.value) || 0);
     });
 
     bebidaItems.forEach((item, index) => {
-        const cantidad = parseInt(document.getElementById(`bebida_${index}`).value) || 0;
-        if (item.nombre === "Nada" && cantidad > 0) nadaBebida = true;
-        total += item.precio * cantidad;
+        const input = document.getElementById(`bebida_${index}`);
+        if (input) total += item.precio * (parseInt(input.value) || 0);
     });
-
-    // Validar que solo uno tenga "Nada"
-    if (nadaComida && nadaBebida) {
-        alert("Solo puedes elegir 'Nada' en comida o en bebida, no en ambos.");
-        resetearNada();
-        total = 0;
-    }
 
     document.getElementById('totalPrecio').textContent = `Total: ${total.toFixed(2)} €`;
 }
 
-function resetearNada() {
-    comidaItems.forEach((item, index) => {
-        if (item.nombre === "Nada") {
-            document.getElementById(`comida_${index}`).value = 0;
-        }
-    });
-    bebidaItems.forEach((item, index) => {
-        if (item.nombre === "Nada") {
-            document.getElementById(`bebida_${index}`).value = 0;
-        }
-    });
-}
-
 function confirmarPedido() {
-    calcularTotal(); // Para asegurarse que el total está actualizado
+    calcularTotal();
 
-    let cantidadTotal = 0;
-    let nadaSeleccionada = false;
-
-    // Contar todas las cantidades seleccionadas
-    comidaItems.forEach((item, index) => {
-        const cantidad = parseInt(document.getElementById(`comida_${index}`).value) || 0;
-        if (item.nombre === "Nada" && cantidad > 0) {
-            nadaSeleccionada = true;
-        } else {
-            cantidadTotal += cantidad;
-        }
-    });
-
-    bebidaItems.forEach((item, index) => {
-        const cantidad = parseInt(document.getElementById(`bebida_${index}`).value) || 0;
-        if (item.nombre === "Nada" && cantidad > 0) {
-            nadaSeleccionada = true;
-        } else {
-            cantidadTotal += cantidad;
-        }
-    });
-
-    if (cantidadTotal === 0) {
-        alert("Debes seleccionar al menos un producto para poder confirmar el pedido.");
-        return;
-    }
-
-    const totalText = document.getElementById('totalPrecio').textContent;
-    alert(`Pedido confirmado.\n${totalText}`);
-    // Aquí puedes enviar los datos al servidor si quieres
+    const totalTexto = document.getElementById('totalPrecio').textContent;
+    alert(`Pedido confirmado.\n${totalTexto}`);
+    // Aquí puedes hacer una petición al backend si quieres
 }
-
-
 </script>
 
 </body>
