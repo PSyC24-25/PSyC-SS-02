@@ -27,7 +27,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testCrearUsuario() {
+    public void testCrearYEliminarUsuario() {
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setCorreo("test@correo.com");
         nuevoUsuario.setContrasenya("password123");
@@ -39,13 +39,26 @@ public class IntegrationTest {
 
         HttpEntity<Usuario> request = new HttpEntity<>(nuevoUsuario, headers);
 
+        //Creación de usuario
         ResponseEntity<Usuario> response = restTemplate.postForEntity(
                 getUrl("/usuarios"), request, Usuario.class);
-
-        System.out.println("Location header: " + response.getHeaders().getLocation()); //Prueba de redireccionamiento
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCorreo()).isEqualTo("test@correo.com");
+
+        //Eliminación de usuario
+        Long idUsuario = response.getBody().getCodUsuario();
+
+        assertThat(idUsuario).isNotNull();
+
+        ResponseEntity<Void> deleteResponse = restTemplate.exchange(
+            getUrl("/usuarios/" + idUsuario), 
+            org.springframework.http.HttpMethod.DELETE,
+            null,
+            Void.class
+        );
+
+        assertThat(deleteResponse.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }
