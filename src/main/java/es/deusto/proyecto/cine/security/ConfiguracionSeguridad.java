@@ -24,7 +24,9 @@ public class ConfiguracionSeguridad {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable() // Desactiva CSRF
+            .csrf(csrf -> csrf
+            .ignoringRequestMatchers("/usuarios/**")  // Desactiva CSRF solo para el endpoint de usuarios
+            )
             .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/autenticacion/login", "/autenticacion/registro", "/peliculas", "/peliculas/**").permitAll() // Public pages
                 .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
