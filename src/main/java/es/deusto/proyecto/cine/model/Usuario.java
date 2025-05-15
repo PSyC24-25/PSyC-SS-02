@@ -3,22 +3,35 @@ package es.deusto.proyecto.cine.model;
 import jakarta.persistence.*;
 import java.util.List;
 
-
+/**
+ * Clase que representa un usuario en el sistema de cine.
+ * 
+ * Esta clase contiene información sobre el usuario, incluyendo su nombre,
+ * apellido, correo electrónico, número de teléfono, contraseña y el rol
+ * asignado (usuario o administrador).
+ */
 @Entity
 public class Usuario {
+    /** Identificador único del usuario */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codUsuario;
-
+    /** Nombre del usuario */
     private String nombre;
+    /** Apellido del usuario */
     private String apellido;
+    /** Correo electrónico del usuario */
     private String correo;
+    /** Número de teléfono del usuario */
     private String numTelefono;
+    /** Contraseña del usuario */
     private String contrasenya;
 
+    /** Lista de compras realizadas por el usuario */
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Compra> compras;
 
+    /** Rol del usuario (usuario o administrador) */
     @Enumerated(EnumType.STRING)
     private Rol rol;
 

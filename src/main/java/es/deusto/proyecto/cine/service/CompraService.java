@@ -17,6 +17,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio para gestionar las compras del sistema.
+ * 
+ * Este servicio proporciona funcionalidades para crear,
+ * actualizar, eliminar y consultar compras. Además,
+ * permite calcular el precio de una compra y obtener
+ * los asientos ocupados por una emisión.
+ */
 @Service
 public class CompraService {
     
@@ -29,11 +37,23 @@ public class CompraService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    /**
+     * calcula el precio de una compra en base al número de asientos.
+     *
+     * @param compraDTO objeto DTO de la compra
+     * @return el precio de la compra
+     */
     public double calcPrecio(CompraDTO compraDTO){
         double precioPorAsiento = 9.5;
         return precioPorAsiento * compraDTO.getAsientos().size(); 
     }
 
+    /**
+     * Convierte una entidad Compra a un objeto DTO.
+     *
+     * @param compra objeto de la compra
+     * @return el objeto DTO de la compra
+     */
     private CompraDTO convertirADTO(Compra compra){
         if (compra.getUsuario() == null) {
             throw new RuntimeException("Usuario no encontrado");
@@ -45,6 +65,12 @@ public class CompraService {
         , compra.getAsientos());
     }
 
+    /**
+     * Convierte un objeto DTO de compra a una entidad Compra.
+     *
+     * @param compraDTO objeto DTO de la compra
+     * @return la entidad Compra
+     */
     private Compra ConvertirAEntidad(CompraDTO compraDTO){
         Emision emision = emisionRepository.findByCodEmision(compraDTO.getIdEmision());
         Usuario usuario = usuarioRepository.findById(compraDTO.getIdUsuario())
@@ -60,6 +86,12 @@ public class CompraService {
         return compra;
     }
 
+    /**
+     * Obtiene una lista de asientos ocupados para una emisión específica.
+     *
+     * @param emision la emisión para la que se desean obtener los asientos ocupados
+     * @return una lista de asientos ocupados
+     */
     public List<String> getAsientosOcupadosPorEmision(Emision emision) {
         List<Compra> compras = compraRepository.findByEmision(emision);
         
@@ -72,24 +104,47 @@ public class CompraService {
         return ocupados;
     }
 
+    /**
+     * Obtiene una lista de todas las compras.
+     *
+     * @return una lista de objetos DTO de compras
+     */
     public List<CompraDTO> getAllCompras() {
         return compraRepository.findAll().stream()
                 .map(this::convertirADTO)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene una compra por su ID.
+     *
+     * @param id el ID de la compra
+     * @return el objeto DTO de la compra, o null si no se encuentra
+     */
     public CompraDTO getCompraById(Long id) {
         return compraRepository.findById(id)
         .map(this::convertirADTO) 
         .orElse(null);  
     }
 
+    /**
+     * Guarda una compra en la base de datos.
+     *
+     * @param compra la entidad Compra a guardar
+     */
     public CompraDTO crearCompra(CompraDTO compraDTO){
         Compra compra = ConvertirAEntidad(compraDTO);
         Compra compraGuardada = compraRepository.save(compra);
         return convertirADTO(compraGuardada);
     }
 
+    /**
+     * Actualiza una compra existente.
+     *
+     * @param id el ID de la compra a actualizar
+     * @param actualizarCompra el objeto DTO con los nuevos datos
+     * @return el objeto DTO de la compra actualizada
+     */
     public CompraDTO actualizarCompra(Long id, CompraDTO actualizarCompra) {
         Optional<Compra> compraExistente = compraRepository.findById(id);
 
@@ -114,6 +169,11 @@ public class CompraService {
         throw new EntityNotFoundException("No se ha encontrado compra con ID " + id);
     }
 
+    /**
+     * Elimina una compra por su ID.
+     *
+     * @param id el ID de la compra a eliminar
+     */
     public void borrarCompra(Long id){
         if (compraRepository.existsById(id)) {
             compraRepository.deleteById(id);

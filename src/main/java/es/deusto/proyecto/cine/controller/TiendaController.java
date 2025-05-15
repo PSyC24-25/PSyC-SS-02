@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.security.SecureRandom;
 import java.util.Random;
 
+/**
+ * Controlador para gestionar la tienda.
+ */
 @Controller
 public class TiendaController {
 
@@ -15,6 +18,11 @@ public class TiendaController {
     private static final int ID_LENGTH = 4;
     private final Random random = new SecureRandom();
 
+    /**
+     * Genera un ID de compra aleatorio.
+     *
+     * @return un ID de compra aleatorio
+     */
     private String generarIdCompra() {
         StringBuilder sb = new StringBuilder(ID_LENGTH);
         for (int i = 0; i < ID_LENGTH; i++) {
@@ -23,12 +31,23 @@ public class TiendaController {
         return sb.toString();
     }
 
+    /**
+     * Muestra la vista de la tienda.
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista de la tienda
+     */
     @GetMapping("/tienda")
     public String mostrarTienda(Model model) {
         model.addAttribute("idCompra", generarIdCompra());
         return "tienda";
     }
 
+    /**
+     * Procesa la compra.
+     *
+     * @return la redirección a la página de inicio
+     */
     @PostMapping("/tienda/comprar")
     public String procesarCompra() {
         // Aquí puedes guardar los datos si es necesario

@@ -4,22 +4,34 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Clase que representa una emisión de una película en una sala de cine.
+ * 
+ * Esta clase contiene información sobre la fecha y hora de la emisión,
+ * la película asociada, la sala donde se proyecta y las compras realizadas
+ * para esa emisión.
+ */
 @Entity
 public class Emision {
+    /** Identificador único de la emisión */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codEmision;
 
+    /** Fecha y hora de la emisión */
     private LocalDateTime fecha; 
 
+    /** Película asociada a la emisión */
     @ManyToOne
     @JoinColumn(name = "codPelicula", nullable = false)
     private Pelicula pelicula;
 
+    /** Sala donde se proyecta la película */
     @ManyToOne
     @JoinColumn(name = "codSala", nullable = false)
     private Sala sala;
 
+    /** Lista de compras realizadas para esta emisión */
     @OneToMany(mappedBy = "emision", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Compra> compras;
 
