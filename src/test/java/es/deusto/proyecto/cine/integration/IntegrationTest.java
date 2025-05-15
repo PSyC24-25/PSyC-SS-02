@@ -1,21 +1,23 @@
-/*package es.deusto.proyecto.cine.integration;
+package es.deusto.proyecto.cine.integration;
 
-import es.deusto.proyecto.cine.CineApplication;
-import es.deusto.proyecto.cine.model.Usuario;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import es.deusto.proyecto.cine.CineApplication;
+import es.deusto.proyecto.cine.model.Usuario;
 
 @SpringBootTest(classes = CineApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class IntegrationTest {
 
-    @LocalServerPort
-    private int port;
+    private final int port = 8080;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -38,10 +40,12 @@ public class IntegrationTest {
         HttpEntity<Usuario> request = new HttpEntity<>(nuevoUsuario, headers);
 
         ResponseEntity<Usuario> response = restTemplate.postForEntity(
-                getUrl("/api/usuarios"), request, Usuario.class);
+                getUrl("/usuarios"), request, Usuario.class);
+
+        System.out.println("Location header: " + response.getHeaders().getLocation()); //Prueba de redireccionamiento
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().getCorreo()).isEqualTo("test@correo.com");
     }
-}*/
+}

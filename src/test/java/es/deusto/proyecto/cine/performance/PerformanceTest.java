@@ -14,13 +14,6 @@ import com.github.noconnor.junitperf.JUnitPerfTestActiveConfig;
 import com.github.noconnor.junitperf.JUnitPerfTestRequirement;
 import com.github.noconnor.junitperf.reporting.providers.HtmlReportGenerator;
 
-// import es.deusto.proyecto.cine.dto.CompraDTO;
-// import es.deusto.proyecto.cine.dto.EmisionDTO;
-// import es.deusto.proyecto.cine.dto.PeliculaDTO;
-// import es.deusto.proyecto.cine.dto.SalaDTO;
-// import es.deusto.proyecto.cine.model.Pelicula;
-// import es.deusto.proyecto.cine.model.Rol;
-// import es.deusto.proyecto.cine.model.Usuario;
 import es.deusto.proyecto.cine.service.CompraService;
 import es.deusto.proyecto.cine.service.EmisionService;
 import es.deusto.proyecto.cine.service.PeliculaService;
@@ -69,7 +62,7 @@ public class PerformanceTest {
 
     //Performance para peliculas
     @Test
-    @JUnitPerfTest(threads = 20, durationMs = 3000, warmUpMs = 1000)
+    @JUnitPerfTest(threads = 20, durationMs = 5000, warmUpMs = 1000)
     @JUnitPerfTestRequirement(executionsPerSec = 35, percentiles = "95:300ms")
     public void testGetAllPeliculasPerformance() {
         peliculaService.getAllPeliculas();
@@ -102,7 +95,7 @@ public class PerformanceTest {
 
     //Performance para salas
     @Test
-    @JUnitPerfTest(threads = 20, durationMs = 3000, warmUpMs = 1000)
+    @JUnitPerfTest(threads = 20, durationMs = 5000, warmUpMs = 1000)
     @JUnitPerfTestRequirement(executionsPerSec = 35, percentiles = "95:300ms")
     public void testGetAllSalasPerformance() {
         salaService.getAllSalas();

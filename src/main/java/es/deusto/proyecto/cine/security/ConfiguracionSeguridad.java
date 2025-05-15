@@ -24,8 +24,10 @@ public class ConfiguracionSeguridad {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf().disable() // Desactiva CSRF
             .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/autenticacion/login", "/autenticacion/registro", "/peliculas", "/peliculas/**").permitAll() // Public pages
+                .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                 .requestMatchers("/admin/**").authenticated()  // Admin pages
                 .requestMatchers(HttpMethod.DELETE, "admin/peliculas/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll() // Permitir archivos estáticos
