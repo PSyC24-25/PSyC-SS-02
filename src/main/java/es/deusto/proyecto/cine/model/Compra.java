@@ -5,20 +5,32 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa una compra de entradas en el sistema de cine.
+ * 
+ * Esta clase contiene información sobre la compra, incluyendo el usuario
+ * que realizó la compra, la emisión asociada, los asientos seleccionados
+ * y el precio total de la compra.
+ */
 @Entity
 public class Compra {
+
+    /** Identificador único de la compra */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codCompra;
 
+    /** Usuario que realizó la compra */
     @ManyToOne
     @JoinColumn(name = "codUsuario", nullable = false)
     private Usuario usuario;
 
+    /** Emisión asociada a la compra */
     @ManyToOne
     @JoinColumn(name = "codEmision", nullable = false)
     private Emision emision;
 
+    /** Lista de asientos seleccionados para la compra */
     @ElementCollection
     @CollectionTable(
         name = "asiento",
@@ -27,6 +39,7 @@ public class Compra {
     @Column(name = "asiento")
     private List<String> asientos = new ArrayList<>();
 
+    /** Precio total de la compra */
     private double precio;
 
     

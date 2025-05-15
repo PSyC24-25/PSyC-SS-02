@@ -14,6 +14,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador para gestionar las emisiones de películas.
+ * 
+ * Este controlador proporciona funcionalidades para crear,
+ * actualizar, eliminar y consultar emisiones de películas.
+ */
 @Controller
 @RequestMapping("/emisiones")
 public class EmisionController {
@@ -25,6 +31,13 @@ public class EmisionController {
     // public List<EmisionDTO> getAllEmisiones() {
     //     return emisionService.getAllEmisiones();
     // }
+    
+    /**
+     * Muestra la vista de emisiones.
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista de emisiones (fechas del día actual y posteriores)
+     */
     @GetMapping
     public String getAllPeliculas(Model model) {
         List<EmisionDTO> emisiones = emisionService.getAllEmisiones();

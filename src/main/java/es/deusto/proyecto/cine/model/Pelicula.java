@@ -4,18 +4,32 @@ package es.deusto.proyecto.cine.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+/**
+ * Clase que representa una película en el sistema de cine.
+ * 
+ * Esta clase contiene información sobre la película, incluyendo su título,
+ * género, duración, director y sinopsis. También tiene una relación con
+ * la clase Emision, que representa las emisiones de la película en las salas.
+ */
 @Entity
 public class Pelicula {
+    /** Identificador único de la película */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codPelicula;
 
+    /** Título de la película */
     private String titulo;
+    /** Género de la película */
     private String genero;
+    /** Duración de la película en minutos */
     private int duracion; 
+    /** Director de la película */
     private String director;
+    /** Sinopsis de la película */
     private String sinopsis;
 
+    /** Lista de emisiones asociadas a la película */
     @OneToMany(mappedBy = "pelicula", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Emision> emisiones;
 

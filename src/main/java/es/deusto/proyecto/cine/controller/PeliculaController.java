@@ -21,7 +21,9 @@ import es.deusto.proyecto.cine.dto.PeliculaDTO;
 import es.deusto.proyecto.cine.service.PeliculaService;
 // import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * Controlador para gestionar las películas.
+ */
 @Controller
 @RequestMapping("/peliculas")
 public class PeliculaController {
@@ -29,6 +31,15 @@ public class PeliculaController {
     @Autowired
     private PeliculaService peliculaService;
 
+    /**
+     * Muestra la vista de películas.
+     *
+     * @param genero el género de la película (opcional)
+     * @param nombre el nombre de la película (opcional)
+     * @param model el modelo para pasar datos a la vista
+     * @param requestedWith el encabezado de la solicitud (para AJAX)
+     * @return la vista de películas
+     */
     @GetMapping
     public String getAllPeliculas(@RequestParam(required = false) String genero,
                                   @RequestParam(required = false) String nombre, 
