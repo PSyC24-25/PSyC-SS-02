@@ -188,4 +188,8 @@ public class CompraService {
                   .map(this::convertirADTO)
                   .collect(Collectors.toList());
     }
+
+    public void eliminarCompra(Long codCompra) {
+        compraRepository.deleteById(codCompra);
+    }
 }

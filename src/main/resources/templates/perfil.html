@@ -6,6 +6,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
+<script th:inline="javascript">
+    function borrarCompra(id) {
+        const csrfHeader = /*[[${_csrf.headerName}]]*/ 'X-CSRF-TOKEN';
+        const csrfToken = /*[[${_csrf.token}]]*/ '';
+
+        fetch('/compras/' + id, {
+            method: 'DELETE',
+            headers: {
+                [csrfHeader]: csrfToken
+            }
+        }).then(response => {
+            if (response.ok) {
+                // Recargar la página para actualizar la lista
+                location.reload();
+            } else {
+                alert('Error al eliminar la compra');
+            }
+        });
+    }
+</script>
+
 <body>
 
     <a th:href="@{/}" class="back-link">Volver al inicio</a>
@@ -21,6 +43,12 @@
                     <p><strong>Fecha:</strong> <span th:text="${#temporals.format(compra.emision.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2025 20:00</span></p>
                     <p><strong>Asientos:</strong> <span th:text="${#strings.listJoin(compra.asientos, ', ')}">A1, A2</span></p>
                     <p><strong>Precio:</strong> <span th:text="${compra.precio} + ' €'">10 €</span></p>
+
+                    <form th:action="@{/compras/{id}(id=${compra.codCompra})}" method="post" style="display:inline">
+                        <input type="hidden" name="_method" value="delete" />
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button type="button" class="delete-btn" th:attr="onclick=|borrarCompra(${compra.codCompra})|">Borrar</button>
+                    </form>
                 </li>
             </ul>
         </div>
