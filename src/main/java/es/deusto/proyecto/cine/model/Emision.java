@@ -55,11 +55,11 @@ public class Emision {
         this.codEmision = codEmision;
     }
 
-    public LocalDateTime getDateTime() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setDateTime(LocalDateTime fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 

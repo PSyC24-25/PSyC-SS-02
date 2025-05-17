@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <a th:href="@{/}" class="back-link">Volver al inicio</a>
+
+    <div class="login-container">
+        <h2 th:text="${usuario.nombre}">Usuario</h2>
+
+        <div th:if="${compras != null and !compras.isEmpty()}">
+            <h3>Tus Compras</h3>
+            <ul>
+                <li th:each="compra : ${compras}" style="margin-bottom: 20px; list-style: none; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                    <p><strong>Película:</strong> <span th:text="${compra.emision.pelicula.titulo}">Título</span></p>
+                    <p><strong>Fecha:</strong> <span th:text="${#temporals.format(compra.emision.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2025 20:00</span></p>
+                    <p><strong>Asientos:</strong> <span th:text="${#strings.listJoin(compra.asientos, ', ')}">A1, A2</span></p>
+                    <p><strong>Precio:</strong> <span th:text="${compra.precio} + ' €'">10 €</span></p>
+                </li>
+            </ul>
+        </div>
+
+        <div th:if="${compras == null or compras.isEmpty()}">
+            <p>No has realizado ninguna compra todavía.</p>
+        </div>
+
+        <form th:action="@{/logout}" method="post" style="margin-top: 20px;">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </div>
+
+</body>
+</html>

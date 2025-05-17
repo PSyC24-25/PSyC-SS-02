@@ -47,7 +47,7 @@ public class EmisionService {
         if (emision.getSala() == null) {
             throw new RuntimeException("Sala no encontrada");
         }
-        return new EmisionDTO(emision.getCodEmision(), emision.getDateTime(), emision.getPelicula().getTitulo()
+        return new EmisionDTO(emision.getCodEmision(), emision.getFecha(), emision.getPelicula().getTitulo()
         , emision.getSala().getNumero());
     }
 
@@ -65,7 +65,7 @@ public class EmisionService {
 
         Emision emision = new Emision();
         emision.setCodEmision(emisionDTO.getCodEmision());
-        emision.setDateTime(emisionDTO.getFecha());
+        emision.setFecha(emisionDTO.getFecha());
         emision.setPelicula(pelicula);
         emision.setSala(sala);
 
@@ -128,7 +128,7 @@ public class EmisionService {
 
         if (emisionExistente.isPresent()) {
             Emision emision = emisionExistente.get();
-            emision.setDateTime(actualizarEmisionDTO.getFecha());
+            emision.setFecha(actualizarEmisionDTO.getFecha());
 
             Pelicula pelicula = peliculaRepository.findByTitulo(actualizarEmisionDTO.getNomPelicula())
                 .orElseThrow(() -> new RuntimeException("Pelicula no encontrada"));

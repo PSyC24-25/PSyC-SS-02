@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompraRepository extends JpaRepository<Compra, Long> {   
     List<Compra> findByEmision(Emision emision);
+    List<Compra> findByUsuarioCodUsuario(Long codUsuario);
 }
+

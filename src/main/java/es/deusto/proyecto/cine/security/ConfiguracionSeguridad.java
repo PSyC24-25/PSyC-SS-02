@@ -30,6 +30,7 @@ public class ConfiguracionSeguridad {
             .authorizeHttpRequests(auth -> auth
             .requestMatchers("/", "/autenticacion/login", "/autenticacion/registro", "/peliculas", "/peliculas/**").permitAll() // Public pages
                 .requestMatchers("/usuarios/**").permitAll()
+                .requestMatchers("/perfil").authenticated()
                 .requestMatchers("/admin/**").authenticated()  // Admin pages
                 .requestMatchers(HttpMethod.DELETE, "admin/peliculas/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/webjars/**").permitAll() // Permitir archivos estáticos
