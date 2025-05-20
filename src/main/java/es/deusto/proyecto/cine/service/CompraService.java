@@ -181,4 +181,15 @@ public class CompraService {
             throw new RuntimeException("No existe compra con id: " + id);
         }
     }
+
+    public List<CompraDTO> getComprasPorUsuario(Long usuarioId) {
+    List<Compra> compras = compraRepository.findByUsuarioCodUsuario(usuarioId);
+    return compras.stream()
+                  .map(this::convertirADTO)
+                  .collect(Collectors.toList());
+    }
+
+    public void eliminarCompra(Long codCompra) {
+        compraRepository.deleteById(codCompra);
+    }
 }

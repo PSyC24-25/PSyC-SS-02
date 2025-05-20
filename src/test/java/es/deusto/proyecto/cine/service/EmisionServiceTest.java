@@ -59,7 +59,7 @@ public class EmisionServiceTest {
 
         Emision emision1 = new Emision();
         emision1.setCodEmision(1L);
-        emision1.setDateTime(LocalDateTime.now());
+        emision1.setFecha(LocalDateTime.now());
         emision1.setPelicula(pelicula1);
         emision1.setSala(sala1);
 
@@ -71,7 +71,7 @@ public class EmisionServiceTest {
 
         Emision emision2 = new Emision();
         emision2.setCodEmision(2L);
-        emision2.setDateTime(LocalDateTime.now());
+        emision2.setFecha(LocalDateTime.now());
         emision2.setPelicula(pelicula2);
         emision2.setSala(sala2);
 
@@ -101,7 +101,7 @@ public class EmisionServiceTest {
 
         Emision emision = new Emision();
         emision.setCodEmision(1L);
-        emision.setDateTime(LocalDateTime.now());
+        emision.setFecha(LocalDateTime.now());
         emision.setPelicula(pelicula);
         emision.setSala(sala);
 
@@ -146,7 +146,7 @@ public class EmisionServiceTest {
     void actualizarEmision() {
         Emision emision = new Emision();
         emision.setCodEmision(1L);
-        emision.setDateTime(LocalDateTime.now());
+        emision.setFecha(LocalDateTime.now());
 
         EmisionDTO emisionDTO = new EmisionDTO();
         emisionDTO.setFecha(LocalDateTime.now().plusDays(1));
@@ -202,7 +202,7 @@ public class EmisionServiceTest {
 
         Emision emision = new Emision();
         emision.setCodEmision(1L);
-        emision.setDateTime(LocalDateTime.now());
+        emision.setFecha(LocalDateTime.now());
         emision.setSala(sala); // Pelicula is null
 
         when(emisionRepository.findById(1L)).thenReturn(Optional.of(emision));
@@ -222,7 +222,7 @@ public class EmisionServiceTest {
 
         Emision emision = new Emision();
         emision.setCodEmision(1L);
-        emision.setDateTime(LocalDateTime.now());
+        emision.setFecha(LocalDateTime.now());
         emision.setPelicula(pelicula); // Sala is null
 
         when(emisionRepository.findById(1L)).thenReturn(Optional.of(emision));

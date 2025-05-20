@@ -9,10 +9,19 @@
 <body>
     <!-- Autenticación -->
     <div class="auth-bar">
+        <!-- Sección izquierda (perfil) -->
+        <div class="profile-left" th:if="${usuario != null}">
+            <a th:href="@{/perfil}" class="profile-link">
+                👤 <span>Mi perfil</span>
+            </a>
+        </div>
+
+        <!-- Sección derecha (login/logout) -->
         <div class="auth-links" th:if="${usuario == null}">
             <a th:href="@{/autenticacion/login}">Iniciar sesión</a>
             <a th:href="@{/autenticacion/registro}">Registro</a>
         </div>
+
         <div class="user-info" th:if="${usuario != null}">
             <div class="user-welcome">
                 <span>Bienvenido,</span>
