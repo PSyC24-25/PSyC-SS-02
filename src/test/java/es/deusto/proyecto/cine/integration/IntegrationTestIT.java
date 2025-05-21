@@ -15,7 +15,7 @@ import es.deusto.proyecto.cine.CineApplication;
 import es.deusto.proyecto.cine.model.Usuario;
 
 @SpringBootTest(classes = CineApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class IntegrationTest {
+public class IntegrationTestIT {
 
     private final int port = 8080;
 
