@@ -5,11 +5,19 @@ import jakarta.persistence.*;
 import java.util.List;
 
 /**
- * Clase que representa una película en el sistema de cine.
- * 
- * Esta clase contiene información sobre la película, incluyendo su título,
- * género, duración, director y sinopsis. También tiene una relación con
- * la clase Emision, que representa las emisiones de la película en las salas.
+ * @file Sala.java
+ * @brief Clase que representa una sala en el sistema de cine.
+ *
+ * @details
+ * La clase {@code Sala} mapea la tabla "sala" en la base de datos y almacena
+ * información sobre el número, capacidad y las emisiones asociadas a la sala.
+ *
+ * @see Emision
+ *
+ * @author
+ * PSyC_SS_02
+ * @version 1.0
+ * @since 2025-05-15
  */
 @Entity
 public class Sala {

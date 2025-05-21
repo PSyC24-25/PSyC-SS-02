@@ -6,11 +6,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Clase que representa una compra de entradas en el sistema de cine.
- * 
- * Esta clase contiene información sobre la compra, incluyendo el usuario
- * que realizó la compra, la emisión asociada, los asientos seleccionados
- * y el precio total de la compra.
+ * @file Compra.java
+ * @brief Clase que representa una compra en el sistema de cine.
+ *
+ * @details
+ * La clase {@code Compra} mapea la tabla "compra" en la base de datos y almacena
+ * información sobre el usuario, los asientos seleccionados, el precio total y la emisión asociada.
+ *
+ * @see Usuario
+ * @see Emision
+ *
+ * @author
+ * PSyC_SS_02
+ * @version 1.0
+ * @since 2025-05-15
  */
 @Entity
 public class Compra {

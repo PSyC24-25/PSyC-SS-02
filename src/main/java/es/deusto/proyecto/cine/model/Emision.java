@@ -5,11 +5,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Clase que representa una emisión de una película en una sala de cine.
- * 
- * Esta clase contiene información sobre la fecha y hora de la emisión,
- * la película asociada, la sala donde se proyecta y las compras realizadas
- * para esa emisión.
+ * @file Emision.java
+ * @brief Clase que representa una emisión de película en el sistema de cine.
+ *
+ * @details
+ * La clase {@code Emision} mapea la tabla "emision" en la base de datos y almacena
+ * información sobre la fecha y hora de la emisión, la película asociada, la sala donde se proyecta
+ * y las compras realizadas para esa emisión.
+ *
+ * @see Pelicula
+ * @see Sala
+ * @see Compra
+ *
+ * @author
+ * PSyC_SS_02
+ * @version 1.0
+ * @since 2025-05-15
  */
 @Entity
 public class Emision {

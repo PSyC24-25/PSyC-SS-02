@@ -4,11 +4,20 @@ import jakarta.persistence.*;
 import java.util.List;
 
 /**
- * Clase que representa un usuario en el sistema de cine.
- * 
- * Esta clase contiene información sobre el usuario, incluyendo su nombre,
- * apellido, correo electrónico, número de teléfono, contraseña y el rol
- * asignado (usuario o administrador).
+ * @file Usuario.java
+ * @brief Clase que representa un usuario en el sistema de cine.
+ *
+ * @details
+ * La clase {@code Usuario} mapea la tabla "usuario" en la base de datos y almacena
+ * información sobre el nombre, apellido, correo electrónico, número de teléfono,
+ * contraseña y las compras realizadas por el usuario.
+ *
+ * @see Compra
+ *
+ * @author
+ * PSyC_SS_02
+ * @version 1.0
+ * @since 2025-05-15
  */
 @Entity
 public class Usuario {
