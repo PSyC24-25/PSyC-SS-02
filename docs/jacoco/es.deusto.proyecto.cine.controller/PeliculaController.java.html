@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeliculaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.controller</a> &gt; <span class="el_source">PeliculaController.java</span></div><h1>PeliculaController.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import es.deusto.proyecto.cine.dto.PeliculaDTO;
+import es.deusto.proyecto.cine.service.PeliculaService;
+// import javax.servlet.http.HttpServletRequest;
+
+/**
+ * Controlador para gestionar las películas.
+ */
+@Controller
+@RequestMapping(&quot;/peliculas&quot;)
+<span class="fc" id="L29">public class PeliculaController {</span>
+
+    @Autowired
+    private PeliculaService peliculaService;
+
+    /**
+     * Muestra la vista de películas.
+     *
+     * @param genero el género de la película (opcional)
+     * @param nombre el nombre de la película (opcional)
+     * @param model el modelo para pasar datos a la vista
+     * @param requestedWith el encabezado de la solicitud (para AJAX)
+     * @return la vista de películas
+     */
+    @GetMapping
+    public String getAllPeliculas(@RequestParam(required = false) String genero,
+                                  @RequestParam(required = false) String nombre, 
+                                  Model model,
+                                  @RequestHeader(value = &quot;X-Requested-With&quot;, required = false) String requestedWith) {
+<span class="nc" id="L48">        List&lt;PeliculaDTO&gt; peliculas = peliculaService.buscarPeliculas(nombre, genero);</span>
+        
+        // Verifica las películas recuperadas
+<span class="nc" id="L51">        System.out.println(&quot;Películas obtenidas: &quot; + peliculas);</span>
+    
+<span class="nc" id="L53">        model.addAttribute(&quot;peliculas&quot;, peliculas);</span>
+<span class="nc" id="L54">        model.addAttribute(&quot;genero&quot;, genero);</span>
+<span class="nc" id="L55">        model.addAttribute(&quot;nombre&quot;, nombre);</span>
+    
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (&quot;XMLHttpRequest&quot;.equals(requestedWith)) {</span>
+            // Asegúrate de que se devuelve solo el fragmento y no toda la página
+<span class="nc" id="L59">            return &quot;fragments/tablaPeliculas :: tabla&quot;;</span>
+        }
+    
+<span class="nc" id="L62">        return &quot;peliculas&quot;;</span>
+    }    
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;PeliculaDTO&gt; getPeliculaById(@PathVariable Long id) {
+<span class="nc" id="L67">        PeliculaDTO pelicula = peliculaService.getPeliculaById(id);</span>
+
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if(pelicula != null){</span>
+<span class="nc" id="L70">            return ResponseEntity.ok(pelicula);</span>
+        }
+<span class="nc" id="L72">        return ResponseEntity.notFound().build();</span>
+    }
+
+    @PostMapping
+    public String crearPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
+<span class="nc" id="L77">        peliculaService.crearPelicula(peliculaDTO);</span>
+<span class="nc" id="L78">        return &quot;redirect:/peliculas&quot;;</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;PeliculaDTO&gt; actualizarPelicula(@PathVariable Long id, @RequestBody PeliculaDTO datosPeliculaDTO) {
+        try {
+<span class="nc" id="L84">            PeliculaDTO peliculaActualizada = peliculaService.actualizarPelicula(id, datosPeliculaDTO);</span>
+<span class="nc" id="L85">            return ResponseEntity.ok(peliculaActualizada);</span>
+<span class="nc" id="L86">        } catch (Exception e) {</span>
+<span class="nc" id="L87">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; borrarPelicula(@PathVariable Long id) {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (peliculaService.getPeliculaById(id) != null){</span>
+<span class="nc" id="L94">            peliculaService.borrarPelicula(id);</span>
+<span class="nc" id="L95">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="nc" id="L97">        return ResponseEntity.notFound().build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

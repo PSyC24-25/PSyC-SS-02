@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompraController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.controller</a> &gt; <span class="el_source">CompraController.java</span></div><h1>CompraController.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.controller;
+
+import es.deusto.proyecto.cine.dto.CompraDTO;
+import es.deusto.proyecto.cine.dto.EmisionDTO;
+import es.deusto.proyecto.cine.model.Sala;
+import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.service.CompraService;
+import es.deusto.proyecto.cine.service.EmisionService;
+import es.deusto.proyecto.cine.service.SalaService;
+import es.deusto.proyecto.cine.service.UsuarioService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Controller
+@RequestMapping(&quot;/compras&quot;)
+public class CompraController {
+    
+    private final CompraService compraService;
+    private final EmisionService emisionService;
+    private final UsuarioService usuarioService;
+    private final SalaService salaService;
+
+    @Autowired
+<span class="fc" id="L33">    public CompraController(CompraService compraService, EmisionService emisionService, </span>
+                            UsuarioService usuarioService, SalaService salaService) {
+<span class="fc" id="L35">        this.compraService = compraService;</span>
+<span class="fc" id="L36">        this.emisionService = emisionService;</span>
+<span class="fc" id="L37">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L38">        this.salaService = salaService;</span>
+<span class="fc" id="L39">    }</span>
+
+    @GetMapping
+    public String seleccionarEmision(Model model) {
+<span class="nc" id="L43">        LocalDate today = LocalDate.now();</span>
+
+<span class="nc" id="L45">        List&lt;EmisionDTO&gt; emisiones = emisionService.getAllEmisiones().stream()</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            .filter(emision -&gt; !emision.getFecha().toLocalDate().isBefore(today))</span>
+<span class="nc" id="L47">            .toList();</span>
+
+<span class="nc" id="L49">        model.addAttribute(&quot;emisiones&quot;, emisiones);</span>
+<span class="nc" id="L50">        return &quot;seleccionar_emision&quot;;</span>
+    }
+
+    @GetMapping(&quot;/crear&quot;)
+    public String getAllCompras(@RequestParam(&quot;emisionId&quot;) Long emisionId, Model model, Authentication authentication) {
+<span class="nc" id="L55">        EmisionDTO emisionDTO = emisionService.getEmisionById(emisionId);</span>
+<span class="nc" id="L56">        int numSala = emisionDTO.getNumSala();</span>
+<span class="nc" id="L57">        Sala sala = salaService.getSalaByNumero(numSala);</span>
+
+<span class="nc" id="L59">        List&lt;String&gt; asientosOcupados = compraService.getAsientosOcupadosPorEmision(emisionService.ConvertirAEntidad(emisionDTO));</span>
+        
+<span class="nc" id="L61">        CompraDTO compraDTO = new CompraDTO();</span>
+<span class="nc" id="L62">        compraDTO.setIdEmision(emisionId);</span>
+        
+
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (authentication != null) {</span>
+<span class="nc" id="L66">            Usuario usuario = usuarioService.obtenerUsuarioPorEmail(authentication.getName());</span>
+<span class="nc" id="L67">            compraDTO.setIdUsuario(usuario.getCodUsuario());</span>
+<span class="nc" id="L68">            model.addAttribute(&quot;usuario&quot;, usuario);</span>
+        }
+<span class="nc" id="L70">        int filas = (int) Math.ceil((double) sala.getCapacidad() / sala.getColumnas());</span>
+
+<span class="nc" id="L72">        model.addAttribute(&quot;filas&quot;, filas);</span>
+<span class="nc" id="L73">        model.addAttribute(&quot;nuevaCompra&quot;, compraDTO);</span>
+<span class="nc" id="L74">        model.addAttribute(&quot;emision&quot;, emisionDTO);</span>
+<span class="nc" id="L75">        model.addAttribute(&quot;asientosOcupados&quot;, asientosOcupados);</span>
+<span class="nc" id="L76">        model.addAttribute(&quot;sala&quot;, sala);</span>
+<span class="nc" id="L77">        return &quot;compra_boletos&quot;;</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CompraDTO&gt; getCompraById(@PathVariable Long id) {
+<span class="nc" id="L82">        CompraDTO compra = compraService.getCompraById(id);</span>
+
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if(compra != null){</span>
+<span class="nc" id="L85">            return ResponseEntity.ok(compra);</span>
+        }
+<span class="nc" id="L87">        return ResponseEntity.notFound().build();</span>
+    }
+
+    @PostMapping(&quot;/guardar&quot;)
+    public String crearCompra(@ModelAttribute CompraDTO compraDTO, Authentication authentication) {
+<span class="nc bnc" id="L92" title="All 4 branches missed.">        if (authentication != null &amp;&amp; compraDTO.getIdUsuario() == null) {</span>
+<span class="nc" id="L93">            Usuario usuario = usuarioService.obtenerUsuarioPorEmail(authentication.getName());</span>
+<span class="nc" id="L94">            compraDTO.setIdUsuario(usuario.getCodUsuario());</span>
+        }
+<span class="nc" id="L96">        compraDTO.setAsientos(compraDTO.getAsientos());</span>
+<span class="nc" id="L97">        compraService.crearCompra(compraDTO);</span>
+<span class="nc" id="L98">        return &quot;redirect:/compras&quot;;</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;CompraDTO&gt; actualizarCompra(@PathVariable Long id, @RequestBody CompraDTO datosCompra) {
+        try {
+<span class="nc" id="L104">            CompraDTO compraActualizada = compraService.actualizarCompra(id, datosCompra);</span>
+<span class="nc" id="L105">            return ResponseEntity.ok(compraActualizada);</span>
+<span class="nc" id="L106">        } catch (Exception e) {</span>
+<span class="nc" id="L107">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; borrarCompra(@PathVariable Long id) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (compraService.getCompraById(id) != null){</span>
+<span class="nc" id="L114">            compraService.borrarCompra(id);</span>
+<span class="nc" id="L115">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="nc" id="L117">        return ResponseEntity.notFound().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

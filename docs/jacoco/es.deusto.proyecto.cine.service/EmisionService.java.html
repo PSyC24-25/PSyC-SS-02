@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmisionService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.service</a> &gt; <span class="el_source">EmisionService.java</span></div><h1>EmisionService.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.service;
+
+import es.deusto.proyecto.cine.dto.EmisionDTO;
+import es.deusto.proyecto.cine.model.Emision;
+import es.deusto.proyecto.cine.model.Pelicula;
+import es.deusto.proyecto.cine.model.Sala;
+import es.deusto.proyecto.cine.repository.EmisionRepository;
+import es.deusto.proyecto.cine.repository.PeliculaRepository;
+import es.deusto.proyecto.cine.repository.SalaRepository;
+import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Servicio para gestionar las emisiones del sistema.
+ * 
+ * Este servicio proporciona funcionalidades para crear,
+ * actualizar, eliminar y consultar emisiones.
+ */
+@Service
+<span class="fc" id="L26">public class EmisionService {</span>
+
+    @Autowired
+    private EmisionRepository emisionRepository;
+
+    @Autowired
+    private SalaRepository salaRepository;
+
+    @Autowired
+    private PeliculaRepository peliculaRepository;
+
+    /**
+     * Convierte una entidad Emision a un objeto DTO.
+     *
+     * @param emision objeto de la emision
+     * @return el objeto DTO de la emision
+     */
+    private EmisionDTO convertirADTO(Emision emision){
+<span class="fc bfc" id="L44" title="All 2 branches covered.">        if (emision.getPelicula() == null) {</span>
+<span class="fc" id="L45">            throw new RuntimeException(&quot;Pelicula no encontrada&quot;);</span>
+        }
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (emision.getSala() == null) {</span>
+<span class="fc" id="L48">            throw new RuntimeException(&quot;Sala no encontrada&quot;);</span>
+        }
+<span class="fc" id="L50">        return new EmisionDTO(emision.getCodEmision(), emision.getFecha(), emision.getPelicula().getTitulo()</span>
+<span class="fc" id="L51">        , emision.getSala().getNumero());</span>
+    }
+
+    /**
+     * Convierte un objeto DTO de Emision a una entidad Emision.
+     *
+     * @param emisionDTO objeto DTO de la emision
+     * @return la entidad Emision
+     */
+    public Emision ConvertirAEntidad(EmisionDTO emisionDTO){
+<span class="fc" id="L61">        Pelicula pelicula = peliculaRepository.findByTitulo(emisionDTO.getNomPelicula())</span>
+<span class="pc" id="L62">            .orElseThrow(() -&gt; new RuntimeException(&quot;Pelicula no encontrada&quot;));</span>
+<span class="fc" id="L63">        Sala sala = salaRepository.findByNumero(emisionDTO.getNumSala())</span>
+<span class="pc" id="L64">            .orElseThrow(() -&gt; new RuntimeException(&quot;Sala no encontrada&quot;));</span>
+
+<span class="fc" id="L66">        Emision emision = new Emision();</span>
+<span class="fc" id="L67">        emision.setCodEmision(emisionDTO.getCodEmision());</span>
+<span class="fc" id="L68">        emision.setFecha(emisionDTO.getFecha());</span>
+<span class="fc" id="L69">        emision.setPelicula(pelicula);</span>
+<span class="fc" id="L70">        emision.setSala(sala);</span>
+
+<span class="fc" id="L72">        return emision;</span>
+    }
+
+    /**
+     * Obtiene todas las emisiones del sistema.
+     *
+     * @return una lista de objetos DTO de emisiones
+     */
+    public List&lt;EmisionDTO&gt; getAllEmisiones() {
+<span class="fc" id="L81">        return emisionRepository.findAll().stream()</span>
+<span class="fc" id="L82">                .map(this::convertirADTO)</span>
+<span class="fc" id="L83">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Obtiene una emisión por su ID.
+     *
+     * @param id el ID de la emisión
+     * @return el objeto DTO de la emisión, o null si no se encuentra
+     */
+    public EmisionDTO getEmisionById(Long id) {
+<span class="fc" id="L93">        return emisionRepository.findById(id)</span>
+<span class="fc" id="L94">        .map(this::convertirADTO) </span>
+<span class="fc" id="L95">        .orElse(null);    </span>
+    }
+
+    /**
+     * Guarda una emisión en el sistema.
+     *
+     * @param emision la entidad Emision a guardar
+     */
+    public void guardar(Emision emision) {
+<span class="nc" id="L104">    emisionRepository.save(emision);</span>
+<span class="nc" id="L105">    }   </span>
+
+    /**
+     * Crea una nueva emisión en el sistema.
+     *
+     * @param emisionDTO objeto DTO de la emisión a crear
+     * @return el objeto DTO de la emisión creada
+     */
+    public EmisionDTO crearEmision(EmisionDTO emisionDTO){
+<span class="fc" id="L114">        Emision emision = ConvertirAEntidad(emisionDTO);</span>
+<span class="fc" id="L115">        Emision emisionGuardada = emisionRepository.save(emision);</span>
+<span class="fc" id="L116">        return convertirADTO(emisionGuardada);</span>
+    }
+
+    /**
+     * Actualiza una emisión existente en el sistema.
+     *
+     * @param id el ID de la emisión a actualizar
+     * @param actualizarEmisionDTO objeto DTO con los nuevos datos
+     * @return el objeto DTO de la emisión actualizada
+     */
+    public EmisionDTO actualizarEmision(Long id, EmisionDTO actualizarEmisionDTO) {
+<span class="fc" id="L127">        Optional&lt;Emision&gt; emisionExistente = emisionRepository.findById(id);</span>
+
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (emisionExistente.isPresent()) {</span>
+<span class="fc" id="L130">            Emision emision = emisionExistente.get();</span>
+<span class="fc" id="L131">            emision.setFecha(actualizarEmisionDTO.getFecha());</span>
+
+<span class="fc" id="L133">            Pelicula pelicula = peliculaRepository.findByTitulo(actualizarEmisionDTO.getNomPelicula())</span>
+<span class="pc" id="L134">                .orElseThrow(() -&gt; new RuntimeException(&quot;Pelicula no encontrada&quot;));</span>
+<span class="fc" id="L135">            emision.setPelicula(pelicula);</span>
+<span class="fc" id="L136">            Sala sala = salaRepository.findByNumero(actualizarEmisionDTO.getNumSala())</span>
+<span class="pc" id="L137">                .orElseThrow(() -&gt; new RuntimeException(&quot;Sala no encontrada&quot;));</span>
+<span class="fc" id="L138">            emision.setSala(sala);</span>
+
+<span class="fc" id="L140">            Emision emisionActualizada = emisionRepository.save(emision);</span>
+<span class="fc" id="L141">            return convertirADTO(emisionActualizada);</span>
+        }
+<span class="nc" id="L143">        throw new EntityNotFoundException(&quot;No se ha encontrado emision con ID &quot; + id);</span>
+    }
+
+    /**
+     * Elimina una emisión por su ID.
+     *
+     * @param id el ID de la emisión a eliminar
+     */
+    public void borrarEmision(Long id){
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (emisionRepository.existsById(id)) {</span>
+<span class="fc" id="L153">            emisionRepository.deleteById(id);</span>
+<span class="fc" id="L154">        } else {</span>
+<span class="fc" id="L155">            throw new RuntimeException(&quot;No existe emision con id: &quot; + id);</span>
+        }
+<span class="fc" id="L157">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

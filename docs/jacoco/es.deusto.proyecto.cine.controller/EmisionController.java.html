@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EmisionController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.controller</a> &gt; <span class="el_source">EmisionController.java</span></div><h1>EmisionController.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.controller;
+
+import es.deusto.proyecto.cine.dto.EmisionDTO;
+import es.deusto.proyecto.cine.service.EmisionService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * Controlador para gestionar las emisiones de películas.
+ * 
+ * Este controlador proporciona funcionalidades para crear,
+ * actualizar, eliminar y consultar emisiones de películas.
+ */
+@Controller
+@RequestMapping(&quot;/emisiones&quot;)
+<span class="fc" id="L25">public class EmisionController {</span>
+    
+    @Autowired
+    private EmisionService emisionService;
+
+    // @GetMapping
+    // public List&lt;EmisionDTO&gt; getAllEmisiones() {
+    //     return emisionService.getAllEmisiones();
+    // }
+    
+    /**
+     * Muestra la vista de emisiones.
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista de emisiones (fechas del día actual y posteriores)
+     */
+    @GetMapping
+    public String getAllPeliculas(Model model) {
+<span class="nc" id="L43">        List&lt;EmisionDTO&gt; emisiones = emisionService.getAllEmisiones();</span>
+        //ESTOS FILTRA LAS EMISIONES EN BASE A LAS QUE HAY DISPONIBLES A PARTIR DEL DIA DE HOY 
+        //AHORA MISMO NO HAY NI UNA
+<span class="nc" id="L46">        LocalDate today = LocalDate.now();</span>
+
+<span class="nc" id="L48">        List&lt;EmisionDTO&gt; emisionesHoy = emisiones.stream()</span>
+<span class="nc" id="L49">            .filter(emision -&gt; emision.getFecha().toLocalDate().isEqual(today))</span>
+<span class="nc" id="L50">            .collect(Collectors.toList());</span>
+
+<span class="nc" id="L52">        List&lt;EmisionDTO&gt; emisionesPosteriores = emisiones.stream()</span>
+<span class="nc" id="L53">            .filter(emision -&gt; emision.getFecha().toLocalDate().isAfter(today))</span>
+<span class="nc" id="L54">            .collect(Collectors.toList());</span>
+
+<span class="nc" id="L56">        model.addAttribute(&quot;emisionesHoy&quot;, emisionesHoy);</span>
+<span class="nc" id="L57">        model.addAttribute(&quot;emisionesPosteriores&quot;, emisionesPosteriores);</span>
+<span class="nc" id="L58">        model.addAttribute(&quot;emisiones&quot;, emisiones);</span>
+<span class="nc" id="L59">        return &quot;emisiones&quot;;</span>
+    }
+
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;EmisionDTO&gt; getEmisionById(@PathVariable Long id) {
+<span class="nc" id="L65">        EmisionDTO emision = emisionService.getEmisionById(id);</span>
+
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if(emision != null){</span>
+<span class="nc" id="L68">            return ResponseEntity.ok(emision);</span>
+        }
+<span class="nc" id="L70">        return ResponseEntity.notFound().build();</span>
+    }
+
+    @PostMapping
+    public ResponseEntity&lt;EmisionDTO&gt; crearEmision(@RequestBody EmisionDTO emisionDTO) {
+<span class="nc" id="L75">        EmisionDTO emisionGuardada = emisionService.crearEmision(emisionDTO);</span>
+<span class="nc" id="L76">        return ResponseEntity.status(HttpStatus.CREATED).body(emisionGuardada);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;EmisionDTO&gt; actualizarEmision(@PathVariable Long id, @RequestBody EmisionDTO datosEmisionDTO) {
+        try {
+<span class="nc" id="L82">            EmisionDTO emisionActualizada = emisionService.actualizarEmision(id, datosEmisionDTO);</span>
+<span class="nc" id="L83">            return ResponseEntity.ok(emisionActualizada);</span>
+<span class="nc" id="L84">        } catch (Exception e) {</span>
+<span class="nc" id="L85">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; borrarEmision(@PathVariable Long id) {
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (emisionService.getEmisionById(id) != null){</span>
+<span class="nc" id="L92">            emisionService.borrarEmision(id);</span>
+<span class="nc" id="L93">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="nc" id="L95">        return ResponseEntity.notFound().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

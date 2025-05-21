@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PerfilController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.controller</a> &gt; <span class="el_source">PerfilController.java</span></div><h1>PerfilController.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.controller;
+
+import es.deusto.proyecto.cine.model.Compra;
+import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.repository.CompraRepository;
+import es.deusto.proyecto.cine.repository.UsuarioRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.Principal;
+import java.util.List;
+
+@Controller
+<span class="fc" id="L17">public class PerfilController {</span>
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CompraRepository compraRepository;
+
+    @GetMapping(&quot;/perfil&quot;)
+    public String verPerfil(Model model, Principal principal) {
+        // Obtener el correo del usuario autenticado
+<span class="nc" id="L28">        String correo = principal.getName();</span>
+
+        // Buscar usuario por correo (viene como Optional)
+<span class="nc" id="L31">        Usuario usuario = usuarioRepository.findByCorreo(correo).orElse(null);</span>
+
+<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (usuario == null) {</span>
+<span class="nc" id="L34">            return &quot;redirect:/autenticacion/login&quot;;</span>
+        }
+
+        // Obtener compras del usuario
+<span class="nc" id="L38">        List&lt;Compra&gt; compras = compraRepository.findByUsuarioCodUsuario(usuario.getCodUsuario());</span>
+
+        // Pasar datos al modelo
+<span class="nc" id="L41">        model.addAttribute(&quot;usuario&quot;, usuario);</span>
+<span class="nc" id="L42">        model.addAttribute(&quot;compras&quot;, compras);</span>
+
+<span class="nc" id="L44">        return &quot;perfil&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

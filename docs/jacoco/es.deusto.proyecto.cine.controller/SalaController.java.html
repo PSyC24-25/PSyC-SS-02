@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SalaController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.controller</a> &gt; <span class="el_source">SalaController.java</span></div><h1>SalaController.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.controller;
+
+import es.deusto.proyecto.cine.dto.SalaDTO;
+import es.deusto.proyecto.cine.service.SalaService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@Controller
+@RequestMapping(&quot;/salas&quot;)
+<span class="fc" id="L16">public class SalaController {</span>
+    
+    @Autowired
+    private SalaService salaService;
+
+    @GetMapping
+    public List&lt;SalaDTO&gt; getAllSalas() {
+<span class="nc" id="L23">        return salaService.getAllSalas();</span>
+    }
+
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;SalaDTO&gt; getSalaById(@PathVariable Long id) {
+<span class="nc" id="L28">        SalaDTO sala = salaService.getSalaById(id);</span>
+
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if(sala != null){</span>
+<span class="nc" id="L31">            return ResponseEntity.ok(sala);</span>
+        }
+<span class="nc" id="L33">        return ResponseEntity.notFound().build();</span>
+    }
+
+
+    @PostMapping
+    public ResponseEntity&lt;SalaDTO&gt; crearSala(@RequestBody SalaDTO sala) {
+<span class="nc" id="L39">        SalaDTO salaGuardada = salaService.crearSala(sala);</span>
+<span class="nc" id="L40">        return ResponseEntity.status(HttpStatus.CREATED).body(salaGuardada);</span>
+    }
+
+    @PutMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;SalaDTO&gt; actualizarSala(@PathVariable Long id, @RequestBody SalaDTO datosSala) {
+        try {
+<span class="nc" id="L46">            SalaDTO salaActualizada = salaService.actualizarSala(id, datosSala);</span>
+<span class="nc" id="L47">            return ResponseEntity.ok(salaActualizada);</span>
+<span class="nc" id="L48">        } catch (Exception e) {</span>
+<span class="nc" id="L49">            return ResponseEntity.badRequest().build();</span>
+        }
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Void&gt; borrarSala(@PathVariable Long id) {
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        if (salaService.getSalaById(id) != null){</span>
+<span class="nc" id="L56">            salaService.borrarSala(id);</span>
+<span class="nc" id="L57">            return ResponseEntity.noContent().build();</span>
+        }
+<span class="nc" id="L59">        return ResponseEntity.notFound().build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

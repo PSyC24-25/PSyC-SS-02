@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AdminController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.controller</a> &gt; <span class="el_source">AdminController.java</span></div><h1>AdminController.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+// import org.springframework.security.access.prepost.PreAuthorize;
+// import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import es.deusto.proyecto.cine.dto.EmisionDTO;
+import es.deusto.proyecto.cine.dto.PeliculaDTO;
+import es.deusto.proyecto.cine.dto.SalaDTO;
+import es.deusto.proyecto.cine.dto.UsuarioDTO;
+import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.repository.UsuarioRepository;
+import es.deusto.proyecto.cine.service.EmisionService;
+// import es.deusto.proyecto.cine.model.Usuario;
+import es.deusto.proyecto.cine.service.PeliculaService;
+import es.deusto.proyecto.cine.service.SalaService;
+import es.deusto.proyecto.cine.service.UsuarioService;
+
+/**
+ * Clase que representa el controlador de administración en el sistema de cine.
+ * 
+ * Esta clase contiene métodos para gestionar películas, emisiones y usuarios.
+ */
+@Controller
+@RequestMapping(&quot;/admin&quot;)
+public class AdminController {
+
+    private final PeliculaService peliculaService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    
+    private final EmisionService emisionService;
+
+    private final SalaService salaService;
+
+    private final UsuarioService usuarioService;
+
+<span class="fc" id="L51">    public AdminController(PeliculaService peliculaService, EmisionService emisionService, SalaService salaService, UsuarioService usuarioService) {</span>
+<span class="fc" id="L52">        this.usuarioService = usuarioService;</span>
+<span class="fc" id="L53">        this.salaService = salaService;</span>
+<span class="fc" id="L54">        this.emisionService = emisionService;</span>
+<span class="fc" id="L55">        this.peliculaService = peliculaService;</span>
+<span class="fc" id="L56">    }</span>
+
+    // PANEL ADMIN
+    /**
+     * Muestra el panel de administración.
+     *
+     * @param authentication la autenticación del usuario
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista del panel de administración
+     */
+    @GetMapping
+    public String panelAdmin(Authentication authentication, Model model) {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (authentication != null) {</span>
+<span class="nc" id="L69">            String nombre = authentication.getName();</span>
+<span class="nc" id="L70">            Usuario usuario = usuarioRepository.findByCorreo(nombre).orElse(null);</span>
+<span class="nc" id="L71">            model.addAttribute(&quot;usuario&quot;, usuario);</span>
+        }
+<span class="nc" id="L73">        return &quot;panel_admin&quot;;  </span>
+    }
+
+
+    //PELICULAS
+    /**
+     * Muestra la lista de películas en el panel de administración.
+     *
+     * @param model el modelo para pasar datos a la vista
+     */
+    @GetMapping(&quot;/peliculas&quot;)
+    public String getPeliculasAdmin(Model model) {
+<span class="nc" id="L85">        List&lt;PeliculaDTO&gt; peliculas = peliculaService.getAllPeliculas();</span>
+<span class="nc" id="L86">        model.addAttribute(&quot;peliculas&quot;, peliculas);</span>
+<span class="nc" id="L87">        model.addAttribute(&quot;nuevaPelicula&quot;, new PeliculaDTO());</span>
+<span class="nc" id="L88">        return &quot;admin_peliculas&quot;;</span>
+    }
+
+    /**
+     * Agrega una nueva película al sistema.
+     *
+     * @param peliculaDTO el objeto DTO de la película a agregar
+     * @return redirige a la lista de películas
+     */
+    @PostMapping(&quot;/peliculas/agregar&quot;)
+    public String agregarPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
+<span class="nc" id="L99">        peliculaService.crearPelicula(peliculaDTO);</span>
+<span class="nc" id="L100">        return &quot;redirect:/admin/peliculas&quot;;</span>
+    }
+
+    /**
+     * Elimina una película del sistema.
+     *
+     * @param id el identificador de la película a eliminar
+     * @return redirige a la lista de películas
+     */
+    @DeleteMapping(&quot;/peliculas/borrar/{id}&quot;)
+    public String borrarPelicula(@PathVariable Long id) {
+<span class="nc" id="L111">        peliculaService.borrarPelicula(id);</span>
+<span class="nc" id="L112">        return &quot;redirect:/admin/peliculas&quot;;</span>
+    }
+
+    /**
+     * Actualiza una película existente en el sistema.
+     *
+     * @param peliculaDTO el objeto DTO de la película a actualizar
+     * @return redirige a la lista de películas
+     */
+    @PutMapping(&quot;/peliculas/editar&quot;)
+    public String actualizarPelicula(@ModelAttribute PeliculaDTO peliculaDTO) {
+<span class="nc" id="L123">        peliculaService.actualizarPelicula(peliculaDTO.getCodPelicula(), peliculaDTO);</span>
+<span class="nc" id="L124">        return &quot;redirect:/admin/peliculas&quot;;</span>
+    }
+
+    /**
+     * Muestra el formulario de edición de una película.
+     *
+     * @param id el identificador de la película a editar
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista del formulario de edición de película
+     */
+    @GetMapping(&quot;/peliculas/editar/{id}&quot;)
+    public String editarPelicula(@PathVariable Long id, Model model) {
+<span class="nc" id="L136">        PeliculaDTO pelicula = peliculaService.getPeliculaById(id);</span>
+<span class="nc" id="L137">        model.addAttribute(&quot;pelicula&quot;, pelicula);</span>
+<span class="nc" id="L138">        return &quot;admin_pelicula_editar&quot;;</span>
+    }
+
+
+    //EMISIONES
+    /**
+     * Muestra la lista de emisiones en el panel de administración.
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista de gestión de emisiones
+     */
+    @GetMapping(&quot;/emisiones&quot;)
+    public String gestionarEmisiones(Model model) {
+<span class="nc" id="L151">        model.addAttribute(&quot;nuevaEmision&quot;, new EmisionDTO());</span>
+
+        // Aquí asumimos que tienes un método que devuelve entidades Pelicula
+<span class="nc" id="L154">        List&lt;PeliculaDTO&gt; peliculas = peliculaService.getAllPeliculas(); </span>
+<span class="nc" id="L155">        List&lt;SalaDTO&gt; salas = salaService.getAllSalas();</span>
+
+<span class="nc" id="L157">        model.addAttribute(&quot;peliculas&quot;, peliculas);</span>
+<span class="nc" id="L158">        model.addAttribute(&quot;salas&quot;, salas);</span>
+
+<span class="nc" id="L160">        return &quot;admin_emisiones&quot;;</span>
+    }
+
+    /**
+     * Agrega una nueva emisión al sistema.
+     *
+     * @param emisionDTO el objeto DTO de la emisión a agregar
+     * @return redirige a la lista de emisiones
+     */
+    @PostMapping(&quot;/emisiones/programar&quot;)
+    public String programarEmision(@ModelAttribute EmisionDTO emisionDTO) {
+<span class="nc" id="L171">        emisionService.crearEmision(emisionDTO);</span>
+<span class="nc" id="L172">        return &quot;redirect:/admin/emisiones&quot;;</span>
+        // Emision emision = new Emision();
+        // emision.setDateTime(emisionDTO.getFecha());
+
+        // Pelicula pelicula = peliculaService.getPeliculaByTitulo(emisionDTO.getNomPelicula());
+        // emision.setPelicula(pelicula);
+
+        // Sala sala = salaService.getSalaByNumero(emisionDTO.getNumSala());
+        // emision.setSala(sala);
+
+        // emisionService.guardar(emision);
+        // return &quot;redirect:/admin/emisiones&quot;;
+    }
+
+
+    //USUARIOS
+    /**
+     * Muestra la lista de usuarios en el panel de administración.
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista de gestión de usuarios
+     */
+    @GetMapping(&quot;/usuarios&quot;)
+    public String getUsuariosAdmin(Model model) {
+<span class="nc" id="L196">        List&lt;UsuarioDTO&gt; usuarios = usuarioService.getAllUsuarios();</span>
+<span class="nc" id="L197">        model.addAttribute(&quot;usuarios&quot;, usuarios);</span>
+<span class="nc" id="L198">        return &quot;admin_usuarios&quot;;</span>
+    }
+
+    /**
+     * Agrega un nuevo usuario al sistema.
+     *
+     * @param usuarioDTO el objeto DTO del usuario a agregar
+     * @return redirige a la lista de usuarios
+     */
+    @PutMapping(&quot;/usuarios/editar&quot;)
+    public String actualizarUsuario(@ModelAttribute UsuarioDTO usuarioDTO) {
+<span class="nc" id="L209">        usuarioService.actualizarUsuario(usuarioDTO.getCodUsuario(), usuarioDTO);</span>
+<span class="nc" id="L210">        return &quot;redirect:/admin/usuarios&quot;;</span>
+    }
+
+    /**
+     * Agrega un nuevo usuario al sistema.
+     *
+     * @param usuarioDTO el objeto DTO del usuario a agregar
+     * @return redirige a la lista de usuarios
+     */
+    @GetMapping(&quot;/usuarios/editar/{id}&quot;)
+    public String editarUsuario(@PathVariable Long id, Model model) {
+<span class="nc" id="L221">        UsuarioDTO usuario = usuarioService.getUsuarioById(id);</span>
+<span class="nc" id="L222">        model.addAttribute(&quot;usuario&quot;, usuario);</span>
+<span class="nc" id="L223">        return &quot;admin_usuario_editar&quot;;</span>
+    }
+
+    /**
+     * Elimina un usuario del sistema.
+     *
+     * @param id el identificador del usuario a eliminar
+     * @return redirige a la lista de usuarios
+     */
+    @DeleteMapping(&quot;/usuarios/borrar/{id}&quot;)
+    public String borrarUsuario(@PathVariable Long id) {
+<span class="nc" id="L234">        usuarioService.borrarUsuario(id);</span>
+<span class="nc" id="L235">        return &quot;redirect:/admin/usuarios&quot;;</span>
+    }
+
+
+    //SALAS
+    /**
+     * Muestra la lista de salas en el panel de administración.
+     *
+     * @param model el modelo para pasar datos a la vista
+     * @return la vista de gestión de salas
+     */
+    @GetMapping(&quot;/salas&quot;)
+    public String getSalasAdmin(Model model) {
+<span class="nc" id="L248">        List&lt;SalaDTO&gt; salas = salaService.getAllSalas();</span>
+<span class="nc" id="L249">        model.addAttribute(&quot;salas&quot;, salas);</span>
+<span class="nc" id="L250">        model.addAttribute(&quot;nuevaSala&quot;, new SalaDTO());</span>
+<span class="nc" id="L251">        return &quot;admin_salas&quot;;</span>
+    }
+
+    /**
+     * Agrega una nueva sala al sistema.
+     *
+     * @param salaDTO el objeto DTO de la sala a agregar
+     * @return redirige a la lista de salas
+     */
+    @PostMapping(&quot;/salas/agregar&quot;)
+    public String agregarSala(@ModelAttribute SalaDTO salaDTO) {
+<span class="nc" id="L262">        salaService.crearSala(salaDTO);</span>
+<span class="nc" id="L263">        return &quot;redirect:/admin/salas&quot;;</span>
+    }
+
+    /**
+     * Actualiza una sala existente en el sistema.
+     *
+     * @param salaDTO el objeto DTO de la sala a actualizar
+     * @return redirige a la lista de salas
+     */
+    @DeleteMapping(&quot;/salas/borrar/{id}&quot;)
+    public String borrarSala(@PathVariable Long id) {
+<span class="nc" id="L274">        salaService.borrarSala(id);</span>
+<span class="nc" id="L275">        return &quot;redirect:/admin/salas&quot;;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
