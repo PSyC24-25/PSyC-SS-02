@@ -41,6 +41,7 @@
                 <li th:each="compra : ${compras}" style="margin-bottom: 20px; list-style: none; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
                     <p><strong>Película:</strong> <span th:text="${compra.emision.pelicula.titulo}">Título</span></p>
                     <p><strong>Fecha:</strong> <span th:text="${#temporals.format(compra.emision.fecha, 'dd/MM/yyyy HH:mm')}">01/01/2025 20:00</span></p>
+                    <p><strong>Sala:</strong> <span th:text="${compra.emision.sala.numero}">1</span></p>
                     <p><strong>Asientos:</strong> <span th:text="${#strings.listJoin(compra.asientos, ', ')}">A1, A2</span></p>
                     <p><strong>Precio:</strong> <span th:text="${compra.precio} + ' €'">10 €</span></p>
 
