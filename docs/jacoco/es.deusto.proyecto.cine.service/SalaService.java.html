@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SalaService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.service</a> &gt; <span class="el_source">SalaService.java</span></div><h1>SalaService.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.service;
+
+import es.deusto.proyecto.cine.dto.SalaDTO;
+import es.deusto.proyecto.cine.model.Sala;
+import es.deusto.proyecto.cine.repository.SalaRepository;
+import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Servicio para gestionar las salas del sistema.
+ * 
+ * Este servicio proporciona funcionalidades para crear,
+ * actualizar, eliminar y consultar salas.
+ */
+@Service
+<span class="fc" id="L22">public class SalaService {</span>
+    @Autowired
+    private SalaRepository salaRepository;  
+
+    /**
+     * Convierte una entidad Sala a un objeto DTO.
+     *
+     * @param sala objeto de la sala
+     * @return el objeto DTO de la sala
+     */
+    public SalaDTO convertirADTO(Sala sala){
+<span class="fc" id="L33">        return new SalaDTO(sala.getCodSala(), sala.getNumero(), sala.getCapacidad(), sala.getColumnas());</span>
+    }
+
+    /**
+     * Convierte un objeto DTO de Sala a una entidad Sala.
+     *
+     * @param salaDTO objeto DTO de la sala
+     * @return la entidad Sala
+     */
+    public Sala ConvertirAEntidad(SalaDTO salaDTO){
+<span class="fc" id="L43">        Sala sala = new Sala();</span>
+<span class="fc" id="L44">        sala.setCodSala(salaDTO.getCodSala());</span>
+<span class="fc" id="L45">        sala.setNumero(salaDTO.getNumero());</span>
+<span class="fc" id="L46">        sala.setCapacidad(salaDTO.getCapacidad());</span>
+<span class="fc" id="L47">        sala.setColumnas(salaDTO.getColumnas());</span>
+
+<span class="fc" id="L49">        return sala;</span>
+    }
+
+    /**
+     * Obtiene una lista de todas las salas en el sistema.
+     *
+     * @return una lista de objetos DTO de salas
+     */
+    public List&lt;Sala&gt; obtenerTodas() {
+<span class="nc" id="L58">    return salaRepository.findAll();</span>
+    }
+
+    /**
+     * Obtiene una lista de todas las salas en el sistema.
+     *
+     * @return una lista de objetos DTO de salas
+     */
+    public List&lt;SalaDTO&gt; getAllSalas() {
+<span class="fc" id="L67">        return salaRepository.findAll().stream()</span>
+<span class="fc" id="L68">                .map(this::convertirADTO)</span>
+<span class="fc" id="L69">                .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Obtiene una sala por su ID.
+     *
+     * @param id el ID de la sala
+     * @return el objeto DTO de la sala, o null si no se encuentra
+     */
+    public SalaDTO getSalaById(Long id) {
+<span class="nc" id="L79">        return salaRepository.findById(id)</span>
+<span class="nc" id="L80">                .map(this::convertirADTO) </span>
+<span class="nc" id="L81">                .orElse(null); </span>
+    }
+
+    /**
+     * Busca una sala por su número.
+     *
+     * @param numero el número de la sala
+     * @return la entidad Sala, o null si no se encuentra
+     */
+    public Sala getSalaByNumero(int numero) {
+<span class="fc" id="L91">        return salaRepository.findByNumero(numero).orElse(null);</span>
+    }
+
+    /**
+     * Crea una nueva sala en el sistema.
+     *
+     * @param salaDTO objeto DTO de la sala a crear
+     * @return el objeto DTO de la sala creada
+     */
+    public SalaDTO crearSala(SalaDTO salaDTO){
+<span class="fc" id="L101">        Sala salaExistente = getSalaByNumero(salaDTO.getNumero());</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (salaExistente != null) {</span>
+<span class="nc" id="L103">            throw new RuntimeException(&quot;Ya existe una sala con el número: &quot; + salaDTO.getNumero());</span>
+        }
+<span class="fc" id="L105">        Sala sala = ConvertirAEntidad(salaDTO);</span>
+<span class="fc" id="L106">        Sala salaGuardada = salaRepository.save(sala);</span>
+<span class="fc" id="L107">        return convertirADTO(salaGuardada);</span>
+    }
+
+    /**
+     * Actualiza una sala existente en el sistema.
+     *
+     * @param id el ID de la sala a actualizar
+     * @param actualizarSala el objeto DTO con los nuevos datos
+     * @return el objeto DTO de la sala actualizada
+     */
+    public SalaDTO actualizarSala(Long id, SalaDTO actualizarSala) {
+<span class="fc" id="L118">        Optional&lt;Sala&gt; salaExistente = salaRepository.findById(id);</span>
+
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (salaExistente.isPresent()) {</span>
+<span class="fc" id="L121">            Sala sala = salaExistente.get();</span>
+<span class="fc" id="L122">            sala.setCapacidad(actualizarSala.getCapacidad());</span>
+<span class="fc" id="L123">            sala.setNumero(actualizarSala.getNumero());</span>
+<span class="fc" id="L124">            sala.setColumnas(actualizarSala.getColumnas());</span>
+
+<span class="fc" id="L126">            Sala salaActualizada = salaRepository.save(sala);</span>
+<span class="fc" id="L127">            return convertirADTO(salaActualizada);</span>
+        }
+<span class="nc" id="L129">        throw new EntityNotFoundException(&quot;No se ha encontrado compra con ID &quot; + id);</span>
+    }
+
+    /**
+     * Elimina una sala por su ID.
+     *
+     * @param id el ID de la sala a eliminar
+     */
+    public void borrarSala(Long id){
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (salaRepository.existsById(id)) {</span>
+<span class="fc" id="L139">            salaRepository.deleteById(id);</span>
+<span class="fc" id="L140">        } else {</span>
+<span class="nc" id="L141">            throw new RuntimeException(&quot;No existe sala con id: &quot; + id);</span>
+        }
+<span class="fc" id="L143">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

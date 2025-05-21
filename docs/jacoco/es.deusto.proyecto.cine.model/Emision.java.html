@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Emision.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.model</a> &gt; <span class="el_source">Emision.java</span></div><h1>Emision.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.model;
+
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
+
+/**
+ * @file Emision.java
+ * @brief Clase que representa una emisión de película en el sistema de cine.
+ *
+ * @details
+ * La clase {@code Emision} mapea la tabla &quot;emision&quot; en la base de datos y almacena
+ * información sobre la fecha y hora de la emisión, la película asociada, la sala donde se proyecta
+ * y las compras realizadas para esa emisión.
+ *
+ * @see Pelicula
+ * @see Sala
+ * @see Compra
+ *
+ * @author
+ * PSyC_SS_02
+ * @version 1.0
+ * @since 2025-05-15
+ */
+@Entity
+public class Emision {
+    /** Identificador único de la emisión */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long codEmision;
+
+    /** Fecha y hora de la emisión */
+    private LocalDateTime fecha; 
+
+    /** Película asociada a la emisión */
+    @ManyToOne
+    @JoinColumn(name = &quot;codPelicula&quot;, nullable = false)
+    private Pelicula pelicula;
+
+    /** Sala donde se proyecta la película */
+    @ManyToOne
+    @JoinColumn(name = &quot;codSala&quot;, nullable = false)
+    private Sala sala;
+
+    /** Lista de compras realizadas para esta emisión */
+    @OneToMany(mappedBy = &quot;emision&quot;, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List&lt;Compra&gt; compras;
+
+
+<span class="fc" id="L50">    public Emision() {</span>
+<span class="fc" id="L51">    }</span>
+
+<span class="nc" id="L53">    public Emision(Long codEmision, LocalDateTime fecha, Pelicula pelicula, Sala sala, List&lt;Compra&gt; compras) {</span>
+<span class="nc" id="L54">        this.codEmision = codEmision;</span>
+<span class="nc" id="L55">        this.fecha = fecha;</span>
+<span class="nc" id="L56">        this.pelicula = pelicula;</span>
+<span class="nc" id="L57">        this.sala = sala;</span>
+<span class="nc" id="L58">        this.compras = compras;</span>
+<span class="nc" id="L59">    }</span>
+
+    public Long getCodEmision() {
+<span class="fc" id="L62">        return codEmision;</span>
+    }
+
+    public void setCodEmision(Long codEmision) {
+<span class="fc" id="L66">        this.codEmision = codEmision;</span>
+<span class="fc" id="L67">    }</span>
+
+    public LocalDateTime getFecha() {
+<span class="fc" id="L70">        return fecha;</span>
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+<span class="fc" id="L74">        this.fecha = fecha;</span>
+<span class="fc" id="L75">    }</span>
+
+    public Pelicula getPelicula() {
+<span class="fc" id="L78">        return pelicula;</span>
+    }
+
+    public void setPelicula(Pelicula pelicula) {
+<span class="fc" id="L82">        this.pelicula = pelicula;</span>
+<span class="fc" id="L83">    }</span>
+
+    public Sala getSala() {
+<span class="fc" id="L86">        return sala;</span>
+    }
+
+    public void setSala(Sala sala) {
+<span class="fc" id="L90">        this.sala = sala;</span>
+<span class="fc" id="L91">    }</span>
+
+    public List&lt;Compra&gt; getCompras() {
+<span class="nc" id="L94">        return compras;</span>
+    }
+
+    public void setCompras(List&lt;Compra&gt; compras) {
+<span class="nc" id="L98">        this.compras = compras;</span>
+<span class="nc" id="L99">    }</span>
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PeliculaService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">cine</a> &gt; <a href="index.source.html" class="el_package">es.deusto.proyecto.cine.service</a> &gt; <span class="el_source">PeliculaService.java</span></div><h1>PeliculaService.java</h1><pre class="source lang-java linenums">package es.deusto.proyecto.cine.service;
+
+import es.deusto.proyecto.cine.dto.PeliculaDTO;
+import es.deusto.proyecto.cine.model.Pelicula;
+import es.deusto.proyecto.cine.repository.PeliculaRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+/**
+ * Servicio para gestionar las películas del sistema.
+ * 
+ * Este servicio proporciona funcionalidades para crear,
+ * actualizar, eliminar y consultar películas.
+ */
+@Service
+<span class="fc" id="L23">public class PeliculaService {</span>
+    
+    @Autowired
+    private PeliculaRepository peliculaRepository; 
+
+    /**
+     * Convierte una entidad Pelicula a un objeto DTO.
+     *
+     * @param pelicula objeto de la pelicula
+     * @return el objeto DTO de la pelicula
+     */
+    public PeliculaDTO convertirADTO(Pelicula pelicula){
+<span class="fc" id="L35">        return new PeliculaDTO(pelicula.getCodPelicula(), pelicula.getTitulo(), pelicula.getGenero(), pelicula.getDuracion(),</span>
+<span class="fc" id="L36">         pelicula.getDirector(), pelicula.getSinopsis());</span>
+    }
+
+    /**
+     * Convierte un objeto DTO de Pelicula a una entidad Pelicula.
+     *
+     * @param peliculaDTO objeto DTO de la pelicula
+     * @return la entidad Pelicula
+     */
+    public Pelicula convertirAEntidad(PeliculaDTO peliculaDTO){
+<span class="fc" id="L46">        Pelicula pelicula = new Pelicula();</span>
+<span class="fc" id="L47">        pelicula.setCodPelicula(peliculaDTO.getCodPelicula());</span>
+<span class="fc" id="L48">        pelicula.setTitulo(peliculaDTO.getTitulo());</span>
+<span class="fc" id="L49">        pelicula.setGenero(peliculaDTO.getGenero());</span>
+<span class="fc" id="L50">        pelicula.setDirector(peliculaDTO.getDirector());</span>
+<span class="fc" id="L51">        pelicula.setDuracion(peliculaDTO.getDuracion());</span>
+<span class="fc" id="L52">        pelicula.setSinopsis(peliculaDTO.getSinopsis());</span>
+
+<span class="fc" id="L54">        return pelicula;</span>
+    }
+
+    /**
+     * Obtiene una lista de todas las películas en el sistema.
+     *
+     * @return una lista de objetos DTO de películas
+     */
+    public List&lt;PeliculaDTO&gt; getAllPeliculas() {
+<span class="fc" id="L63">        return peliculaRepository.findAll().stream()</span>
+<span class="fc" id="L64">                .map(this::convertirADTO)</span>
+<span class="fc" id="L65">                .collect(Collectors.toList());</span>
+    }
+
+    /* PARA GENERO Y NOMBRE */
+    /**
+     * Busca películas por nombre y género.
+     *
+     * @param nombre el nombre de la película
+     * @param genero el género de la película
+     * @return una lista de objetos DTO de películas que coinciden con los criterios de búsqueda
+     */
+    public List&lt;PeliculaDTO&gt; buscarPeliculas(String nombre, String genero) {
+<span class="fc" id="L77">        return peliculaRepository.findAll().stream()</span>
+<span class="pc bpc" id="L78" title="2 of 6 branches missed.">            .filter(p -&gt; (genero == null || genero.isEmpty() || p.getGenero().equalsIgnoreCase(genero)))</span>
+<span class="pc bpc" id="L79" title="3 of 6 branches missed.">            .filter(p -&gt; (nombre == null || nombre.isEmpty() || p.getTitulo().toLowerCase().contains(nombre.toLowerCase())))</span>
+<span class="fc" id="L80">            .map(this::convertirADTO)</span>
+<span class="fc" id="L81">            .collect(Collectors.toList());</span>
+    }
+    
+    /*IGUAL HAY QUE BORRARLO SI LO OTRO HACE */
+    /**
+     * Busca películas por género.
+     *
+     * @param genero el género de la película
+     * @return una lista de objetos DTO de películas que coinciden con el género
+     */
+    public List&lt;PeliculaDTO&gt; getPeliculasByGenero(String genero) {
+<span class="fc" id="L92">        return peliculaRepository.findByGenero(genero).stream()</span>
+<span class="fc" id="L93">        .map(this::convertirADTO)</span>
+<span class="fc" id="L94">        .collect(Collectors.toList());</span>
+    }
+
+    /**
+     * Busca una película por su ID.
+     *
+     * @param id el ID de la película
+     * @return el objeto DTO de la película, o null si no se encuentra
+     */
+    public PeliculaDTO getPeliculaById(Long id) {
+<span class="fc" id="L104">        return peliculaRepository.findById(id)</span>
+<span class="fc" id="L105">                .map(this::convertirADTO) </span>
+<span class="fc" id="L106">                .orElse(null);            </span>
+    }
+
+    /**
+     * Busca una película por su título.
+     *
+     * @param titulo el título de la película
+     * @return la entidad Pelicula, o null si no se encuentra
+     */
+    public Pelicula getPeliculaByTitulo(String titulo) {
+<span class="fc" id="L116">        return peliculaRepository.findByTitulo(titulo).orElse(null);</span>
+    }
+
+    /**
+     * Guarda una película en el sistema.
+     *
+     * @param pelicula la entidad Pelicula a guardar
+     */
+    public PeliculaDTO crearPelicula(PeliculaDTO peliculaDTO){
+<span class="fc" id="L125">        Pelicula pelicula = convertirAEntidad(peliculaDTO);</span>
+<span class="fc" id="L126">        Pelicula peliculaGuardada = peliculaRepository.save(pelicula);</span>
+<span class="fc" id="L127">        return convertirADTO(peliculaGuardada);</span>
+    }
+    
+    /**
+     * Actualiza una película existente en el sistema.
+     *
+     * @param id el ID de la película a actualizar
+     * @param peliculaDTO objeto DTO con los nuevos datos
+     * @return el objeto DTO de la película actualizada
+     */
+    public PeliculaDTO actualizarPelicula(Long id, PeliculaDTO peliculaDTO) {
+<span class="fc" id="L138">        Optional&lt;Pelicula&gt; peliculaExistente = peliculaRepository.findById(id);</span>
+
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">        if (peliculaExistente.isPresent()) {</span>
+<span class="fc" id="L141">            Pelicula pelicula = peliculaExistente.get();</span>
+<span class="fc" id="L142">            pelicula.setTitulo(peliculaDTO.getTitulo());</span>
+<span class="fc" id="L143">            pelicula.setGenero(peliculaDTO.getGenero());</span>
+<span class="fc" id="L144">            pelicula.setDuracion(peliculaDTO.getDuracion());</span>
+<span class="fc" id="L145">            pelicula.setDirector(peliculaDTO.getDirector());</span>
+<span class="fc" id="L146">            pelicula.setSinopsis(peliculaDTO.getSinopsis());</span>
+
+<span class="fc" id="L148">            Pelicula peliculaActualizada = peliculaRepository.save(pelicula);</span>
+<span class="fc" id="L149">            return convertirADTO(peliculaActualizada);</span>
+        }
+<span class="nc" id="L151">        throw new EntityNotFoundException(&quot;No se ha encontrado compra con ID &quot; + id);</span>
+    }
+
+    /**
+     * Elimina una película por su ID.
+     *
+     * @param id el ID de la película a eliminar
+     */
+    @Transactional
+    public void borrarPelicula(Long id){
+<span class="fc" id="L161">        Optional&lt;Pelicula&gt; pelicula = peliculaRepository.findByCodPelicula(id); </span>
+<span class="fc" id="L162">        System.out.println(&quot;PELICULA:&quot; + pelicula.get().getTitulo());</span>
+<span class="fc" id="L163">        peliculaRepository.deleteByCodPelicula(id);</span>
+<span class="fc" id="L164">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
