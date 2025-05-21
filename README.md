@@ -8,7 +8,7 @@ Esta aplicación permite la compra de entradas para las diferentes sesiones que 
 - Tests unitarios mediante ([JaCoCo](https://psyc24-25.github.io/PSyC-SS-02/jacoco)).
 
 ## Arquitectura:
-Hemos creado esta aplicación mediante SpringBoot usando el patrón Modelo-Vista-Controlador en una estructura de 3 niveles.
+Hemos creado esta aplicación mediante SpringBoot usando el patrón Modelo-Vista-Controlador en una estructura de 3 niveles (Controladores, servicios y repositorios).
 - Modelo: Definición de entidades de la aplicación
 - Vista: Frontend de la aplicación usando HTML y Thymeleaf
 - Controlador: Maneja solicitudes HTTP de los usuarios
