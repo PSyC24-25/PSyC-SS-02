@@ -1,14 +1,18 @@
-# Usamos una imagen base de Maven con Java 11
-FROM maven:3.8.1-openjdk-11
+# Usar Maven para construir la app
+FROM maven:3.8.1-openjdk-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-# Copiamos el código fuente al contenedor
-COPY . /app
-
-# Establecemos el directorio de trabajo
+# Usar una imagen liviana de Java para ejecutar
+FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-# Compilamos el proyecto y mejoramos las clases para JPA si es necesario
-RUN mvn compile
+# Copiar el .jar desde el build anterior
+COPY --from=build /app/target/*.jar app.jar
 
-# Especificamos el comando que ejecutará tu aplicación
-CMD ["mvn", "test"]
+# Puerto expuesto por Spring Boot
+EXPOSE 8080
+
+# Ejecutar la app
+CMD ["java", "-jar", "app.jar"]
