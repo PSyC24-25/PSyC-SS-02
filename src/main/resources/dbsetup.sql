@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS usuario (
     apellido VARCHAR(30) NOT NULL,
     correo VARCHAR(255) UNIQUE NOT NULL,
     num_telefono VARCHAR(15) UNIQUE NOT NULL,
-    contrasenya VARCHAR(50) NOT NULL
+    contrasenya VARCHAR(50) NOT NULL,
+    rol ENUM('admin', 'usuario') NOT NULL DEFAULT 'usuario',
 );
 
 CREATE TABLE IF NOT EXISTS compra (
