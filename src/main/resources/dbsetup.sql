@@ -1,3 +1,13 @@
+CREATE DATABASE IF NOT EXISTS cine;
+
+CREATE USER IF NOT EXISTS 'dbuser'@'%' IDENTIFIED BY 'dbuser';
+
+GRANT ALL PRIVILEGES ON cine.* TO 'dbuser'@'%' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+
+USE cine;
+
 CREATE TABLE IF NOT EXISTS pelicula (
     cod_pelicula INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
@@ -29,8 +39,8 @@ CREATE TABLE IF NOT EXISTS usuario (
     apellido VARCHAR(30) NOT NULL,
     correo VARCHAR(255) UNIQUE NOT NULL,
     num_telefono VARCHAR(15) UNIQUE NOT NULL,
-    contrasenya VARCHAR(50) NOT NULL,
-    rol ENUM('admin', 'usuario') NOT NULL DEFAULT 'usuario',
+    contrasenya VARCHAR(100) NOT NULL,
+    rol ENUM('ADMIN', 'USUARIO') NOT NULL DEFAULT 'USUARIO'
 );
 
 CREATE TABLE IF NOT EXISTS compra (

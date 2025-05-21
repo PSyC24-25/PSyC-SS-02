@@ -118,10 +118,10 @@ public class PerformanceTest {
     }
 
     // @Test
-    // @JUnitPerfTest(threads = 10, durationMs = 5000, warmUpMs = 2000)
-    // @JUnitPerfTestRequirement(executionsPerSec = 20, percentiles = "95:300ms")
+    // @JUnitPerfTest(threads = 10, durationMs = 10000, warmUpMs = 2000)
+    // @JUnitPerfTestRequirement(executionsPerSec = 20, percentiles = "90:200ms")
     // public void testCrearEmisionesPerformance() {
-    //     EmisionDTO emisionDTO = new EmisionDTO(1L, LocalDateTime.now(), "peli", 1);
-    //     emisionService.crearEmision(emisionDTO);
+    //      EmisionDTO emisionDTO = new EmisionDTO(1L, LocalDateTime.now(), "peli", 1);
+    //      emisionService.crearEmision(emisionDTO);
     // }
 }

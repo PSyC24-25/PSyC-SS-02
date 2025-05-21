@@ -29,7 +29,6 @@ public class CompraController {
     private final UsuarioService usuarioService;
     private final SalaService salaService;
 
-    @Autowired
     public CompraController(CompraService compraService, EmisionService emisionService, 
                             UsuarioService usuarioService, SalaService salaService) {
         this.compraService = compraService;
