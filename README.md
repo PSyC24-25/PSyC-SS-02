@@ -17,10 +17,13 @@ Hemos creado esta aplicación mediante SpringBoot usando el patrón Modelo-Vista
 
 ## Pasos para ejecutar:
 
-  1. Establecer la conexión con la base de datos, crear una base de datos "cine".
-  2. En la carpeta raíz del proyecto (cine). Desde la consola ejecutar `mvn clean install`*.
-  3. En la consola ejecutar `mvn spring-boot:run`.
-  4. Abrir el navegador **"http://localhost:8080/"**.
+  1. Establecer la conexión con mysql.
+  2. En la carpeta raíz del proyecto (cine). Ejecutar desde la consola `mysql -u root -p < src/main/resources/dbsetup.sql`.
+     - Se solicitará la contraseña del root.
+     - Una vez introducida, se creará la base de datos cine con las tablas correspondientes.
+  4. En la carpeta raíz del proyecto. Desde la consola ejecutar `mvn clean install`*.
+  5. En la consola ejecutar `mvn spring-boot:run`.
+  6. Abrir el navegador **"http://localhost:8080/"**.
 
 *Esto ejecetura todos los tests, para compilar sin hacer los tests: `mvn clean install -DskipTests`.
 
