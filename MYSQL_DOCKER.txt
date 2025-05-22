@@ -1,0 +1,41 @@
+CREAR CONTENEDOR MYSQL:
+
+	- El contenedor es como un "servidor MySQL" virtual, que corre en Docker.
+
+	- No tienes que instalar MySQL en tu PC ni usar XAMPP.
+
+	- Cuando el contenedor está corriendo, tu app puede conectarse a ese MySQL por localhost y el puerto que expongas (normalmente 3306).
+
+Crear-> docker run --name cine-mysql -e MYSQL_ROOT_PASSWORD=tu_password -e MYSQL_DATABASE=cine -e MYSQL_USER=dbuser -e MYSQL_PASSWORD=dbuser -p 3306:3306 -d mysql:8
+
+Eliminar-> docker rm cine-mysql
+
+Parar-> docker stop cine-mysql
+
+Reanudar-> docker start cine-mysql
+
+Modificar datos dentro de la BD del docker:
+
+Entrar al contenedor-> docker exec -it cine-mysql bash
+
+Conectar con la BD-> mysql -u dbuser -p
+
+Seleccionar BD-> use cine;
+
+Cambiar a ADMIN-> UPDATE usuario SET rol = 'ADMIN' WHERE cod_usuario = 1;
+
+Salir de la BD-> exit;
+
+Salir del contenedor-> exit
+
+CREAR CONTENEDOR APP:
+
+Crear-> docker build -t mi-app-jersey .
+
+Crear red-> docker network create cine-network
+
+Conectar MYSQL a esa red-> docker network connect cine-network cine-mysql
+
+Cambiar el application properties-> spring.datasource.url=jdbc:mysql://cine-mysql:3306/cine?useSSL=false&serverTimezone=UTC
+
+Ejecutar (primero MYSQL)-> docker run --rm -p 8080:8080 --network cine-network --name cine-app mi-app-jersey

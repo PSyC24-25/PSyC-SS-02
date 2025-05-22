@@ -1,36 +1,30 @@
-version: "3.8"
-services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: cine
-      MYSQL_USER: cineuser
-      MYSQL_PASSWORD: cinepass
-    ports:
-      - "3306:3306"
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - cine-network
-
-  cine-app:
-    build: .
-    container_name: cine-app
-    depends_on:
-      - mysql
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/cine
-      SPRING_DATASOURCE_USERNAME: cineuser
-      SPRING_DATASOURCE_PASSWORD: cinepass
-    networks:
-      - cine-network
+version: '3.3'
 
 volumes:
   db_data:
 
+services:
+  database:
+    image: mysql:8.0.25
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cine
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbuser
+    networks:
+      - cine-net
+
+  server:
+    container_name: cine-server
+    build: .
+    depends_on:
+      - database
+    ports:
+      - "9080:8080"
+    restart: always
+    networks:
+      - cine-net
+
 networks:
-  cine-network:
+  cine-net:
